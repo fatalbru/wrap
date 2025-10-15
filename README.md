@@ -26,6 +26,7 @@ Descubrí la versión PRO en https://wrap.com.ar/pro
 * Outgoing Webhooks
 * Devoluciones de pagos
 * API REST + Bearer Authentication
+* Portales de cliente
 
 ## Requerimientos
 
