@@ -11,11 +11,11 @@ Este repositorio es la versión básica que cubre la funcionalidad necesaria par
 La versión PRO incluye: manejo de múltiples sitios, manejo de usuarios/accesos, códigos de descuento, facturación basada en créditos, facturación basada en asientos (seats), SLA 99.9% y más.
 Descubrí la versión PRO en https://wrap.com.ar/pro
 
-### Pasarelas de Pago soportadas
+## Pasarelas de Pago soportadas
 
 * MercadoPago (Tarjetas y MercadoPago Wallet)
 
-### Funcionalidades
+## Funcionalidades
 
 * Ambientes productivos (`live`) y sandbox (`test`)
 * Manejo de clientes
@@ -27,6 +27,11 @@ Descubrí la versión PRO en https://wrap.com.ar/pro
 * Devoluciones de pagos
 * API REST + Bearer Authentication
 
-### Instalación
+## Requerimientos
+
+* VPS
+* PostgreSQL
+
+## Instalación
 
 * MercadoPago
