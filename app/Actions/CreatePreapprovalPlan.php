@@ -61,7 +61,6 @@ final readonly class CreatePreapprovalPlan
         $response = $this->mercadoPagoSubscriptions->createPreapprovalPlan(
             $application,
             $payload,
-            $price->product->environment
         );
 
         $price->update([

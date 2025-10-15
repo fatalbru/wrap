@@ -26,7 +26,7 @@ final class Subscription
             ->json();
     }
 
-    public function createPreapprovalPlan(Application $application, array $data, Environment $environment = Environment::LIVE): ?array
+    public function createPreapprovalPlan(Application $application, array $data): ?array
     {
         return Http::mercadopago($application)
             ->throw()
