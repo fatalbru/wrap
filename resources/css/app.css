@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: Inter, sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.card {
+    @apply border border-zinc-200 rounded-lg shadow-sm bg-white overflow-hidden;
+}
+
+.card-header {
+    @apply border-b border-zinc-200 p-4 space-y-2 bg-zinc-100/70;
+}
+
+.card-body {
+    @apply p-4 space-y-4;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.ternary-select {
+    @apply grid grid-cols-2 gap-4;
+}
+
+.ternary-select > div {
+    @apply cursor-pointer bg-zinc-50/25 p-4 rounded-lg hover:bg-zinc-200/20 transition-all
+    border border-zinc-100  bg-white flex flex-col justify-between items-start text-sm
+    hover:border-zinc-200/80 opacity-70 relative;
+}
+
+.ternary-select > div:hover{
+    @apply  bg-zinc-100 border border-zinc-200;
+}
+
+.ternary-select > div.selected {
+    @apply opacity-100 bg-zinc-100 border border-zinc-200;
+}
+
+label[for="DOCUMENT"] {
+    @apply mt-3;
+}
+
+.mp-container form > div:first-of-type {
+    @apply !mb-5;
+}
+
+.mp-container form h1 + div {
+    @apply !pb-0 !mb-0;
+
+}
