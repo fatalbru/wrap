@@ -7,13 +7,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "bacon/bacon-qr-code": "^3.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.14",
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.5",
-        "livewire/flux-pro": "^2.5",
         "livewire/livewire": "^3.6",
         "nunomaduro/essentials": "^1.0",
         "tuupola/ksuid": "^2.1"
@@ -80,11 +78,5 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "repositories": {
-        "flux-pro": {
-            "type": "composer",
-            "url": "https://composer.fluxui.dev"
-        }
-    }
+    "prefer-stable": true
 }
