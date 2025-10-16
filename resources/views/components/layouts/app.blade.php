@@ -10,7 +10,7 @@
 </head>
 <body>
 {{$slot}}
-<flux:toast/>
+<x-toaster-hub />
 @fluxScripts
 @stack('scripts')
 </body>

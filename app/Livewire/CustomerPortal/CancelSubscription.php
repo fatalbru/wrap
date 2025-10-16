@@ -7,6 +7,7 @@ use Flux\Flux;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class CancelSubscription extends Component
 {
@@ -29,14 +30,14 @@ class CancelSubscription extends Component
     public function cancelSubscription(\App\Actions\CancelSubscription $cancelSubscription): void
     {
         if (! $this->subscription->cancelable) {
-            Flux::toast(__('Subscription cannot be cancelled.'), variant: 'danger');
+            Toaster::error(__('Subscription cannot be cancelled.'));
 
             return;
         }
 
         $cancelSubscription->handle($this->subscription);
 
-        Flux::toast(__('Subscription cancelled.'), variant: 'success');
+        Toaster::success(__('Subscription cancelled.'));
 
         $this->closeModal();
     }

@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
     Route::prefix('customers')
-        ->can('view-any', Customer::class)
         ->group(function (): void {
             Route::get('/', [CustomersController::class, 'index'])
                 ->name('api.customers.index');
@@ -26,7 +25,6 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
                 ->name('api.customers.store');
 
             Route::prefix('{customer:ksuid}')
-                ->can('view', 'customer')
                 ->group(function (): void {
                     Route::get('/', [CustomersController::class, 'show'])
                         ->name('api.customers.show');
@@ -35,7 +33,6 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
                         ->name('api.customers.portal-link');
 
                     Route::put('/', [CustomersController::class, 'update'])
-                        ->can('update', 'customer')
                         ->name('api.customers.update');
                 });
         });
@@ -46,7 +43,6 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
     });
 
     Route::prefix('orders')
-        ->can('view-any', Order::class)
         ->group(function (): void {
             Route::get('/', [OrdersController::class, 'index'])
                 ->name('api.orders.index');
@@ -67,13 +63,11 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
     });
 
     Route::prefix('payments')
-        ->can('view-any', Payment::class)
         ->group(function (): void {
             Route::get('/', [PaymentsController::class, 'index'])
                 ->name('api.payments.index');
 
             Route::prefix('{payment:ksuid}')
-                ->can('view', 'payment')
                 ->group(function (): void {
                     Route::post('/refund', [PaymentsController::class, 'refund'])
                         ->name('api.payments.refund');
@@ -81,13 +75,11 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
         });
 
     Route::prefix('subscriptions')
-        ->can('view-any', Subscription::class)
         ->group(function (): void {
             Route::get('/', [SubscriptionsController::class, 'index'])
                 ->name('api.subscriptions.index');
 
             Route::prefix('{subscription:ksuid}')
-                ->can('view', 'subscription')
                 ->group(function (): void {
                     Route::get('/', [SubscriptionsController::class, 'show'])
                         ->name('api.subscriptions.show');

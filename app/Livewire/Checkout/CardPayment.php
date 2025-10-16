@@ -13,7 +13,7 @@ use App\Models\Payment;
 use App\Models\Subscription;
 use App\PaymentVendor;
 use App\ProductType;
-use Flux\Flux;
+use Masmerise\Toaster\Toaster;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -65,7 +65,7 @@ class CardPayment extends Component
     {
         $message ??= __('Something went wrong.');
         $this->dispatch('failed', errorMessage: $message)->self();
-        Flux::toast($message, __('Payment failed'), variant: 'danger');
+        Toaster::error($message);
     }
 
     #[Computed]

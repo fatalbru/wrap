@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/flux": "^2.5",
         "livewire/livewire": "^3.6",
+        "masmerise/livewire-toaster": "^2.8",
         "nunomaduro/essentials": "^1.0",
         "tuupola/ksuid": "^2.1"
     },

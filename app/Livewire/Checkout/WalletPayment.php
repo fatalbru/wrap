@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class WalletPayment extends Component
 {
@@ -55,7 +56,7 @@ class WalletPayment extends Component
     private function failed(string $message): void
     {
         $this->dispatch('failed', errorMessage: $message)->self();
-        Flux::toast($message, __('Payment failed'), variant: 'danger');
+        Toaster::error($message, __('Payment failed'));
     }
 
     public function render()
