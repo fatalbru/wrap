@@ -56,7 +56,7 @@ class WalletPayment extends Component
     private function failed(string $message): void
     {
         $this->dispatch('failed', errorMessage: $message)->self();
-        Toaster::error($message, __('Payment failed'));
+        Toaster::error($message);
     }
 
     public function render()
