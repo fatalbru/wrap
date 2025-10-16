@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
         Carbon::setLocale(config('app.locale'));
 
-        Str::macro('ksuid', fn(string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid())->payload())));
+        Str::macro('ksuid', fn (string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid)->payload())));
 
         Http::macro('mercadopago', function (Application $application) {
             return Http::baseUrl('https://api.mercadopago.com')
@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var Model $model */
             $model = $payload[0];
 
-            if (filled($prefix = config('mrr.ksuid_prefixes.' . class_basename(get_class($model))))) {
+            if (filled($prefix = config('mrr.ksuid_prefixes.'.class_basename(get_class($model))))) {
                 $class = get_class($model);
                 $model->ksuid = $class::generateKsuid($prefix);
             }

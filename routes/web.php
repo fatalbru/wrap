@@ -10,7 +10,7 @@ use App\Livewire\CustomerPortal\Home;
 use Illuminate\Support\Facades\Route;
 
 Route::domain(config('mrr.checkout_domain'))
-    ->prefix(config('mrr.checkout_prefix') . '/{checkout:ksuid}')
+    ->prefix(config('mrr.checkout_prefix').'/{checkout:ksuid}')
     ->group(function (): void {
         Route::get('/', Pay::class)->name('checkout');
         Route::get('/complete', Completed::class)->name('checkout.complete');
@@ -18,7 +18,7 @@ Route::domain(config('mrr.checkout_domain'))
     });
 
 Route::domain(config('mrr.customer_portal_domain'))
-    ->prefix(config('mrr.customer_portal_prefix') . '/{portalIdentifier}')
+    ->prefix(config('mrr.customer_portal_prefix').'/{portalIdentifier}')
     ->middleware(PortalIdentifierContext::class)
     ->group(function (): void {
         Route::get('/', Home::class)

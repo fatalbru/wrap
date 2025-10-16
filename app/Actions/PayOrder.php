@@ -21,16 +21,13 @@ use SensitiveParameter;
 
 final readonly class PayOrder
 {
-    public function __construct(private PaymentService $paymentService)
-    {
-    }
+    public function __construct(private PaymentService $paymentService) {}
 
     public function handle(
-        Checkout                               $checkout,
+        Checkout $checkout,
         #[SensitiveParameter] TemporaryCardDto $card,
-        array                                  $metadata = []
-    ): Payment
-    {
+        array $metadata = []
+    ): Payment {
         $idempotency = Str::random(128);
 
         /** @var Order $order */
@@ -45,7 +42,7 @@ final readonly class PayOrder
         $order->application()->associate($application);
         $order->save();
 
-        $items = $order->items->map(fn(OrderItem $orderItem) => [
+        $items = $order->items->map(fn (OrderItem $orderItem) => [
             'id' => $orderItem->id,
             'title' => $orderItem->price->name,
             'quantity' => $orderItem->quantity,
@@ -60,7 +57,7 @@ final readonly class PayOrder
             $card,
             $checkout->customer->email,
             $order->ksuid,
-            $items->pluck('title')->implode(', ') . " {$order->ksuid}",
+            $items->pluck('title')->implode(', ')." {$order->ksuid}",
             $total,
             $idempotency,
             metadata: [
@@ -81,7 +78,7 @@ final readonly class PayOrder
                 'payment_vendor' => PaymentVendor::MERCADOPAGO_CARD,
                 'payment_method' => $card?->paymentMethodId(),
                 'payment_type' => $card?->paymentTypeId(),
-                'card_last_digits' => $card?->lastFourDigits()
+                'card_last_digits' => $card?->lastFourDigits(),
             ]);
         }
 
@@ -102,7 +99,7 @@ final readonly class PayOrder
             'vendor_data' => $response,
             'payment_method' => $card?->paymentMethodId(),
             'payment_type' => $card?->paymentTypeId(),
-            'card_last_digits' => $card?->lastFourDigits()
+            'card_last_digits' => $card?->lastFourDigits(),
         ]);
     }
 }

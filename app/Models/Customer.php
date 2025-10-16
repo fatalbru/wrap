@@ -22,7 +22,7 @@ class Customer extends Model
     {
         parent::boot();
 
-        self::creating(function (Customer $customer) {
+        self::creating(function (Customer $customer): void {
             $customer->portal_id = self::assignPortalId();
         });
     }
@@ -60,7 +60,7 @@ class Customer extends Model
 
     public function scopeSearch(Builder $builder, ?string $search): void
     {
-        $builder->when(filled($search), function (Builder $builder) use ($search) {
+        $builder->when(filled($search), function (Builder $builder) use ($search): void {
             $builder->whereAny(['name', 'email', 'ksuid'], 'like', "%{$search}%");
         });
     }

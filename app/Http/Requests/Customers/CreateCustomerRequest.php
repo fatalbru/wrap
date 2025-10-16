@@ -6,7 +6,6 @@ namespace App\Http\Requests\Customers;
 
 use App\Environment;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Context;
 use Illuminate\Validation\Rule;
 
 class CreateCustomerRequest extends FormRequest
@@ -22,7 +21,7 @@ class CreateCustomerRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('customers', 'email')
+                Rule::unique('customers', 'email'),
             ],
             'name' => ['required', 'string'],
             'environment' => ['required', Rule::enum(Environment::class)],

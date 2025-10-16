@@ -13,9 +13,7 @@ use Throwable;
 
 final readonly class UpdateSubscriptionPrice
 {
-    public function __construct(private SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     /**
      * @throws Throwable

@@ -98,7 +98,7 @@ class Subscription extends Model
         return false;
     }
 
-    function getCancelableAttribute(): bool
+    public function getCancelableAttribute(): bool
     {
         return in_array($this->status, [SubscriptionStatus::AUTHORIZED, SubscriptionStatus::PAUSED]);
     }

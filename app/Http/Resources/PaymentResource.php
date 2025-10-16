@@ -18,7 +18,7 @@ class PaymentResource extends JsonResource
             'paid_at' => $this->paid_at,
             'refunded_at' => $this->refunded_at,
             'environment' => $this->environment,
-            'vendor_data' => $this->vendor_data
+            'vendor_data' => $this->vendor_data,
         ];
     }
 }

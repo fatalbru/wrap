@@ -25,7 +25,7 @@ enum PaymentMethod: string
         };
     }
 
-    static function parse(?string $value): ?PaymentMethod
+    public static function parse(?string $value): ?PaymentMethod
     {
         return blank($value) ? null : ($value === 'account_money' ? self::MERCADOPAGO : self::CARD);
     }

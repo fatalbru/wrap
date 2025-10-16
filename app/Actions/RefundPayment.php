@@ -11,9 +11,7 @@ use Illuminate\Support\Str;
 
 final readonly class RefundPayment
 {
-    public function __construct(private PaymentService $paymentService)
-    {
-    }
+    public function __construct(private PaymentService $paymentService) {}
 
     public function handle(Payment $payment): void
     {
@@ -23,7 +21,7 @@ final readonly class RefundPayment
 
         $payment->update([
             'refunded_at' => now(),
-            'status' => PaymentStatus::REFUNDED
+            'status' => PaymentStatus::REFUNDED,
         ]);
 
         $payment->refunds()->create([

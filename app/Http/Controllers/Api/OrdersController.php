@@ -20,18 +20,18 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         return Order::with(['items', 'payments', 'customer'])
-            ->when(str_starts_with($request->get('search', ''), 'ord_'), function ($query) use ($request) {
+            ->when(str_starts_with($request->get('search', ''), 'ord_'), function ($query) use ($request): void {
                 $query->where('ksuid', $request->get('search'));
             })
-            ->when(str_starts_with($request->get('search', ''), 'price_'), function ($query) use ($request) {
-                $query->whereHas('items', function ($query) use ($request) {
-                    $query->whereHas('price', function ($query) use ($request) {
+            ->when(str_starts_with($request->get('search', ''), 'price_'), function ($query) use ($request): void {
+                $query->whereHas('items', function ($query) use ($request): void {
+                    $query->whereHas('price', function ($query) use ($request): void {
                         $query->where('ksuid', $request->get('search'));
                     });
                 });
             })
-            ->when(str_starts_with($request->get('search', ''), 'cus_'), function ($query) use ($request) {
-                $query->whereHas('customer', function ($query) use ($request) {
+            ->when(str_starts_with($request->get('search', ''), 'cus_'), function ($query) use ($request): void {
+                $query->whereHas('customer', function ($query) use ($request): void {
                     $query->where('ksuid', $request->get('search'));
                 });
             })

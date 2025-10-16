@@ -19,9 +19,7 @@ class HandlePreapprovalUpdated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private readonly SubscriptionService $subscriptionService) {}
 
     /**
      * @throws Throwable
@@ -82,7 +80,7 @@ class HandlePreapprovalUpdated implements ShouldQueue
                         'paid_at' => now(),
                         'vendor_data' => $response,
                         'payment_method' => 'account_money',
-                        'payment_type' => 'account_money'
+                        'payment_type' => 'account_money',
                     ]);
                 }
             }

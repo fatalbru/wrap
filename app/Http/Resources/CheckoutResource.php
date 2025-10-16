@@ -23,20 +23,20 @@ class CheckoutResource extends JsonResource
             'url' => url(route('checkout', $this)),
             'min_installments' => $this->when(
                 $this->checkoutable instanceof Order,
-                fn() => $this->min_installments
+                fn () => $this->min_installments
             ),
             'max_installments' => $this->when(
                 $this->checkoutable instanceof Order,
-                fn() => $this->max_installments
+                fn () => $this->max_installments
             ),
             'customer' => CustomerResource::make($this->customer),
             'subscription' => $this->when(
                 $this->checkoutable instanceof Subscription,
-                fn() => SubscriptionResource::make($this->checkoutable)
+                fn () => SubscriptionResource::make($this->checkoutable)
             ),
             'order' => $this->when(
                 $this->checkoutable instanceof Order,
-                fn() => OrderResource::make($this->checkoutable)
+                fn () => OrderResource::make($this->checkoutable)
             ),
         ];
     }

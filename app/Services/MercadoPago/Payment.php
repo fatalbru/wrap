@@ -36,17 +36,16 @@ final class Payment
      * @throws Exception
      */
     public function create(
-        Application                            $application,
+        Application $application,
         #[SensitiveParameter] TemporaryCardDto $card,
-        string                                 $payerEmail,
-        string                                 $externalReference,
-        string                                 $description,
-        int|float                              $amount,
-        string                                 $idempotency,
-        int                                    $installments = 1,
-        array                                  $metadata = [],
-    )
-    {
+        string $payerEmail,
+        string $externalReference,
+        string $description,
+        int|float $amount,
+        string $idempotency,
+        int $installments = 1,
+        array $metadata = [],
+    ) {
         $ksuid = Str::of($description)->explode(' ')->last();
 
         $description = Str::of($description)

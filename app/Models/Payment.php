@@ -59,9 +59,9 @@ class Payment extends Model
 
     public function scopeSearch(Builder $builder, ?string $search = null): void
     {
-        $builder->when(filled($search), function (Builder $builder) use ($search) {
+        $builder->when(filled($search), function (Builder $builder) use ($search): void {
             $builder->whereAny(['vendor_data', 'ksuid'], 'like', "%{$search}%")
-                ->orWhereHas('customer', function (Builder $builder) use ($search) {
+                ->orWhereHas('customer', function (Builder $builder) use ($search): void {
                     $builder->search($search);
                 });
         });

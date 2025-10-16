@@ -43,7 +43,7 @@ class Home extends Component
             ->whereIn('status', [
                 PaymentStatus::APPROVED,
                 PaymentStatus::CANCELLED,
-                PaymentStatus::REFUNDED
+                PaymentStatus::REFUNDED,
             ])
             ->get();
     }

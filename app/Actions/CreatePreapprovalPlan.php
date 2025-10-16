@@ -14,9 +14,7 @@ use Throwable;
 
 final readonly class CreatePreapprovalPlan
 {
-    public function __construct(private MercadoPagoSubscriptions $mercadoPagoSubscriptions)
-    {
-    }
+    public function __construct(private MercadoPagoSubscriptions $mercadoPagoSubscriptions) {}
 
     /**
      * @link https://www.mercadopago.com.ar/developers/en/reference/subscriptions/_preapproval_plan/post

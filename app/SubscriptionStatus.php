@@ -11,7 +11,7 @@ enum SubscriptionStatus: string
     case PAUSED = 'paused';
     case CANCELLED = 'cancelled';
 
-    function getLabel(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::PENDING => __('Pending'),
@@ -21,7 +21,7 @@ enum SubscriptionStatus: string
         };
     }
 
-    function getBadgeColor(): string
+    public function getBadgeColor(): string
     {
         return match ($this) {
             self::PENDING => 'zinc',

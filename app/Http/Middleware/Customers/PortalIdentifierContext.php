@@ -27,7 +27,7 @@ class PortalIdentifierContext
                 abort(Response::HTTP_NOT_FOUND);
             }
 
-            if (!app()->isLocal()) {
+            if (! app()->isLocal()) {
                 if (Carbon::parse(data_get($portalIdentifier, 'expires_at'))->isPast()) {
                     abort(Response::HTTP_NOT_FOUND);
                 }

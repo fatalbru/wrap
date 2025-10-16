@@ -6,7 +6,6 @@ namespace App\Http\Requests\Customers;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Psy\Context;
 
 class UpdateCustomerRequest extends FormRequest
 {
@@ -22,7 +21,7 @@ class UpdateCustomerRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('customers')->ignore(request()->route('customer'))
+                Rule::unique('customers')->ignore(request()->route('customer')),
             ],
         ];
     }

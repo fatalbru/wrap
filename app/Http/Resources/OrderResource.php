@@ -23,7 +23,7 @@ class OrderResource extends JsonResource
             'canceled_at' => $this->canceled_at,
             'items' => OrderItemResource::collection($this->items),
             'payments' => PaymentResource::collection($this->payments),
-            'vendor_data' => $this->vendor_data
+            'vendor_data' => $this->vendor_data,
         ];
     }
 }

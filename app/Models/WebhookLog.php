@@ -13,7 +13,7 @@ class WebhookLog extends Model
     {
         return [
             'vendor' => PaymentVendor::class,
-            'payload' => 'json'
+            'payload' => 'json',
         ];
     }
 }

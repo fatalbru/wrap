@@ -6,7 +6,6 @@ namespace App\Services\MercadoPago;
 
 use App\Currency;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
-use App\Environment;
 use App\Models\Application;
 use App\Models\Price;
 use App\SubscriptionStatus;
@@ -38,22 +37,21 @@ final class Subscription
      * @throws Throwable
      */
     public function subscribe(
-        Application                             $application,
-        Price                                   $price,
-        string                                  $payerEmail,
-        Currency                                $currency,
-        string                                  $externalReference,
+        Application $application,
+        Price $price,
+        string $payerEmail,
+        Currency $currency,
+        string $externalReference,
         #[SensitiveParameter] ?TemporaryCardDto $card = null,
-        ?string                                 $backUrl = null,
-        array                                   $metadata = [],
-        ?string                                 $notificationUrl = null,
-    ): ?array
-    {
+        ?string $backUrl = null,
+        array $metadata = [],
+        ?string $notificationUrl = null,
+    ): ?array {
         Log::debug(__CLASS__, func_get_args());
 
         $payload = [
             'metadata' => $metadata,
-//            'preapproval_plan_id' => $price->vendor_id,
+            //            'preapproval_plan_id' => $price->vendor_id,
             'reason' => implode(' ', Arr::whereNotNull([$price->name, ...$metadata])),
             'external_reference' => $externalReference,
             'payer_email' => $payerEmail,
@@ -95,7 +93,7 @@ final class Subscription
         Http::mercadopago($application)
             ->throw()
             ->put("/preapproval/{$id}", [
-                'status' => SubscriptionStatus::CANCELLED
+                'status' => SubscriptionStatus::CANCELLED,
             ]);
     }
 
@@ -106,7 +104,7 @@ final class Subscription
             ->put("/preapproval/{$id}", [
                 'auto_recurring' => [
                     'transaction_amount' => $amount,
-                ]
+                ],
             ]);
     }
 }

@@ -50,7 +50,7 @@ class CustomersController extends Controller
     public function portalUrl(Request $request, Customer $customer)
     {
         $this->validate($request, [
-            'back_url' => ['required', 'url']
+            'back_url' => ['required', 'url'],
         ]);
 
         $portalIdentifier = base64_encode(encrypt([

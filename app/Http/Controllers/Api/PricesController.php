@@ -16,7 +16,7 @@ class PricesController extends Controller
     public function index(Request $request, ?Product $product = null)
     {
         return Price::with(['product'])
-            ->when(filled($product), fn(Builder $builder) => $builder->whereBelongsTo($product))
+            ->when(filled($product), fn (Builder $builder) => $builder->whereBelongsTo($product))
             ->paginate($request->integer('per_page', 50))
             ->toResourceCollection(PriceResource::class);
     }

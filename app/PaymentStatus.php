@@ -16,7 +16,7 @@ enum PaymentStatus: string
     case REFUNDED = 'refunded';
     case CHARGED_BACK = 'charged_back';
 
-    function getLabel(): string
+    public function getLabel(): string
     {
         return match ($this) {
             self::APPROVED => __('Approved'),
@@ -31,7 +31,7 @@ enum PaymentStatus: string
         };
     }
 
-    function getBadgeColor(): string
+    public function getBadgeColor(): string
     {
         return match ($this) {
             self::APPROVED => 'green',

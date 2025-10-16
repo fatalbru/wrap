@@ -16,7 +16,7 @@ class PaymentsController extends Controller
     /**
      * @throws Throwable
      */
-    function index(Request $request)
+    public function index(Request $request)
     {
         return Payment::search($request->get('search'))
             ->latest()
@@ -24,7 +24,7 @@ class PaymentsController extends Controller
             ->toResourceCollection(PaymentResource::class);
     }
 
-    function refund(Payment $payment, RefundPayment $refundPaymentAction)
+    public function refund(Payment $payment, RefundPayment $refundPaymentAction)
     {
         $refundPaymentAction->handle($payment);
 

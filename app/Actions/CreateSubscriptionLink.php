@@ -16,9 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 final readonly class CreateSubscriptionLink
 {
-    public function __construct(private SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     public function handle(Checkout $checkout): array
     {

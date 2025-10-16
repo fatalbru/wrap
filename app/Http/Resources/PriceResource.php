@@ -21,13 +21,13 @@ class PriceResource extends JsonResource
             'id' => $this->ksuid,
             'name' => $this->name,
             'price' => $this->price,
-            'frequency' => $this->when($this->product->type === ProductType::SUBSCRIPTION, fn() => $this->frequency),
-            'trial_days' => $this->when($this->product->type === ProductType::SUBSCRIPTION, fn() => $this->trial_days),
+            'frequency' => $this->when($this->product->type === ProductType::SUBSCRIPTION, fn () => $this->frequency),
+            'trial_days' => $this->when($this->product->type === ProductType::SUBSCRIPTION, fn () => $this->trial_days),
             'product' => ProductResource::make($this->whenLoaded('product')),
             'environment' => $this->environment,
             'vendor_data' => [
                 'id' => $this->vendor_id,
-            ]
+            ],
         ];
     }
 }

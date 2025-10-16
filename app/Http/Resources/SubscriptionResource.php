@@ -29,7 +29,7 @@ class SubscriptionResource extends JsonResource
             'customer' => CustomerResource::make($this->customer),
             'price' => PriceResource::make($this->price),
             'environment' => $this->environment,
-            'vendor_data' => $this->vendor_data
+            'vendor_data' => $this->vendor_data,
         ];
     }
 }

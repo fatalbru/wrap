@@ -47,12 +47,12 @@ class CardPayment extends Component
 
         /** @var Payment $payment */
         $payment = Cache::lock("checkout:{$this->checkout->ksuid}", 10)
-            ->block(3, fn() => DB::transaction(fn() => $handler->handle(
+            ->block(3, fn () => DB::transaction(fn () => $handler->handle(
                 $this->checkout,
                 TemporaryCardDto::make($this->card),
             )));
 
-        if (!$payment->isSuccessful()) {
+        if (! $payment->isSuccessful()) {
             $this->failed($payment->decline_reason);
 
             return;

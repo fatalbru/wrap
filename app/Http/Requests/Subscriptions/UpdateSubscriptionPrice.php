@@ -17,7 +17,7 @@ class UpdateSubscriptionPrice extends FormRequest
     public function rules(): array
     {
         return [
-            'price_id' => ['required', Rule::exists('prices', 'ksuid')]
+            'price_id' => ['required', Rule::exists('prices', 'ksuid')],
         ];
     }
 }

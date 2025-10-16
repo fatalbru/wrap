@@ -17,9 +17,7 @@ class HandlePaymentCreated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly PaymentService $paymentService)
-    {
-    }
+    public function __construct(private readonly PaymentService $paymentService) {}
 
     /**
      * @throws \Throwable
@@ -34,7 +32,7 @@ class HandlePaymentCreated implements ShouldQueue
             return;
         }
 
-        if (!$event->getRelatedModel() instanceof Order) {
+        if (! $event->getRelatedModel() instanceof Order) {
             Log::debug(__CLASS__, [
                 'message' => 'Only Order models are handled',
             ]);

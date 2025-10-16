@@ -6,7 +6,6 @@ namespace App\Actions;
 
 use App\Currency;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
-use App\FrequencyType;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Payment;
@@ -72,7 +71,7 @@ final readonly class Subscribe
                 'payment_method' => $card?->paymentMethodId(),
                 'payment_vendor' => PaymentVendor::MERCADOPAGO_CARD,
                 'payment_type' => $card?->paymentTypeId(),
-                'card_last_digits' => $card?->lastFourDigits()
+                'card_last_digits' => $card?->lastFourDigits(),
             ]);
         }
 
@@ -99,7 +98,7 @@ final readonly class Subscribe
             'payment_vendor' => PaymentVendor::MERCADOPAGO_CARD,
             'payment_method' => $card?->paymentMethodId(),
             'payment_type' => $card?->paymentTypeId(),
-            'card_last_digits' => $card?->lastFourDigits()
+            'card_last_digits' => $card?->lastFourDigits(),
         ]);
     }
 }

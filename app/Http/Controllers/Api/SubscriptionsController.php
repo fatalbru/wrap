@@ -6,16 +6,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\CancelSubscription;
 use App\Actions\ListPayments;
+use App\Actions\UpdateSubscriptionPrice as UpdateSubscriptionPriceAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Subscriptions\UpdateSubscriptionPrice;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\SubscriptionResource;
 use App\Models\Price;
 use App\Models\Subscription;
+use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Http\Request;
 use Throwable;
-use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\Actions\UpdateSubscriptionPrice as UpdateSubscriptionPriceAction;
 
 class SubscriptionsController extends Controller
 {
@@ -58,11 +58,10 @@ class SubscriptionsController extends Controller
      * @throws Throwable
      */
     public function updatePlan(
-        UpdateSubscriptionPrice       $request,
-        Subscription                  $subscription,
+        UpdateSubscriptionPrice $request,
+        Subscription $subscription,
         UpdateSubscriptionPriceAction $updateSubscriptionPriceAction
-    )
-    {
+    ) {
         $updateSubscriptionPriceAction->handle($subscription, Price::findByKsuid($request->get('price_id')));
 
         return response()->noContent();

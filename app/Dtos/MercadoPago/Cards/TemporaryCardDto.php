@@ -6,9 +6,7 @@ namespace App\Dtos\MercadoPago\Cards;
 
 final readonly class TemporaryCardDto
 {
-    public function __construct(private array $card)
-    {
-    }
+    public function __construct(private array $card) {}
 
     public static function make(array $card): TemporaryCardDto
     {

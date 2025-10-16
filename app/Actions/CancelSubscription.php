@@ -10,9 +10,7 @@ use App\SubscriptionStatus;
 
 final readonly class CancelSubscription
 {
-    public function __construct(private SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     public function handle(Subscription $subscription): void
     {

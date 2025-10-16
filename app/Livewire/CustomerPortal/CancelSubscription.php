@@ -28,8 +28,9 @@ class CancelSubscription extends Component
 
     public function cancelSubscription(\App\Actions\CancelSubscription $cancelSubscription): void
     {
-        if(!$this->subscription->cancelable) {
+        if (! $this->subscription->cancelable) {
             Flux::toast(__('Subscription cannot be cancelled.'), variant: 'danger');
+
             return;
         }
 
