@@ -4,7 +4,8 @@ namespace App\Jobs\MercadoPago\Payments;
 
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
-use App\Events\Payments\Created;
+use App\Events\Payments\PaymentCreated;
+use App\Events\Payments\PaymentUpdated;
 use App\Models\Order;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Payment as PaymentService;
@@ -18,9 +19,11 @@ class RegisterModelPayment implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        private readonly string $paymentId,
+        private readonly string             $paymentId,
         private readonly Order|Subscription $model
-    ) {}
+    )
+    {
+    }
 
     public function middleware()
     {
@@ -53,8 +56,8 @@ class RegisterModelPayment implements ShouldQueue
             'card_last_digits' => data_get($payment, 'card.last_four_digits'),
         ]);
 
-        if ($paymentModel->wasRecentlyCreated) {
-            event(new Created($paymentModel));
-        }
+        $event = $paymentModel->wasRecentlyCreated ? PaymentCreated::class : PaymentUpdated::class;
+
+        event(new $event($paymentModel));
     }
 }

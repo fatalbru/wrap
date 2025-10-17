@@ -7,6 +7,7 @@ use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
 use App\Events\MercadoPago\WebhookReceived;
+use App\Events\Subscriptions\SubscriptionCanceled;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Bus\Queueable;
@@ -19,7 +20,9 @@ class HandlePreapprovalUpdated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly SubscriptionService $subscriptionService) {}
+    public function __construct(private readonly SubscriptionService $subscriptionService)
+    {
+    }
 
     /**
      * @throws Throwable
@@ -86,10 +89,10 @@ class HandlePreapprovalUpdated implements ShouldQueue
             }
         }
 
-        if ($status === SubscriptionStatus::CANCELLED) {
-            if (blank($subscription->canceled_at)) {
-                $subscription->touch('canceled_at');
-            }
+        if ($status === SubscriptionStatus::CANCELLED && blank($subscription->canceled_at)) {
+            $subscription->touch('canceled_at');
+
+            event(new SubscriptionCanceled($subscription));
         }
     }
 }

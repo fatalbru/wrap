@@ -17,6 +17,8 @@ return [
     'checkout_prefix' => env('CHECKOUT_PREFIX', 'checkout'),
     'customer_portal_domain' => env('CUSTOMER_PORTAL_DOMAIN', 'portal.wrap.test'),
     'customer_portal_prefix' => env('CUSTOMER_PORTAL_PREFIX', 'customers'),
+    'webhook_url' => env('WEBHOOK_URL'),
+    'webhook_signature' => env('WEBHOOK_SIGNATURE'),
     'currency' => env('APP_CURRENCY', 'USD'),
     'ksuid_prefixes' => [
         class_basename(Customer::class) => 'cus',
