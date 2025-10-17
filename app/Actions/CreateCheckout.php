@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Environment;
+use App\Enums\Environment;
 use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Price;
-use App\OrderStatus;
-use App\PaymentVendor;
-use App\ProductType;
-use App\SubscriptionStatus;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
+use App\Enums\SubscriptionStatus;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Throwable;
 

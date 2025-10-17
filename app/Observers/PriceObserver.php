@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use App\Actions\CreatePreapprovalPlan;
+use App\Enums\ProductType;
 use App\Models\Price;
-use App\ProductType;
 use Throwable;
 
 class PriceObserver

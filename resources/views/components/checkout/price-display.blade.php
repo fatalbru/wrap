@@ -1,4 +1,4 @@
-@use(App\ProductType;use Illuminate\Support\Number)
+@use(App\Enums\ProductType;use Illuminate\Support\Number)
 <div class="space-y-4">
     <flux:heading size="lg">
         {{$title}}
@@ -27,7 +27,8 @@
                     <li class="flex items-end gap-2 text-zinc-500 justify-between">
                         <div>
                             <div>{{data_get($item, 'name')}}</div>
-                            <div class="text-sm">{{ data_get($item, 'quantity') }} x $ {{ Number::format(data_get($item, 'unit_price'), 2) }}</div>
+                            <div class="text-sm">{{ data_get($item, 'quantity') }} x
+                                $ {{ Number::format(data_get($item, 'unit_price'), 2) }}</div>
                         </div>
                         <span>
                             $ {{Number::format(data_get($item, 'subtotal'),2)}}

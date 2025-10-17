@@ -36,24 +36,17 @@ final class Payment
      * @throws Exception
      */
     public function create(
-        Application $application,
+        Application                            $application,
         #[SensitiveParameter] TemporaryCardDto $card,
-        string $payerEmail,
-        string $externalReference,
-        string $description,
-        int|float $amount,
-        string $idempotency,
-        int $installments = 1,
-        array $metadata = [],
-    ) {
-        $ksuid = Str::of($description)->explode(' ')->last();
-
-        $description = Str::of($description)
-            ->replace($ksuid, '')
-            ->rtrim()
-            ->limit(strlen($description) - strlen($ksuid) - 1)
-            ->toString();
-
+        string                                 $payerEmail,
+        string                                 $externalReference,
+        string                                 $description,
+        int|float                              $amount,
+        string                                 $idempotency,
+        int                                    $installments = 1,
+        array                                  $metadata = [],
+    )
+    {
         $payload = [
             'payer' => [
                 'email' => $payerEmail,
@@ -80,8 +73,8 @@ final class Payment
             'description' => ['required', 'string', 'max:255'],
             'transaction_amount' => ['required', 'integer', 'min:0'],
             'token' => ['required', 'string'],
-            'statement_descriptor' => ['required', 'string', 'max:255'],
-            'metadata' => ['array', 'sometimes'],
+//            'statement_descriptor' => ['required', 'string', 'max:255'],
+//            'metadata' => ['array', 'sometimes'],
         ]);
 
         if ($validator->fails()) {
@@ -95,6 +88,7 @@ final class Payment
 
         return Http::mercadopago($application)
             ->withHeader('x-idempotency-key', $idempotency)
+            ->throw()
             ->post('/v1/payments', $payload)
             ->json();
     }

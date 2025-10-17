@@ -7,7 +7,7 @@ namespace App\Livewire\Checkout;
 use App\Models\Checkout;
 use App\Models\Order;
 use App\Models\Subscription;
-use App\PaymentStatus;
+use App\Enums\PaymentStatus;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 

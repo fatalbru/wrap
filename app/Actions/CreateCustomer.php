@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Environment;
+use App\Enums\Environment;
 use App\Models\Customer;
 
 final class CreateCustomer

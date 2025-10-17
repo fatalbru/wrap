@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Environment;
+use App\Enums\Environment;
 
 return [
     Environment::LIVE->value => [

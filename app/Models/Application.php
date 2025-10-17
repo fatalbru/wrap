@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Environment;
-use App\PaymentVendor;
-use App\ProductType;
+use App\Enums\Environment;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model

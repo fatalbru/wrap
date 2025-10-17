@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Actions\CreateCheckout;
-use App\Environment;
+use App\Enums\Environment;
 use App\Events\MercadoPago\WebhookReceived;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkouts\CreateCheckoutRequest;

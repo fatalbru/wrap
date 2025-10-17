@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Currency;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\Enums\Currency;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
+use App\Enums\SubscriptionStatus;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Payment;
 use App\Models\Subscription;
-use App\PaymentStatus;
-use App\PaymentVendor;
-use App\ProductType;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\SubscriptionStatus;
 use Illuminate\Support\Facades\Log;
 use SensitiveParameter;
 

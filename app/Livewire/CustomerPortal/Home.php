@@ -2,10 +2,10 @@
 
 namespace App\Livewire\CustomerPortal;
 
+use App\Enums\PaymentStatus;
+use App\Enums\SubscriptionStatus;
 use App\Models\Customer;
 use App\Models\Subscription;
-use App\PaymentStatus;
-use App\SubscriptionStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Context;
 use Livewire\Attributes\Computed;

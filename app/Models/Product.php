@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Environment;
-use App\ProductType;
+use App\Enums\Environment;
+use App\Enums\ProductType;
 use App\Traits\HasKsuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

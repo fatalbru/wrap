@@ -7,18 +7,18 @@ namespace App\Livewire\Checkout;
 use App\Actions\PayOrder;
 use App\Actions\Subscribe;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Payment;
 use App\Models\Subscription;
-use App\PaymentVendor;
-use App\ProductType;
-use Masmerise\Toaster\Toaster;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class CardPayment extends Component
 {

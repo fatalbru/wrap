@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Application::class)->constrained();
             $table->nullableMorphs('loggable');
             $table->json('payload');
-            $table->string('vendor')->nullable();
+            $table->string('provider')->nullable();
             $table->timestamps();
         });
     }

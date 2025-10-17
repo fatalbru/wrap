@@ -6,9 +6,9 @@ namespace App\Actions;
 
 use App\Models\Price;
 use App\Models\Subscription;
-use App\ProductType;
+use App\Enums\ProductType;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\SubscriptionStatus;
+use App\Enums\SubscriptionStatus;
 use Throwable;
 
 final readonly class UpdateSubscriptionPrice

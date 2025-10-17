@@ -8,7 +8,7 @@ use App\Actions\CreatePreferenceLink;
 use App\Actions\CreateSubscriptionLink;
 use App\Models\Checkout;
 use App\Models\Payment;
-use App\ProductType;
+use App\Enums\ProductType;
 use Flux\Flux;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
@@ -56,7 +56,7 @@ class WalletPayment extends Component
     private function failed(string $message): void
     {
         $this->dispatch('failed', errorMessage: $message)->self();
-        Toaster::error($message, __('Payment failed'));
+        Toaster::error($message);
     }
 
     public function render()

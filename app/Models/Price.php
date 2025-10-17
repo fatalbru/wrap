@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\UseCents;
-use App\Environment;
-use App\FrequencyType;
+use App\Enums\Environment;
+use App\Enums\FrequencyType;
 use App\Observers\PriceObserver;
-use App\PaymentVendor;
-use App\ProductType;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Traits\HasKsuid;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

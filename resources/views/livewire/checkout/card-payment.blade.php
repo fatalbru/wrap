@@ -1,4 +1,4 @@
-@php use App\ProductType; @endphp
+@php use App\Enums\ProductType; @endphp
 <div x-data="cardPaymentData" x-on:failed="failed($event)">
     <flux:callout variant="danger" x-cloak x-show="!!errorMessage">
         <flux:callout.text>

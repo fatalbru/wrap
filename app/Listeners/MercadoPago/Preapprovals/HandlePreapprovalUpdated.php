@@ -3,12 +3,12 @@
 namespace App\Listeners\MercadoPago\Preapprovals;
 
 use App\Events\MercadoPago\WebhookReceived;
-use App\FrequencyType;
+use App\Enums\FrequencyType;
 use App\Models\Subscription;
-use App\PaymentStatus;
-use App\PaymentVendor;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentVendor;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\SubscriptionStatus;
+use App\Enums\SubscriptionStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
