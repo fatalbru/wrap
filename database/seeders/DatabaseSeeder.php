@@ -6,12 +6,12 @@ namespace Database\Seeders;
 
 use App\Enums\Environment;
 use App\Enums\FrequencyType;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Models\Application;
 use App\Models\Price;
 use App\Models\Product;
 use App\Models\User;
-use App\Enums\PaymentVendor;
-use App\Enums\ProductType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

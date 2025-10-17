@@ -19,12 +19,11 @@ final class Preference
 
     public function create(
         Application $application,
-        array       $items,
-        string      $externalReference,
-        string      $backUrl,
-        string      $notificationUrl,
-    )
-    {
+        array $items,
+        string $externalReference,
+        string $backUrl,
+        string $notificationUrl,
+    ) {
         return Http::mercadopago($application)
             ->throw()
             ->post('/checkout/preferences', [

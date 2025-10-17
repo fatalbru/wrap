@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Models\Application;
-use App\Models\Price;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
+use App\Models\Application;
+use App\Models\Price;
 use App\Services\MercadoPago\Subscription as MercadoPagoSubscriptions;
 use Illuminate\Support\Arr;
 use Throwable;

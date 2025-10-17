@@ -6,22 +6,19 @@ namespace App\Actions;
 
 use App\Enums\Currency;
 use App\Enums\HandshakeType;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Handshake;
 use App\Models\Subscription;
-use App\Enums\PaymentVendor;
-use App\Enums\ProductType;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 final readonly class CreateSubscriptionLink
 {
-    public function __construct(private SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     public function handle(Checkout $checkout): array
     {
@@ -43,7 +40,7 @@ final readonly class CreateSubscriptionLink
 
         $price = $subscription->price;
 
-        $idempotency = md5($subscription->ksuid . uniqid() . time());
+        $idempotency = md5($subscription->ksuid.uniqid().time());
 
         $handshake = Handshake::create([
             'type' => HandshakeType::REROUTE,
@@ -55,9 +52,9 @@ final readonly class CreateSubscriptionLink
                         'idempotency' => $idempotency,
                         'checkout_id' => $checkout->id,
                         'subscription_id' => $subscription->id,
-                    ])
-                ]
-            ]
+                    ]),
+                ],
+            ],
         ]);
 
         $response = $this->subscriptionService->subscribe(

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Enums\SubscriptionStatus;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\Enums\SubscriptionStatus;
 
 final readonly class CancelSubscription
 {

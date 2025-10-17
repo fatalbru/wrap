@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Checkout;
 
+use App\Enums\PaymentStatus;
 use App\Models\Checkout;
 use App\Models\Order;
 use App\Models\Subscription;
-use App\Enums\PaymentStatus;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 

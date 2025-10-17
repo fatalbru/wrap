@@ -4,29 +4,26 @@ namespace App\Jobs\MercadoPago\MerchantOrders;
 
 use App\Jobs\MercadoPago\Payments\RegisterModelPayment;
 use App\Models\Order;
-use App\Services\MercadoPago\MerchantOrder;
+use App\Services\MercadoPago\MerchantOrder as MerchantOrderService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use App\Services\MercadoPago\MerchantOrder as MerchantOrderService;
 
 class ProcessMerchantOrder implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(
-        private readonly int   $merchantOrderId,
+        private readonly int $merchantOrderId,
         private readonly Order $order
-    )
-    {
-    }
+    ) {}
 
     public function failed()
     {
         Log::error(__CLASS__, [
             'merchant_order_id' => $this->merchantOrderId,
-            'order' => $this->order
+            'order' => $this->order,
         ]);
     }
 

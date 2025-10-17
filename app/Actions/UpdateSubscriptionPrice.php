@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Enums\ProductType;
+use App\Enums\SubscriptionStatus;
 use App\Models\Price;
 use App\Models\Subscription;
-use App\Enums\ProductType;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\Enums\SubscriptionStatus;
 use Throwable;
 
 final readonly class UpdateSubscriptionPrice

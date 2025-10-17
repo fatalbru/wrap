@@ -3,43 +3,41 @@
 namespace App\Http\Controllers\Webhooks\MercadoPago;
 
 use App\Actions\RegisterWebhookLog;
-use App\Exceptions\IdempotencyOverlap;
-use App\Http\Controllers\Controller;
-use App\Models\Checkout;
-use App\Models\Subscription;
 use App\Enums\PaymentProvider;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
+use App\Exceptions\IdempotencyOverlap;
+use App\Http\Controllers\Controller;
+use App\Models\Checkout;
+use App\Models\Subscription;
+use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\MercadoPago\Subscription as SubscriptionService;
 
 class PreapprovalsController extends Controller
 {
     /**
      * Malformed/abusive requests have no mercy here
-     * @param string $signature
-     * @param SubscriptionService $subscriptionService
-     * @param RegisterWebhookLog $registerWebhookLog
+     *
      * @return RedirectResponse
+     *
      * @throws IdempotencyOverlap
      */
     public function preapprovalCallback(
-        string              $signature,
+        string $signature,
         SubscriptionService $subscriptionService,
-        RegisterWebhookLog  $registerWebhookLog
-    )
-    {
+        RegisterWebhookLog $registerWebhookLog
+    ) {
         $signature = decrypt($signature);
 
         $validator = Validator::make($signature, [
             'checkout_id' => ['required', 'exists:checkouts,id'],
             'subscription_id' => ['required', 'exists:subscriptions,id'],
-            'idempotency' => ['required', 'unique:webhook_logs,idempotency']
+            'idempotency' => ['required', 'unique:webhook_logs,idempotency'],
         ]);
 
         if ($validator->fails()) {
@@ -54,7 +52,7 @@ class PreapprovalsController extends Controller
         /** @var ?Subscription $subscription */
         $subscription = Subscription::find(data_get($signature, 'subscription_id'));
 
-        if (!$checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
+        if (! $checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -82,7 +80,7 @@ class PreapprovalsController extends Controller
 
             $subscription->update([
                 'status' => SubscriptionStatus::AUTHORIZED,
-                'started_at' => now()
+                'started_at' => now(),
             ]);
 
             $payment_method_id = data_get($preapproval, 'payment_method_id');

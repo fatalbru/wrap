@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\View\Components\Checkout;
 
 use App\Enums\FrequencyType;
+use App\Enums\ProductType;
 use App\Models\Checkout;
 use App\Models\OrderItem;
 use App\Models\Subscription;
-use App\Enums\ProductType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

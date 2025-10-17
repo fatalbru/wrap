@@ -15,9 +15,7 @@ use App\Services\MercadoPago\Preference as PreferenceService;
 
 final readonly class CreatePreferenceLink
 {
-    public function __construct(private PreferenceService $preferenceService)
-    {
-    }
+    public function __construct(private PreferenceService $preferenceService) {}
 
     public function handle(Checkout $checkout): array
     {
@@ -42,13 +40,13 @@ final readonly class CreatePreferenceLink
                 'checkout_id' => $checkout->id,
                 'order_id' => $order->id,
             ],
-            md5($order->ksuid . uniqid() . time()),
+            md5($order->ksuid.uniqid().time()),
             disposable: false,
         );
 
         $preference = $this->preferenceService->create(
             $application,
-            $order->items->map(fn(OrderItem $orderItem) => [
+            $order->items->map(fn (OrderItem $orderItem) => [
                 'id' => $orderItem->price->ksuid,
                 'title' => $orderItem->price->name,
                 'quantity' => $orderItem->quantity,

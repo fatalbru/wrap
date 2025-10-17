@@ -16,7 +16,7 @@ class HandshakesController extends Controller
     {
         $payload = $handshake->payload;
 
-        if($handshake->disposable) {
+        if ($handshake->disposable) {
             $handshake->delete();
         }
 
@@ -31,8 +31,8 @@ class HandshakesController extends Controller
             $handler = data_get($payload, 'handler');
 
             dispatch(new $handler([
-                ... $request->all(),
-                ... data_get($payload, 'arguments')
+                ...$request->all(),
+                ...data_get($payload, 'arguments'),
             ]));
 
             return response()->noContent(Response::HTTP_OK);

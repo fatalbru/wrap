@@ -17,8 +17,8 @@ Route::match(['get', 'post'], '/handshakes/{handshake:idempotency}', HandshakesC
     ->withoutMiddleware(VerifyCsrfToken::class)
     ->name('handshake');
 
-Route::prefix('webhooks')->group(function () {
-    Route::prefix('mercadopago')->group(function () {
+Route::prefix('webhooks')->group(function (): void {
+    Route::prefix('mercadopago')->group(function (): void {
         Route::get('preapprovals/{signature}', [PreapprovalsController::class, 'preapprovalCallback'])
             ->name('mercadopago.preapproval.callback');
 
@@ -28,7 +28,7 @@ Route::prefix('webhooks')->group(function () {
 });
 
 Route::domain(config('mrr.checkout_domain'))
-    ->prefix(config('mrr.checkout_prefix') . '/{checkout:ksuid}')
+    ->prefix(config('mrr.checkout_prefix').'/{checkout:ksuid}')
     ->group(function (): void {
         Route::get('/', Pay::class)->name('checkout');
         Route::get('/complete', Completed::class)->name('checkout.complete');
@@ -36,7 +36,7 @@ Route::domain(config('mrr.checkout_domain'))
     });
 
 Route::domain(config('mrr.customer_portal_domain'))
-    ->prefix(config('mrr.customer_portal_prefix') . '/{portalIdentifier}')
+    ->prefix(config('mrr.customer_portal_prefix').'/{portalIdentifier}')
     ->middleware(PortalIdentifierContext::class)
     ->group(function (): void {
         Route::get('/', Home::class)

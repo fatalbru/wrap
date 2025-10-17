@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use SensitiveParameter;
 
 final class Payment
@@ -36,17 +35,16 @@ final class Payment
      * @throws Exception
      */
     public function create(
-        Application                            $application,
+        Application $application,
         #[SensitiveParameter] TemporaryCardDto $card,
-        string                                 $payerEmail,
-        string                                 $externalReference,
-        string                                 $description,
-        int|float                              $amount,
-        string                                 $idempotency,
-        int                                    $installments = 1,
-        array                                  $metadata = [],
-    )
-    {
+        string $payerEmail,
+        string $externalReference,
+        string $description,
+        int|float $amount,
+        string $idempotency,
+        int $installments = 1,
+        array $metadata = [],
+    ) {
         $payload = [
             'payer' => [
                 'email' => $payerEmail,
@@ -73,8 +71,8 @@ final class Payment
             'description' => ['required', 'string', 'max:255'],
             'transaction_amount' => ['required', 'integer', 'min:0'],
             'token' => ['required', 'string'],
-//            'statement_descriptor' => ['required', 'string', 'max:255'],
-//            'metadata' => ['array', 'sometimes'],
+            //            'statement_descriptor' => ['required', 'string', 'max:255'],
+            //            'metadata' => ['array', 'sometimes'],
         ]);
 
         if ($validator->fails()) {

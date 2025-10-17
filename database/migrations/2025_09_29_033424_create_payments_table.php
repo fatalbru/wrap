@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Enums\Environment;
-use App\Models\Customer;
 use App\Enums\PaymentStatus;
+use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

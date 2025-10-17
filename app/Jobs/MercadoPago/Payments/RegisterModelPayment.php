@@ -7,22 +7,20 @@ use App\Enums\PaymentVendor;
 use App\Events\Payments\Created;
 use App\Models\Order;
 use App\Models\Subscription;
+use App\Services\MercadoPago\Payment as PaymentService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
-use App\Services\MercadoPago\Payment as PaymentService;
 
 class RegisterModelPayment implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(
-        private readonly string             $paymentId,
+        private readonly string $paymentId,
         private readonly Order|Subscription $model
-    )
-    {
-    }
+    ) {}
 
     public function middleware()
     {
@@ -41,7 +39,7 @@ class RegisterModelPayment implements ShouldQueue
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
         $paymentModel = $this->model->payments()->updateOrCreate([
-            'vendor_id' => data_get($payment, 'id')
+            'vendor_id' => data_get($payment, 'id'),
         ], [
             'environment' => $this->model->environment,
             'status' => $status,

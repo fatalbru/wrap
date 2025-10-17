@@ -2,11 +2,11 @@
 
 namespace App\Listeners\MercadoPago\Preferences;
 
-use App\Events\MercadoPago\WebhookReceived;
-use App\Models\Order;
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
+use App\Events\MercadoPago\WebhookReceived;
+use App\Models\Order;
 use App\Services\MercadoPago\Payment as PaymentService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

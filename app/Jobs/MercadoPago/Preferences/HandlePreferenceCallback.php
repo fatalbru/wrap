@@ -14,9 +14,7 @@ class HandlePreferenceCallback implements ShouldQueue
 
     public function __construct(
         private readonly array $payload
-    )
-    {
-    }
+    ) {}
 
     public function handle(): void
     {

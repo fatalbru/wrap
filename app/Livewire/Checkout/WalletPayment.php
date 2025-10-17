@@ -6,10 +6,9 @@ namespace App\Livewire\Checkout;
 
 use App\Actions\CreatePreferenceLink;
 use App\Actions\CreateSubscriptionLink;
+use App\Enums\ProductType;
 use App\Models\Checkout;
 use App\Models\Payment;
-use App\Enums\ProductType;
-use Flux\Flux;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
