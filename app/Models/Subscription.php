@@ -8,7 +8,9 @@ use App\Enums\Environment;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
+use App\Observers\SubscriptionObserver;
 use App\Traits\HasKsuid;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
+#[ObservedBy(SubscriptionObserver::class)]
 class Subscription extends Model
 {
     use HasFactory, HasKsuid;

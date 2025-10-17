@@ -6,12 +6,16 @@ use App\Events\Orders\OrderCanceled;
 use App\Events\Orders\OrderCompleted;
 use App\Events\Orders\OrderCreated;
 use App\Events\Orders\OrderExpired;
+use App\Events\Orders\OrderUpdated;
+use App\Events\Payments\PaymentAuthorized;
 use App\Events\Payments\PaymentCreated;
+use App\Events\Payments\PaymentFailed;
 use App\Events\Payments\PaymentUpdated;
 use App\Events\Refunds\RefundCreated;
 use App\Events\Subscriptions\SubscriptionCanceled;
 use App\Events\Subscriptions\SubscriptionCreated;
 use App\Events\Subscriptions\SubscriptionStarted;
+use App\Events\Subscriptions\SubscriptionUpdated;
 use App\Events\Subscriptions\TrialEnded;
 use App\Events\Subscriptions\TrialStarted;
 use App\Models\Checkout;
@@ -60,12 +64,16 @@ return [
         OrderCompleted::class => 'order.completed',
         OrderCreated::class => 'order.created',
         OrderExpired::class => 'order.expired',
+        OrderUpdated::class => 'order.updated',
         PaymentCreated::class => 'payment.created',
         PaymentUpdated::class => 'payment.updated',
+        PaymentFailed::class => 'payment.failed',
+        PaymentAuthorized::class => 'payment.authorized',
         RefundCreated::class => 'refund.created',
         SubscriptionCanceled::class => 'subscription.canceled',
         SubscriptionCreated::class => 'subscription.created',
         SubscriptionStarted::class => 'subscription.started',
+        SubscriptionUpdated::class => 'subscription.updated',
         TrialEnded::class => 'trial.ended',
         TrialStarted::class => 'trial.started',
     ],

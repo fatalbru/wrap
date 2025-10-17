@@ -9,6 +9,10 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
+use App\Events\Orders\OrderCompleted;
+use App\Events\Orders\OrderCreated;
+use App\Events\Payments\PaymentAuthorized;
+use App\Events\Payments\PaymentFailed;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Order;
@@ -21,13 +25,16 @@ use SensitiveParameter;
 
 final readonly class PayOrder
 {
-    public function __construct(private PaymentService $paymentService) {}
+    public function __construct(private PaymentService $paymentService)
+    {
+    }
 
     public function handle(
-        Checkout $checkout,
+        Checkout                               $checkout,
         #[SensitiveParameter] TemporaryCardDto $card,
-        array $metadata = []
-    ): Payment {
+        array                                  $metadata = []
+    ): Payment
+    {
         $idempotency = Str::random(128);
 
         /** @var Order $order */
@@ -42,7 +49,7 @@ final readonly class PayOrder
         $order->application()->associate($application);
         $order->save();
 
-        $items = $order->items->map(fn (OrderItem $orderItem) => [
+        $items = $order->items->map(fn(OrderItem $orderItem) => [
             'id' => $orderItem->id,
             'title' => $orderItem->price->name,
             'quantity' => $orderItem->quantity,
@@ -65,7 +72,7 @@ final readonly class PayOrder
         Log::debug(__CLASS__, $response);
 
         if (data_get($response, 'status') !== 'approved') {
-            return $order->payments()->create([
+            $payment = $order->payments()->create([
                 'customer_id' => $checkout->customer_id,
                 'amount' => $total,
                 'status' => PaymentStatus::REJECTED,
@@ -76,6 +83,8 @@ final readonly class PayOrder
                 'payment_type' => $card?->paymentTypeId(),
                 'card_last_digits' => $card?->lastFourDigits(),
             ]);
+
+            return $payment;
         }
 
         $order->update([
@@ -83,9 +92,11 @@ final readonly class PayOrder
             'completed_at' => now(),
         ]);
 
+        event(new OrderCompleted($order));
+
         $checkout->touch('completed_at');
 
-        return $order->payments()->create([
+        $payment = $order->payments()->create([
             'customer_id' => $checkout->customer_id,
             'amount' => $total,
             'status' => PaymentStatus::APPROVED,
@@ -97,5 +108,7 @@ final readonly class PayOrder
             'payment_type' => $card?->paymentTypeId(),
             'card_last_digits' => $card?->lastFourDigits(),
         ]);
+
+        return $payment;
     }
 }

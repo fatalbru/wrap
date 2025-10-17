@@ -8,6 +8,7 @@ use App\Enums\Currency;
 use App\Enums\HandshakeType;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
+use App\Events\Subscriptions\SubscriptionCreated;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Handshake;
@@ -66,6 +67,8 @@ final readonly class CreateSubscriptionLink
             backUrl: url(route('handshake', $handshake->idempotency)),
             metadata: [$subscription->ksuid],
         );
+
+        event(new SubscriptionCreated($subscription));
 
         Log::debug(__CLASS__, Arr::wrap($response));
 
