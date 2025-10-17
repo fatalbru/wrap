@@ -19,7 +19,9 @@ class HandlePaymentCreated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly PaymentService $paymentService) {}
+    public function __construct(private readonly PaymentService $paymentService)
+    {
+    }
 
     /**
      * @throws \Throwable
@@ -71,7 +73,7 @@ class HandlePaymentCreated implements ShouldQueue
         }
 
         if (filled($externalReference)) {
-            if (! Str::contains($externalReference, [
+            if (!Str::contains($externalReference, [
                 $modelPrefix[class_basename(Subscription::class)],
                 $modelPrefix[class_basename(Order::class)],
             ])) {
@@ -82,18 +84,6 @@ class HandlePaymentCreated implements ShouldQueue
                 return;
             }
         } else {
-            /**
-             * - [x] Sub card
-             * - [x] Sub wallet
-             * - [x] Sub wallet card
-             * - [x] Trial card
-             * - [x] Trial wallet
-             * - [x] Trial wallet card
-             * - [x] Order card
-             *  - [x] Order wallet
-             *  - [x] Order wallet card
-             */
-
             // Is this a sub?
             if (Str::contains($description, ' sub_')) {
                 $model = Subscription::findByKsuid(Str::of($description)->explode(' ')->last());

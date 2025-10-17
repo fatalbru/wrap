@@ -12,6 +12,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Throwable;
 
 class HandlePaymentCreated implements ShouldQueue
 {
@@ -20,7 +21,7 @@ class HandlePaymentCreated implements ShouldQueue
     public function __construct(private readonly PaymentService $paymentService) {}
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function handle(WebhookReceived $event): void
     {

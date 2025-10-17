@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\MercadoPago\WebhookReceived;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class OrdersController extends Controller
@@ -44,15 +42,4 @@ class OrdersController extends Controller
         return $order->toResource(OrderResource::class);
     }
 
-    public function ipn(Request $request, Order $order)
-    {
-        Log::debug(__CLASS__, $request->toArray());
-
-        event(new WebhookReceived(
-            $request->toArray(),
-            $order
-        ));
-
-        return response()->noContent();
-    }
 }

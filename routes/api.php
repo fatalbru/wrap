@@ -46,10 +46,6 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
             Route::prefix('{order:ksuid}')->group(function (): void {
                 Route::get('/', [OrdersController::class, 'show'])
                     ->name('api.orders.show');
-
-                Route::post('/ipn', [OrdersController::class, 'ipn'])
-                    ->withoutMiddleware('auth:sanctum')
-                    ->name('api.orders.ipn');
             });
         });
 
@@ -97,10 +93,6 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
     Route::prefix('checkouts')->group(function (): void {
         Route::post('/', [CheckoutsController::class, 'store'])
             ->name('api.checkouts.store');
-
-        Route::post('ipn', [CheckoutsController::class, 'ipn'])
-            ->withoutMiddleware('auth:sanctum')
-            ->name('api.checkouts.ipn');
 
         Route::prefix('{checkout:ksuid}')->group(function (): void {
             Route::get('/', [CheckoutsController::class, 'show'])
