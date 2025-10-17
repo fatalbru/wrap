@@ -28,6 +28,15 @@ class Payment extends Model
         'paid_at', 'vendor_id', 'environment', 'payment_method', 'payment_type', 'card_last_digits',
         'payment_vendor'];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function (Payment $payment) {
+            $payment->application_id ??= $payment->payable->application_id;
+        });
+    }
+
     protected function casts()
     {
         return [

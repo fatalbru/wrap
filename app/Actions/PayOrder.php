@@ -87,12 +87,7 @@ final readonly class PayOrder
             return $payment;
         }
 
-        $order->update([
-            'status' => OrderStatus::COMPLETED,
-            'completed_at' => now(),
-        ]);
-
-        event(new OrderCompleted($order));
+        $order->complete();
 
         $checkout->touch('completed_at');
 

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\Environment;
 use App\Enums\OrderStatus;
+use App\Events\Orders\OrderCompleted;
 use App\Observers\OrderObserver;
 use App\Traits\HasKsuid;
 use App\Traits\HasWebhookLogs;
@@ -68,5 +69,17 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function complete(): void
+    {
+        if (blank($this->completed_at)) {
+            $this->update([
+                'status' => OrderStatus::COMPLETED,
+                'completed_at' => now(),
+            ]);
+
+            event(new OrderCompleted($this));
+        }
     }
 }
