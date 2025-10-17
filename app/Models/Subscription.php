@@ -9,6 +9,7 @@ use App\Enums\PaymentMethod;
 use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
 use App\Traits\HasKsuid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -101,5 +102,10 @@ class Subscription extends Model
     public function getCancelableAttribute(): bool
     {
         return in_array($this->status, [SubscriptionStatus::AUTHORIZED, SubscriptionStatus::PAUSED]);
+    }
+
+    public function scopeTrialEnded(Builder $builder): void
+    {
+        $builder->whereNotNull('trial_ended_at')->wherePast('trial_ended_at');
     }
 }

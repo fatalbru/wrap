@@ -8,6 +8,8 @@ use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
 use App\Events\MercadoPago\WebhookReceived;
 use App\Events\Subscriptions\SubscriptionCanceled;
+use App\Events\Subscriptions\SubscriptionStarted;
+use App\Events\Subscriptions\TrialStarted;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Bus\Queueable;
@@ -60,6 +62,8 @@ class HandlePreapprovalUpdated implements ShouldQueue
         if ($status === SubscriptionStatus::AUTHORIZED) {
             if (blank($subscription->started_at)) {
                 $subscription->touch('started_at');
+
+                event(new SubscriptionStarted($subscription));
             }
 
             if (blank($subscription->checkout->completed_at)) {
@@ -74,6 +78,8 @@ class HandlePreapprovalUpdated implements ShouldQueue
                     'trial_started_at' => now(),
                     'trial_ended_at' => now()->add($frequency->getFrequencyIterations(), $frequency->getFrequencyCarbonInterval()),
                 ]);
+
+                event(new TrialStarted($subscription));
 
                 if ($subscription->payments()->doesntExist()) {
                     $subscription->payments()->create([

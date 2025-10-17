@@ -23,6 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('payments', function (Blueprint $table) {
+            $table->dropColumn('payment_method');
+            $table->dropColumn('payment_type');
+            $table->dropColumn('card_last_digits');
+        });
     }
 };

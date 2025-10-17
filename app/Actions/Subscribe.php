@@ -10,6 +10,9 @@ use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
 use App\Enums\SubscriptionStatus;
+use App\Events\Subscriptions\SubscriptionCreated;
+use App\Events\Subscriptions\SubscriptionStarted;
+use App\Events\Subscriptions\TrialStarted;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Payment;
@@ -20,15 +23,18 @@ use SensitiveParameter;
 
 final readonly class Subscribe
 {
-    public function __construct(private SubscriptionService $subscriptionService) {}
+    public function __construct(private SubscriptionService $subscriptionService)
+    {
+    }
 
     /**
      * @throws \Throwable
      */
     public function handle(
-        Checkout $checkout,
+        Checkout                                $checkout,
         #[SensitiveParameter] ?TemporaryCardDto $card = null
-    ): Payment {
+    ): Payment
+    {
         /** @var Subscription $subscription */
         $subscription = $checkout->checkoutable;
 
@@ -59,6 +65,8 @@ final readonly class Subscribe
             backUrl: url(route('checkout.callback', $checkout)),
         );
 
+        event(new SubscriptionCreated($subscription));
+
         Log::debug(__CLASS__, $response);
 
         if (data_get($response, 'status') !== 'authorized') {
@@ -75,6 +83,8 @@ final readonly class Subscribe
             ]);
         }
 
+        event(new SubscriptionStarted($subscription));
+
         $subscription->update([
             'status' => SubscriptionStatus::AUTHORIZED,
             'next_payment_at' => data_get($response, 'next_payment_date'),
@@ -86,6 +96,10 @@ final readonly class Subscribe
                 'trial_ended_at' => now()->addDays($price->trial_days),
             ] : [],
         ]);
+
+        if ($price->has_trial) {
+            event(new TrialStarted($subscription));
+        }
 
         $checkout->touch('completed_at');
 

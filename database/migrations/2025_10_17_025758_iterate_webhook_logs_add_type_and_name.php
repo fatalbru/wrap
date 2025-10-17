@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\WebhookType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,8 +11,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('webhook_logs', static function (Blueprint $table) {
-            $table->string('idempotency')->nullable();
+        Schema::table('webhook_logs', function (Blueprint $table) {
+            $table->string('type')->default(WebhookType::INCOMING);
+            $table->string('event_name')->nullable();
         });
     }
 
@@ -20,8 +22,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('webhook_logs', static function (Blueprint $table) {
-            $table->dropColumn('idempotency');
+        Schema::table('webhook_logs', function (Blueprint $table) {
+            $table->dropColumn('type');
+            $table->dropColumn('event_name');
         });
     }
 };

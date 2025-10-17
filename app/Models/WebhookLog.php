@@ -3,12 +3,20 @@
 namespace App\Models;
 
 use App\Enums\PaymentProvider;
+use App\Enums\WebhookType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class WebhookLog extends Model
 {
-    protected $fillable = ['application_id', 'payload', 'provider', 'idempotency'];
+    protected $fillable = [
+        'application_id',
+        'payload',
+        'provider',
+        'idempotency',
+        'type',
+        'event_name'
+    ];
 
     protected static function boot()
     {
@@ -23,6 +31,7 @@ class WebhookLog extends Model
     {
         return [
             'provider' => PaymentProvider::class,
+            'type' => WebhookType::class,
             'payload' => 'json',
         ];
     }

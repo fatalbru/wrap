@@ -18,10 +18,7 @@ class DispatchWebhook implements ShouldQueue
         Http::withHeader('x-webhook-signature', config('mrr.webhook_signature'))
             ->throw()
             ->post(config('mrr.webhook_url'), [
-                'event' => Str::of(get_class($event))
-                    ->classBasename()
-                    ->snake('.')
-                    ->toString(),
+                'event' => config('mrr.webhook_event_name')[get_class($event)],
                 'timestamp' => now()->timestamp,
                 'data' => $event->getWebhookData()
             ]);

@@ -2,6 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Events\Orders\OrderCanceled;
+use App\Events\Orders\OrderCompleted;
+use App\Events\Orders\OrderCreated;
+use App\Events\Orders\OrderExpired;
+use App\Events\Payments\PaymentCreated;
+use App\Events\Payments\PaymentUpdated;
+use App\Events\Refunds\RefundCreated;
+use App\Events\Subscriptions\SubscriptionCanceled;
+use App\Events\Subscriptions\SubscriptionCreated;
+use App\Events\Subscriptions\SubscriptionStarted;
+use App\Events\Subscriptions\TrialEnded;
+use App\Events\Subscriptions\TrialStarted;
 use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Order;
@@ -39,4 +51,22 @@ return [
             ],
         ],
     ],
+
+    /**
+     * Webhook Event Names
+     */
+    'webhook_event_name' => [
+        OrderCanceled::class => 'order.canceled',
+        OrderCompleted::class => 'order.completed',
+        OrderCreated::class => 'order.created',
+        OrderExpired::class => 'order.expired',
+        PaymentCreated::class => 'payment.created',
+        PaymentUpdated::class => 'payment.updated',
+        RefundCreated::class => 'refund.created',
+        SubscriptionCanceled::class => 'subscription.canceled',
+        SubscriptionCreated::class => 'subscription.created',
+        SubscriptionStarted::class => 'subscription.started',
+        TrialEnded::class => 'trial.ended',
+        TrialStarted::class => 'trial.started',
+    ]
 ];
