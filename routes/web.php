@@ -3,21 +3,27 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\HandshakesController;
-use App\Http\Controllers\Webhooks\MercadoPago\SubscriptionsController;
+use App\Http\Controllers\Webhooks\MercadoPago\PreapprovalsController;
+use App\Http\Controllers\Webhooks\MercadoPago\PreferencesController;
 use App\Http\Middleware\Customers\PortalIdentifierContext;
 use App\Livewire\Checkout\Callback;
 use App\Livewire\Checkout\Completed;
 use App\Livewire\Checkout\Pay;
 use App\Livewire\CustomerPortal\Home;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/handshakes/{handshake:idempotency}', HandshakesController::class)
+Route::match(['get', 'post'], '/handshakes/{handshake:idempotency}', HandshakesController::class)
+    ->withoutMiddleware(VerifyCsrfToken::class)
     ->name('handshake');
 
 Route::prefix('webhooks')->group(function () {
     Route::prefix('mercadopago')->group(function () {
-        Route::get('preapprovals/{signature}', [SubscriptionsController::class, 'preapprovalCallback'])
+        Route::get('preapprovals/{signature}', [PreapprovalsController::class, 'preapprovalCallback'])
             ->name('mercadopago.preapproval.callback');
+
+        Route::get('preferences/{signature}', [PreferencesController::class, 'ipn'])
+            ->name('mercadopago.preference.callback');
     });
 });
 

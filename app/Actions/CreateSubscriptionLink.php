@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use App\Currency;
-use App\HandshakeType;
+use App\Enums\Currency;
+use App\Enums\HandshakeType;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Handshake;
 use App\Models\Subscription;
-use App\PaymentVendor;
-use App\ProductType;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -43,7 +43,7 @@ final readonly class CreateSubscriptionLink
 
         $price = $subscription->price;
 
-        $idempotency = md5($subscription->ksuid . Str::random(128));
+        $idempotency = md5($subscription->ksuid . uniqid() . time());
 
         $handshake = Handshake::create([
             'type' => HandshakeType::REROUTE,

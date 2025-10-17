@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Environment;
-use App\PaymentMethod;
-use App\PaymentVendor;
-use App\SubscriptionStatus;
+use App\Enums\Environment;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentVendor;
+use App\Enums\SubscriptionStatus;
 use App\Traits\HasKsuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

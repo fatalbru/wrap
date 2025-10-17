@@ -6,7 +6,7 @@ namespace App\Actions;
 
 use App\Models\Subscription;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
-use App\SubscriptionStatus;
+use App\Enums\SubscriptionStatus;
 
 final readonly class CancelSubscription
 {

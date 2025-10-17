@@ -9,7 +9,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Price;
 use App\Models\Product;
-use App\ProductType;
+use App\Enums\ProductType;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Url;

@@ -1,6 +1,6 @@
-@use(App\PaymentMethod)
-@use(App\PaymentVendor)
-@use(App\ProductType;use Illuminate\Support\Number)
+@use(App\Enums\PaymentMethod;use Illuminate\Support\Number)
+@use(App\Enums\PaymentVendor)
+@use(App\Enums\ProductType;use Illuminate\Support\Number)
 <div class="sm:max-w-5xl w-full mx-auto p-6 sm:p-8 flex flex-col">
     <livewire:customer-portal.cancel-subscription/>
     <div class="grid grid-cols-1 overflow-hidden rounded-2xl shadow-sm grow">

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\View\Components\Checkout;
 
-use App\FrequencyType;
+use App\Enums\FrequencyType;
 use App\Models\Checkout;
 use App\Models\OrderItem;
 use App\Models\Subscription;
-use App\ProductType;
+use App\Enums\ProductType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;

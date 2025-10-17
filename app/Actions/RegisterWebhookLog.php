@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Exceptions\IdempotencyOverlap;
-use App\PaymentProvider;
+use App\Enums\PaymentProvider;
 use Illuminate\Database\Eloquent\Model;
 
 final readonly class RegisterWebhookLog

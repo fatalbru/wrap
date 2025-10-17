@@ -9,10 +9,6 @@ use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\PricesController;
 use App\Http\Controllers\Api\ProductsController;
 use App\Http\Controllers\Api\SubscriptionsController;
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\Payment;
-use App\Models\Subscription;
 use Illuminate\Support\Facades\Route;
 
 Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
-use App\OrderStatus;
-use App\PaymentStatus;
-use App\PaymentVendor;
-use App\ProductType;
 use App\Services\MercadoPago\Payment as PaymentService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -57,13 +57,9 @@ final readonly class PayOrder
             $card,
             $checkout->customer->email,
             $order->ksuid,
-            $items->pluck('title')->implode(', ')." {$order->ksuid}",
+            __('Order :ksuid', $order->only('ksuid')),
             $total,
             $idempotency,
-            metadata: [
-                ...$metadata,
-                'items' => $items->toArray(),
-            ],
         );
 
         Log::debug(__CLASS__, $response);

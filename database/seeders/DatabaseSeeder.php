@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Environment;
-use App\FrequencyType;
+use App\Enums\Environment;
+use App\Enums\FrequencyType;
 use App\Models\Application;
 use App\Models\Price;
 use App\Models\Product;
 use App\Models\User;
-use App\PaymentVendor;
-use App\ProductType;
+use App\Enums\PaymentVendor;
+use App\Enums\ProductType;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder

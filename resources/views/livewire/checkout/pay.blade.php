@@ -1,6 +1,6 @@
-@use(App\PaymentMethod)
-@use(App\PaymentVendor)
-@use(App\ProductType)
+@use(App\Enums\PaymentMethod)
+@use(App\Enums\PaymentVendor)
+@use(App\Enums\ProductType)
 <div class="sm:max-w-5xl w-full mx-auto p-6 sm:p-8 flex flex-col"
      x-data="checkoutData"
      @card-ready.window="ready = true; displayMessage()">

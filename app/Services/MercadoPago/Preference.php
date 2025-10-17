@@ -12,17 +12,19 @@ final class Preference
     public function get(Application $application, string $preferenceId): array
     {
         return Http::mercadopago($application)
-            ->get("/checkout/preference/{$preferenceId}")
+            ->throw()
+            ->get("/checkout/preferences/{$preferenceId}")
             ->json();
     }
 
     public function create(
         Application $application,
-        array $items,
-        string $externalReference,
-        string $backUrl,
-        string $notificationUrl,
-    ) {
+        array       $items,
+        string      $externalReference,
+        string      $backUrl,
+        string      $notificationUrl,
+    )
+    {
         return Http::mercadopago($application)
             ->throw()
             ->post('/checkout/preferences', [

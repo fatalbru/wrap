@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Casts\UseCents;
-use App\Environment;
-use App\PaymentStatus;
-use App\PaymentVendor;
+use App\Enums\Environment;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentVendor;
 use App\Traits\HasKsuid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

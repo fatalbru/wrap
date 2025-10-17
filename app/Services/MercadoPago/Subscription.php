@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\MercadoPago;
 
-use App\Currency;
+use App\Enums\Currency;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
 use App\Models\Application;
 use App\Models\Price;
-use App\SubscriptionStatus;
+use App\Enums\SubscriptionStatus;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +57,7 @@ final class Subscription
             'payer_email' => $payerEmail,
             'back_url' => $backUrl,
             'card_token_id' => $card?->token(),
+            'auto_return' => 'all',
             'auto_recurring' => [
                 'transaction_amount' => $price->price,
                 'frequency' => $price->frequency->getFrequencyIterations(),

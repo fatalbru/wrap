@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('type');
             $table->string('idempotency');
             $table->json('payload');
+            $table->boolean('disposable')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

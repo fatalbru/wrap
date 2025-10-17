@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use App\Enums\PaymentStatus;
 use App\Models\Payment;
-use App\PaymentStatus;
 use App\Services\MercadoPago\Payment as PaymentService;
 use Illuminate\Support\Str;
 

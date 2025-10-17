@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Environment;
-use App\ProductType;
+use App\Enums\Environment;
+use App\Enums\ProductType;
 use App\Traits\HasKsuid;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -68,7 +69,12 @@ class Checkout extends Model
 
         return $this->checkoutable
             ->items
-            ->map(fn (OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
+            ->map(fn(OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
             ->sum();
+    }
+
+    public function scopeOrders(Builder $builder): void
+    {
+        $builder->whereMorphedTo('checkoutable', Order::class);
     }
 }

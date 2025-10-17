@@ -7,10 +7,10 @@ use App\Exceptions\IdempotencyOverlap;
 use App\Http\Controllers\Controller;
 use App\Models\Checkout;
 use App\Models\Subscription;
-use App\PaymentProvider;
-use App\PaymentStatus;
-use App\PaymentVendor;
-use App\SubscriptionStatus;
+use App\Enums\PaymentProvider;
+use App\Enums\PaymentStatus;
+use App\Enums\PaymentVendor;
+use App\Enums\SubscriptionStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
 
-class SubscriptionsController extends Controller
+class PreapprovalsController extends Controller
 {
     /**
      * Malformed/abusive requests have no mercy here

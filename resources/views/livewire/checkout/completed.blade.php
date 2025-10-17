@@ -1,4 +1,4 @@
-@php use App\PaymentVendor;use App\ProductType; @endphp
+@php use App\Enums\PaymentVendor;use App\Enums\ProductType; @endphp
 <div class="p-4 sm:p-8" x-data="completedCheckout" id="checkout">
     <div class="flex items-center justify-center flex-col h-full space-y-12">
         <x-application-logo class="w-40"/>
