@@ -18,17 +18,16 @@ class Handshake extends Model
         return [
             'type' => HandshakeType::class,
             'payload' => 'json',
-            'disposable' => 'bool'
+            'disposable' => 'bool',
         ];
     }
 
-    static function forJob(
+    public static function forJob(
         string $jobHandler,
-        array  $arguments,
+        array $arguments,
         string $idempotency,
-        bool   $disposable = true,
-    ): Handshake
-    {
+        bool $disposable = true,
+    ): Handshake {
         return self::create([
             'type' => HandshakeType::JOB,
             'payload' => [
@@ -36,7 +35,7 @@ class Handshake extends Model
                 'arguments' => $arguments,
             ],
             'idempotency' => $idempotency,
-            'disposable' => $disposable
+            'disposable' => $disposable,
         ]);
     }
 }

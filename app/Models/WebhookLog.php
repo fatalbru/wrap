@@ -14,7 +14,7 @@ class WebhookLog extends Model
     {
         parent::boot();
 
-        self::creating(function (WebhookLog $webhookLog) {
+        self::creating(function (WebhookLog $webhookLog): void {
             $webhookLog->application_id ??= $webhookLog->loggable?->application_id;
         });
     }
@@ -27,7 +27,7 @@ class WebhookLog extends Model
         ];
     }
 
-    function loggable(): MorphTo
+    public function loggable(): MorphTo
     {
         return $this->morphTo();
     }

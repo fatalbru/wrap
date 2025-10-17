@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Livewire\Checkout;
 
+use App\Enums\ProductType;
 use App\Models\Checkout;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Price;
 use App\Models\Product;
-use App\Enums\ProductType;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Url;

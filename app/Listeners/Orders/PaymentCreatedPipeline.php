@@ -14,7 +14,7 @@ class PaymentCreatedPipeline implements ShouldQueue
 
     public function handle(Created $event): void
     {
-        if (!$event->payment->payable instanceof Order) {
+        if (! $event->payment->payable instanceof Order) {
             return;
         }
 
