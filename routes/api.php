@@ -61,6 +61,9 @@ Route::namespace('Api')->middleware('auth:sanctum')->group(function (): void {
 
             Route::prefix('{payment:ksuid}')
                 ->group(function (): void {
+                    Route::get('/', [PaymentsController::class, 'show'])
+                        ->name('api.payments.show');
+
                     Route::post('/refund', [PaymentsController::class, 'refund'])
                         ->name('api.payments.refund');
                 });

@@ -24,6 +24,11 @@ class PaymentsController extends Controller
             ->toResourceCollection(PaymentResource::class);
     }
 
+    public function show(Payment $payment)
+    {
+        return PaymentResource::make($payment);
+    }
+
     public function refund(Payment $payment, RefundPayment $refundPaymentAction)
     {
         $refundPaymentAction->handle($payment);
