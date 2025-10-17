@@ -10,6 +10,7 @@ use App\Enums\PaymentVendor;
 use App\Enums\SubscriptionStatus;
 use App\Observers\SubscriptionObserver;
 use App\Traits\HasKsuid;
+use App\Traits\HasWebhookLogs;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 #[ObservedBy(SubscriptionObserver::class)]
 class Subscription extends Model
 {
-    use HasFactory, HasKsuid;
+    use HasFactory, HasKsuid, HasWebhookLogs;
 
     protected $fillable = ['status', 'started_at', 'ended_at', 'next_payment_at', 'vendor_data',
         'canceled_at', 'vendor', 'vendor_id', 'price_id', 'environment', 'trial_started_at',
@@ -89,11 +90,6 @@ class Subscription extends Model
     public function getPaymentMethodAttribute(): ?PaymentMethod
     {
         return PaymentMethod::parse(data_get($this->payments()->latest()->first(), 'vendor_data.payment_method_id'));
-    }
-
-    public function webhookLogs(): MorphMany
-    {
-        return $this->morphMany(WebhookLog::class, 'loggable');
     }
 
     public function getCancelableAttribute(): bool

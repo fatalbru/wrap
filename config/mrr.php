@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Events\Customers\CustomerCreated;
+use App\Events\Customers\CustomerDeleted;
+use App\Events\Customers\CustomerUpdated;
 use App\Events\Orders\OrderCanceled;
 use App\Events\Orders\OrderCompleted;
 use App\Events\Orders\OrderCreated;
@@ -29,13 +32,22 @@ use App\Models\Subscription;
 
 return [
     'site_url' => env('SITE_URL'),
+
     'checkout_domain' => env('CHECKOUT_DOMAIN', 'pagos.wrap.test'),
     'checkout_prefix' => env('CHECKOUT_PREFIX', 'checkout'),
+
     'customer_portal_domain' => env('CUSTOMER_PORTAL_DOMAIN', 'portal.wrap.test'),
     'customer_portal_prefix' => env('CUSTOMER_PORTAL_PREFIX', 'customers'),
+
     'webhook_url' => env('WEBHOOK_URL'),
     'webhook_signature' => env('WEBHOOK_SIGNATURE'),
+    'webhook_fake' => env('WEBHOOK_FAKE', false),
+
     'currency' => env('APP_CURRENCY', 'USD'),
+
+    /**
+     * KSUID prefixes are used across the platform for the configured models
+     */
     'ksuid_prefixes' => [
         class_basename(Customer::class) => 'cus',
         class_basename(Payment::class) => 'pay',
@@ -46,23 +58,17 @@ return [
         class_basename(Checkout::class) => 'ch',
         class_basename(Order::class) => 'ord',
     ],
-    'card_block_customization' => [
-        'texts' => [],
-        'style' => [
-            'theme' => 'default',
-            'customVariables' => [
-                'formPadding' => '0px',
-            ],
-        ],
-    ],
 
     /**
      * Webhook Event Names
      */
     'webhook_event_name' => [
+        CustomerCreated::class => 'customer.created',
+        CustomerUpdated::class => 'customer.updated',
+        CustomerDeleted::class => 'customer.deleted',
+        OrderCreated::class => 'order.created',
         OrderCanceled::class => 'order.canceled',
         OrderCompleted::class => 'order.completed',
-        OrderCreated::class => 'order.created',
         OrderExpired::class => 'order.expired',
         OrderUpdated::class => 'order.updated',
         PaymentCreated::class => 'payment.created',
@@ -70,10 +76,10 @@ return [
         PaymentFailed::class => 'payment.failed',
         PaymentAuthorized::class => 'payment.authorized',
         RefundCreated::class => 'refund.created',
-        SubscriptionCanceled::class => 'subscription.canceled',
         SubscriptionCreated::class => 'subscription.created',
         SubscriptionStarted::class => 'subscription.started',
         SubscriptionUpdated::class => 'subscription.updated',
+        SubscriptionCanceled::class => 'subscription.canceled',
         TrialEnded::class => 'trial.ended',
         TrialStarted::class => 'trial.started',
     ],

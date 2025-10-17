@@ -72,7 +72,7 @@
                             },
                         },
                         customization: {
-                            visual: @json(array_merge(config('mrr.card_block_customization'), ['hidePaymentButton' => true])),
+                            visual: @json(array_merge(config('mercadopago.card_block_customization'), ['hidePaymentButton' => true])),
                             paymentMethods: {
                                 minInstallments: {{$checkout->min_installments}},
                                 maxInstallments: {{$checkout->max_installments}},

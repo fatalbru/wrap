@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Enums\Environment;
 use App\Enums\OrderStatus;
 use App\Traits\HasKsuid;
+use App\Traits\HasWebhookLogs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Order extends Model
 {
-    use HasFactory, HasKsuid;
+    use HasFactory, HasKsuid, HasWebhookLogs;
 
     protected $fillable = ['status', 'vendor_data', 'vendor', 'vendor_id', 'price_id', 'completed_at', 'canceled_at',
         'amount', 'customer_id', 'decline_reason', 'data', 'paid_at', 'environment'];
@@ -59,11 +60,6 @@ class Order extends Model
     public function payments(): MorphMany
     {
         return $this->morphMany(Payment::class, 'payable');
-    }
-
-    public function webhookLogs(): MorphMany
-    {
-        return $this->morphMany(WebhookLog::class, 'loggable');
     }
 
     public function items(): HasMany

@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\Environment;
+use App\Observers\CustomerObserver;
 use App\Traits\HasKsuid;
+use App\Traits\HasWebhookLogs;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+#[ObservedBy(CustomerObserver::class)]
 class Customer extends Model
 {
-    use HasFactory, HasKsuid;
+    use HasFactory, HasKsuid, HasWebhookLogs;
 
     protected $fillable = ['name', 'email', 'environment'];
 
