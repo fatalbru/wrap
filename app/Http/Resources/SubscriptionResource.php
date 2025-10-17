@@ -25,7 +25,6 @@ class SubscriptionResource extends JsonResource
             'trial_started_at' => $this->trial_started_at,
             'trial_ended_at' => $this->trial_ended_at,
             'trial' => $this->trial,
-            'grace_period' => $this->grace_period,
             'customer' => CustomerResource::make($this->customer),
             'price' => PriceResource::make($this->price),
             'environment' => $this->environment,

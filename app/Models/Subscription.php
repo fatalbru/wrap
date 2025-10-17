@@ -93,12 +93,6 @@ class Subscription extends Model
         return $this->morphMany(WebhookLog::class, 'loggable');
     }
 
-    public function getGracePeriodAttribute(): bool
-    {
-        // @todo
-        return false;
-    }
-
     public function getCancelableAttribute(): bool
     {
         return in_array($this->status, [SubscriptionStatus::AUTHORIZED, SubscriptionStatus::PAUSED]);
