@@ -6,7 +6,9 @@ namespace App\Providers;
 
 use App\Models\Application;
 use App\Models\Checkout;
+use App\Models\Customer;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Price;
 use App\Models\Product;
 use App\Models\Subscription;
@@ -37,11 +39,13 @@ class AppServiceProvider extends ServiceProvider
             4 => Product::class,
             5 => Price::class,
             6 => Order::class,
+            7 => Payment::class,
+            8 => Customer::class,
         ]);
 
         Carbon::setLocale(config('app.locale'));
 
-        Str::macro('ksuid', fn (string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid)->payload())));
+        Str::macro('ksuid', fn(string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid)->payload())));
 
         Http::macro('mercadopago', function (Application $application) {
             return Http::baseUrl('https://api.mercadopago.com')
@@ -60,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var Model $model */
             $model = $payload[0];
 
-            if (filled($prefix = config('mrr.ksuid_prefixes.'.class_basename(get_class($model))))) {
+            if (filled($prefix = config('mrr.ksuid_prefixes.' . class_basename(get_class($model))))) {
                 $class = get_class($model);
                 $model->ksuid = $class::generateKsuid($prefix);
             }
