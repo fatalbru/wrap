@@ -10,6 +10,7 @@ use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Observers\PaymentObserver;
 use App\Traits\HasKsuid;
+use App\Traits\HasWebhookLogs;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 #[ObservedBy(PaymentObserver::class)]
 class Payment extends Model
 {
-    use HasFactory, HasKsuid;
+    use HasFactory, HasKsuid, HasWebhookLogs;
 
     protected $fillable = ['status', 'decline_reason', 'vendor_data', 'customer_id', 'price_id', 'amount',
         'paid_at', 'vendor_id', 'environment', 'payment_method', 'payment_type', 'card_last_digits',
