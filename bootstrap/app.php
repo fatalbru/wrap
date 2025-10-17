@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withEvents(discover: [
         __DIR__.'/../app/Listeners/*',
     ])
-    ->withSchedule(function (Schedule $schedule) {
+    ->withSchedule(function (Schedule $schedule): void {
         $schedule->command(NotifyCompletedTrials::class)->everyMinute();
     })
     ->withMiddleware(function (Middleware $middleware): void {

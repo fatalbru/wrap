@@ -41,5 +41,4 @@ class OrdersController extends Controller
     {
         return $order->toResource(OrderResource::class);
     }
-
 }

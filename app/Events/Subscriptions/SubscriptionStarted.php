@@ -12,16 +12,14 @@ class SubscriptionStarted implements OutgoingWebhookInterface
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Subscription $subscription)
-    {
-    }
+    public function __construct(public readonly Subscription $subscription) {}
 
-    function getWebhookData(): array
+    public function getWebhookData(): array
     {
         return [];
     }
 
-    function getModel(): Model
+    public function getModel(): Model
     {
         return $this->subscription;
     }

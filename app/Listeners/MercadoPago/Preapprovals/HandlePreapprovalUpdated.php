@@ -22,9 +22,7 @@ class HandlePreapprovalUpdated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private readonly SubscriptionService $subscriptionService) {}
 
     /**
      * @throws Throwable

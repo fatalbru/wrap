@@ -12,16 +12,14 @@ class OrderCompleted implements OutgoingWebhookInterface
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(readonly Order $order)
-    {
-    }
+    public function __construct(public readonly Order $order) {}
 
-    function getWebhookData(): array
+    public function getWebhookData(): array
     {
         return [];
     }
 
-    function getModel(): Model
+    public function getModel(): Model
     {
         return $this->order;
     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 interface OutgoingWebhookInterface
 {
-    function getWebhookData(): array;
+    public function getWebhookData(): array;
 
-    function getModel(): Model;
+    public function getModel(): Model;
 }

@@ -15,7 +15,7 @@ class WebhookLog extends Model
         'provider',
         'idempotency',
         'type',
-        'event_name'
+        'event_name',
     ];
 
     protected static function boot()

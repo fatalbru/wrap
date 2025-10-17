@@ -19,9 +19,7 @@ class HandlePaymentCreated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly PaymentService $paymentService)
-    {
-    }
+    public function __construct(private readonly PaymentService $paymentService) {}
 
     /**
      * @throws \Throwable
@@ -73,7 +71,7 @@ class HandlePaymentCreated implements ShouldQueue
         }
 
         if (filled($externalReference)) {
-            if (!Str::contains($externalReference, [
+            if (! Str::contains($externalReference, [
                 $modelPrefix[class_basename(Subscription::class)],
                 $modelPrefix[class_basename(Order::class)],
             ])) {

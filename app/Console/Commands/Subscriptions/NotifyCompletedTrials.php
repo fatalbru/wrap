@@ -16,11 +16,11 @@ class NotifyCompletedTrials extends Command
     public function handle()
     {
         Subscription::trialEnded()
-            ->whereDoesntHave('webhookLogs', function (Builder $builder) {
+            ->whereDoesntHave('webhookLogs', function (Builder $builder): void {
                 $builder->whereEventName(config('mrr.webhook_event_name')[TrialEnded::class]);
             })
             ->lazy()
-            ->each(function (Subscription $subscription) {
+            ->each(function (Subscription $subscription): void {
                 event(new TrialEnded($subscription));
             });
     }

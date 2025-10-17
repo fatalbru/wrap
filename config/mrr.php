@@ -68,5 +68,5 @@ return [
         SubscriptionStarted::class => 'subscription.started',
         TrialEnded::class => 'trial.ended',
         TrialStarted::class => 'trial.started',
-    ]
+    ],
 ];

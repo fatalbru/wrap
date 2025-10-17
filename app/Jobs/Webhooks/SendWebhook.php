@@ -14,11 +14,9 @@ class SendWebhook implements ShouldQueue
 
     public function __construct(
         protected string $eventName,
-        protected Model  $model,
-        protected array  $payload
-    )
-    {
-    }
+        protected Model $model,
+        protected array $payload
+    ) {}
 
     public function handle(): void
     {
@@ -33,7 +31,7 @@ class SendWebhook implements ShouldQueue
             ->post(config('mrr.webhook_url'), [
                 'event' => $this->eventName,
                 'timestamp' => now()->timestamp,
-                'data' => $this->payload
+                'data' => $this->payload,
             ]);
     }
 }

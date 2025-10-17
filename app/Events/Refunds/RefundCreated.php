@@ -12,16 +12,14 @@ class RefundCreated implements OutgoingWebhookInterface
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Refund $refund)
-    {
-    }
+    public function __construct(public readonly Refund $refund) {}
 
-    function getWebhookData(): array
+    public function getWebhookData(): array
     {
         return [];
     }
 
-    function getModel(): Model
+    public function getModel(): Model
     {
         return $this->refund;
     }

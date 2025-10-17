@@ -12,16 +12,14 @@ class PaymentUpdated implements OutgoingWebhookInterface
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Payment $payment)
-    {
-    }
+    public function __construct(public readonly Payment $payment) {}
 
-    function getWebhookData(): array
+    public function getWebhookData(): array
     {
         return [];
     }
 
-    function getModel(): Model
+    public function getModel(): Model
     {
         return $this->payment;
     }

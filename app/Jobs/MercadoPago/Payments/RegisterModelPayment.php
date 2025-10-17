@@ -19,11 +19,9 @@ class RegisterModelPayment implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        private readonly string             $paymentId,
+        private readonly string $paymentId,
         private readonly Order|Subscription $model
-    )
-    {
-    }
+    ) {}
 
     public function middleware()
     {

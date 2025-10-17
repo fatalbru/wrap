@@ -23,18 +23,15 @@ use SensitiveParameter;
 
 final readonly class Subscribe
 {
-    public function __construct(private SubscriptionService $subscriptionService)
-    {
-    }
+    public function __construct(private SubscriptionService $subscriptionService) {}
 
     /**
      * @throws \Throwable
      */
     public function handle(
-        Checkout                                $checkout,
+        Checkout $checkout,
         #[SensitiveParameter] ?TemporaryCardDto $card = null
-    ): Payment
-    {
+    ): Payment {
         /** @var Subscription $subscription */
         $subscription = $checkout->checkoutable;
 
