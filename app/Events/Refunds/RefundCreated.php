@@ -4,6 +4,7 @@ namespace App\Events\Refunds;
 
 use App\Interfaces\OutgoingWebhookInterface;
 use App\Models\Refund;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,5 +19,10 @@ class RefundCreated implements OutgoingWebhookInterface
     function getWebhookData(): array
     {
         return [];
+    }
+
+    function getModel(): Model
+    {
+        return $this->refund;
     }
 }

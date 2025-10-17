@@ -5,6 +5,7 @@ namespace App\Events\Subscriptions;
 use App\Interfaces\OutgoingWebhookInterface;
 use App\Models\Subscription;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -19,5 +20,10 @@ class TrialEnded implements OutgoingWebhookInterface
     function getWebhookData(): array
     {
         return [];
+    }
+
+    function getModel(): Model
+    {
+        return $this->subscription;
     }
 }
