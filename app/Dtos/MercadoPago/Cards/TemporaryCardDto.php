@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Dtos\MercadoPago\Cards;
 
-final readonly class TemporaryCardDto
-{
-    public function __construct(private array $card) {}
+use App\Dtos\Dto;
+use App\Interfaces\PaymentMethodInterface;
 
-    public static function make(array $card): TemporaryCardDto
-    {
-        return new self($card);
-    }
+final class TemporaryCardDto extends Dto implements PaymentMethodInterface
+{
+    public function __construct(private readonly array $card) {}
 
     public function token(): string
     {

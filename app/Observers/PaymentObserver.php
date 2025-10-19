@@ -25,5 +25,4 @@ class PaymentObserver
     {
         event(new PaymentUpdated($payment));
     }
-
 }

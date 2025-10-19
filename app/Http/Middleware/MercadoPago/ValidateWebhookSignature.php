@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 class ValidateWebhookSignature
 {
     const string SIGNATURE_HEADER = 'x-signature';
+
     const string REQUEST_ID_HEADER = 'x-request-id';
+
     const string DATA_ID_PATH = 'data.id';
 
     public function handle(Request $request, Closure $next): Response
@@ -63,7 +65,7 @@ class ValidateWebhookSignature
         $manifest = "id:{$dataId};request-id:{$xRequestId};ts:{$ts};";
 
         abort_if(
-            !hash_equals(hash_hmac('sha256', $manifest, $webhookSignature), $hash),
+            ! hash_equals(hash_hmac('sha256', $manifest, $webhookSignature), $hash),
             Response::HTTP_FORBIDDEN,
             'Invalid signature'
         );

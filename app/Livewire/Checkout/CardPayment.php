@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire\Checkout;
 
-use App\Actions\PayOrder;
-use App\Actions\Subscribe;
+use App\Actions\Orders\PayOrder;
+use App\Actions\Subscriptions\Subscribe;
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
@@ -13,12 +13,12 @@ use App\Models\Application;
 use App\Models\Checkout;
 use App\Models\Payment;
 use App\Models\Subscription;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Throwable;
 
 class CardPayment extends Component
 {
@@ -37,6 +37,9 @@ class CardPayment extends Component
         return 'Pay';
     }
 
+    /**
+     * @throws Throwable
+     */
     public function pay(PayOrder $payOrder, Subscribe $createSubscription): void
     {
         $this->validate([
@@ -46,11 +49,10 @@ class CardPayment extends Component
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscription : $payOrder;
 
         /** @var Payment $payment */
-        $payment = Cache::lock("checkout:{$this->checkout->ksuid}", 10)
-            ->block(3, fn () => DB::transaction(fn () => $handler->handle(
-                $this->checkout,
-                TemporaryCardDto::make($this->card),
-            )));
+        $payment = DB::transaction(fn () => $handler->execute(
+            $this->checkout,
+            TemporaryCardDto::make($this->card),
+        ));
 
         if (! $payment->isSuccessful()) {
             $this->failed($payment->decline_reason);

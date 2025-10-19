@@ -3,17 +3,16 @@
 use App\Http\Middleware\MercadoPago\ValidateWebhookSignature;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use function Pest\Laravel\freezeTime;
-use function Pest\Laravel\post;
-use function Pest\Laravel\travelBack;
 
-beforeEach(function () {
-    Route::post('/test-webhook', fn() => response()->noContent())
+use function Pest\Laravel\post;
+
+beforeEach(function (): void {
+    Route::post('/test-webhook', fn () => response()->noContent())
         ->middleware(ValidateWebhookSignature::class);
 });
 
-test('doenst retain logs outside local', function () {
-    app()->detectEnvironment(fn() => 'production');
+test('doenst retain logs outside local', function (): void {
+    app()->detectEnvironment(fn () => 'production');
     Log::spy();
     Log::shouldReceive('debug')->never();
     config(['mrr.webhook_signature' => null]);
@@ -22,8 +21,8 @@ test('doenst retain logs outside local', function () {
         ->assertSeeText('Webhook Signature conflict');
 });
 
-test('only logs locally', function () {
-    app()->detectEnvironment(fn() => 'local');
+test('only logs locally', function (): void {
+    app()->detectEnvironment(fn () => 'local');
     Log::spy();
     Log::shouldReceive('debug')->once();
     config(['mrr.webhook_signature' => null]);
@@ -32,14 +31,14 @@ test('only logs locally', function () {
         ->assertSeeText('Webhook Signature conflict');
 });
 
-test('validate signature is configured', function () {
+test('validate signature is configured', function (): void {
     config(['mrr.webhook_signature' => null]);
     post('/test-webhook')
         ->assertForbidden()
         ->assertSeeText('Webhook Signature conflict');
 });
 
-test('missing request-id', function () {
+test('missing request-id', function (): void {
     post('/test-webhook', headers: [
         ValidateWebhookSignature::SIGNATURE_HEADER => 'signature',
     ])
@@ -47,7 +46,7 @@ test('missing request-id', function () {
         ->assertSeeText('Webhook params missing');
 });
 
-test('missing signature', function () {
+test('missing signature', function (): void {
     post('/test-webhook', headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => 'request-id',
     ])
@@ -55,7 +54,7 @@ test('missing signature', function () {
         ->assertSeeText('Webhook params missing');
 });
 
-test('missing data.id', function () {
+test('missing data.id', function (): void {
     post('/test-webhook', [], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => 'request-id',
         ValidateWebhookSignature::SIGNATURE_HEADER => 'signature',
@@ -64,11 +63,11 @@ test('missing data.id', function () {
         ->assertSeeText('Webhook params missing');
 });
 
-test('malformed signature', function () {
+test('malformed signature', function (): void {
     post('/test-webhook', [
         'data' => [
             'id' => 'id',
-        ]
+        ],
     ], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => 'request-id',
         ValidateWebhookSignature::SIGNATURE_HEADER => 'ts=123',
@@ -79,7 +78,7 @@ test('malformed signature', function () {
     post('/test-webhook', [
         'data' => [
             'id' => 'id',
-        ]
+        ],
     ], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => 'request-id',
         ValidateWebhookSignature::SIGNATURE_HEADER => 'v1=345678',
@@ -88,12 +87,12 @@ test('malformed signature', function () {
         ->assertSeeText('Malformed signature');
 });
 
-test('stale timestamp forbidden', function () {
+test('stale timestamp forbidden', function (): void {
     $timestamp = now()->subSeconds(config('mrr.webhook_tolerance') + 1)->timestamp;
     post('/test-webhook', [
         'data' => [
             'id' => 'id',
-        ]
+        ],
     ], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => 'request-id',
         ValidateWebhookSignature::SIGNATURE_HEADER => "ts={$timestamp},v1=345678",
@@ -102,7 +101,7 @@ test('stale timestamp forbidden', function () {
         ->assertSeeText('Stale/invalid timestamp');
 });
 
-test('invalidates signature', function () {
+test('invalidates signature', function (): void {
     $timestamp = now()->timestamp;
     $signature = Str::random(128);
     $dataId = 123456;
@@ -116,7 +115,7 @@ test('invalidates signature', function () {
     post('/test-webhook', [
         'data' => [
             'id' => 654321,
-        ]
+        ],
     ], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => $requestId,
         ValidateWebhookSignature::SIGNATURE_HEADER => "ts={$timestamp},v1={$hash}",
@@ -124,7 +123,7 @@ test('invalidates signature', function () {
         ->assertForbidden();
 });
 
-test('validates signature', function () {
+test('validates signature', function (): void {
     $timestamp = now()->timestamp;
     $signature = Str::random(128);
     $dataId = 123456;
@@ -138,7 +137,7 @@ test('validates signature', function () {
     post('/test-webhook', [
         'data' => [
             'id' => $dataId,
-        ]
+        ],
     ], headers: [
         ValidateWebhookSignature::REQUEST_ID_HEADER => $requestId,
         ValidateWebhookSignature::SIGNATURE_HEADER => "ts={$timestamp},v1={$hash}",

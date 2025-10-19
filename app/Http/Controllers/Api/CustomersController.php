@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\CreateCustomer;
+use App\Actions\Customers\CreateCustomer;
 use App\Enums\Environment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customers\CreateCustomerRequest;
@@ -35,7 +35,7 @@ class CustomersController extends Controller
      */
     public function store(CreateCustomerRequest $request, CreateCustomer $createCustomer)
     {
-        return $createCustomer->handle(
+        return $createCustomer->execute(
             $request->get('name'),
             $request->get('email'),
             $request->enum('environment', Environment::class)

@@ -12,9 +12,7 @@ class CustomerUpdated implements OutgoingWebhookInterface
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct(public readonly Customer $customer)
-    {
-    }
+    public function __construct(public readonly Customer $customer) {}
 
     public function getWebhookData(): array
     {

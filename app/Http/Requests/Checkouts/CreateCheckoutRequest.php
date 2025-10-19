@@ -21,11 +21,11 @@ class CreateCheckoutRequest extends FormRequest
             'environment' => ['required', 'bail', Rule::enum(Environment::class)],
             'price_id' => [
                 'required', Rule::exists('prices', 'ksuid')
-                    ->where('environment', $this->enum('environment', Environment::class))
+                    ->where('environment', $this->enum('environment', Environment::class)),
             ],
             'customer_id' => [
                 'required', Rule::exists('customers', 'ksuid')
-                    ->where('environment', $this->enum('environment', Environment::class))
+                    ->where('environment', $this->enum('environment', Environment::class)),
             ],
             'expires_at' => ['nullable', 'date', 'after_or_equal:now'],
         ];

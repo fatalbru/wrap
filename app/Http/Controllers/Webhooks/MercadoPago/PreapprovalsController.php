@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Webhooks\MercadoPago;
 
-use App\Actions\RegisterWebhookLog;
+use App\Actions\Webhooks\RegisterWebhookLog;
 use App\Enums\PaymentProvider;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
@@ -56,7 +56,7 @@ class PreapprovalsController extends Controller
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $registerWebhookLog->handle(
+        $registerWebhookLog->execute(
             $subscription,
             $signature,
             data_get($signature, 'idempotency'),
@@ -73,7 +73,7 @@ class PreapprovalsController extends Controller
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $registerWebhookLog->handle($subscription, $preapproval, paymentProvider: PaymentProvider::MERCADOPAGO);
+        $registerWebhookLog->execute($subscription, $preapproval, paymentProvider: PaymentProvider::MERCADOPAGO);
 
         if ($status === SubscriptionStatus::AUTHORIZED && blank($subscription->started_at)) {
             $checkout->touch('completed_at');

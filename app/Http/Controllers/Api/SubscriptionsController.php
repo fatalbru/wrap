@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\CancelSubscription;
-use App\Actions\ListPayments;
-use App\Actions\UpdateSubscriptionPrice as UpdateSubscriptionPriceAction;
+use App\Actions\Payments\ListPayments;
+use App\Actions\Subscriptions\CancelSubscription;
+use App\Actions\Subscriptions\UpdateSubscriptionPrice as UpdateSubscriptionPriceAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Subscriptions\UpdateSubscriptionPrice;
 use App\Http\Resources\PaymentResource;
@@ -44,12 +44,12 @@ class SubscriptionsController extends Controller
      */
     public function payments(Subscription $subscription, ListPayments $listPayments)
     {
-        return $listPayments->handle($subscription)->toResourceCollection(PaymentResource::class);
+        return $listPayments->execute($subscription)->toResourceCollection(PaymentResource::class);
     }
 
     public function cancel(Subscription $subscription, CancelSubscription $cancelSubscription)
     {
-        $cancelSubscription->handle($subscription);
+        $cancelSubscription->execute($subscription);
 
         return response()->noContent();
     }
@@ -62,7 +62,7 @@ class SubscriptionsController extends Controller
         Subscription $subscription,
         UpdateSubscriptionPriceAction $updateSubscriptionPriceAction
     ) {
-        $updateSubscriptionPriceAction->handle($subscription, Price::findByKsuid($request->get('price_id')));
+        $updateSubscriptionPriceAction->execute($subscription, Price::findByKsuid($request->get('price_id')));
 
         return response()->noContent();
     }

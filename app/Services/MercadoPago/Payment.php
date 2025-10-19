@@ -6,11 +6,10 @@ namespace App\Services\MercadoPago;
 
 use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
 use App\Models\Application;
-use Exception;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SensitiveParameter;
+use Throwable;
 
 final class Payment
 {
@@ -32,7 +31,7 @@ final class Payment
     }
 
     /**
-     * @throws Exception
+     * @throws Throwable
      */
     public function create(
         Application $application,
@@ -71,18 +70,9 @@ final class Payment
             'description' => ['required', 'string', 'max:255'],
             'transaction_amount' => ['required', 'integer', 'min:0'],
             'token' => ['required', 'string'],
-            //            'statement_descriptor' => ['required', 'string', 'max:255'],
-            //            'metadata' => ['array', 'sometimes'],
         ]);
 
-        if ($validator->fails()) {
-            Log::debug(__CLASS__, [
-                'payload' => $payload,
-                'errors' => $validator->errors(),
-            ]);
-
-            throw new Exception('Malformed payment request');
-        }
+        throw_if($validator->fails(), 'Malformed payment request');
 
         return Http::mercadopago($application)
             ->withHeader('x-idempotency-key', $idempotency)

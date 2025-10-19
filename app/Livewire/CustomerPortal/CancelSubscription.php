@@ -27,7 +27,7 @@ class CancelSubscription extends Component
         Flux::modal('cancel-subscription')->show();
     }
 
-    public function cancelSubscription(\App\Actions\CancelSubscription $cancelSubscription): void
+    public function cancelSubscription(\App\Actions\Subscriptions\CancelSubscription $cancelSubscription): void
     {
         if (! $this->subscription->cancelable) {
             Toaster::error(__('Subscription cannot be cancelled.'));
@@ -35,7 +35,7 @@ class CancelSubscription extends Component
             return;
         }
 
-        $cancelSubscription->handle($this->subscription);
+        $cancelSubscription->execute($this->subscription);
 
         Toaster::success(__('Subscription cancelled.'));
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\RefundPayment;
+use App\Actions\Payments\RefundPayment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PaymentResource;
 use App\Models\Payment;
@@ -31,7 +31,7 @@ class PaymentsController extends Controller
 
     public function refund(Payment $payment, RefundPayment $refundPaymentAction)
     {
-        $refundPaymentAction->handle($payment);
+        $refundPaymentAction->execute($payment);
 
         return response()->noContent();
     }

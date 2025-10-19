@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Livewire\Checkout;
 
-use App\Actions\CreatePreferenceLink;
-use App\Actions\CreateSubscriptionLink;
+use App\Actions\Providers\MercadoPago\CreatePreferenceLink;
+use App\Actions\Providers\MercadoPago\CreateSubscriptionLink;
 use App\Enums\ProductType;
+use App\Interfaces\ExternalPaymentHandlerInterface;
 use App\Models\Checkout;
-use App\Models\Payment;
-use Illuminate\Contracts\Cache\LockTimeoutException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Masmerise\Toaster\Toaster;
+use Throwable;
 
 class WalletPayment extends Component
 {
@@ -23,13 +22,13 @@ class WalletPayment extends Component
 
     public ?string $email = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->email = $this->checkout->customer?->email;
     }
 
     /**
-     * @throws LockTimeoutException
+     * @throws Throwable
      */
     public function pay(CreatePreferenceLink $createPreferenceLink, CreateSubscriptionLink $createSubscriptionLink): void
     {
@@ -39,21 +38,21 @@ class WalletPayment extends Component
 
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscriptionLink : $createPreferenceLink;
 
-        /** @var Payment $payment */
-        $response = Cache::lock("checkout:{$this->checkout->id}", 10)
-            ->block(3, fn () => DB::transaction(fn () => $handler->handle($this->checkout)));
+        /** @var ExternalPaymentHandlerInterface $link */
+        $link = DB::transaction(fn () => $handler->execute($this->checkout));
 
-        if (blank(data_get($response, 'init_point'))) {
+        if (blank($link->redirectLink())) {
             $this->failed(__('Failed to generate Mercadopago link.'));
 
             return;
         }
 
-        $this->redirect(data_get($response, 'init_point'));
+        $this->redirect($link->redirectLink());
     }
 
-    private function failed(string $message): void
+    private function failed(?string $message): void
     {
+        $message ??= __('Something went wrong.');
         $this->dispatch('failed', errorMessage: $message)->self();
         Toaster::error($message);
     }

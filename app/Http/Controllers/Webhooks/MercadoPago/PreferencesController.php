@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Webhooks\MercadoPago;
 
-use App\Actions\RegisterWebhookLog;
+use App\Actions\Webhooks\RegisterWebhookLog;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MercadoPago\PreferenceCallbackRequest;
 use App\Services\MercadoPago\Preference as PreferenceService;
@@ -15,7 +15,7 @@ class PreferencesController extends Controller
         PreferenceService $preferenceService,
         RegisterWebhookLog $registerWebhookLog
     ) {
-        //        $registerWebhookLog->handle(
+        //        $registerWebhookLog->execute(
         //            $request->order(),
         //            $request->validated(),
         //            $request->idempotency(),

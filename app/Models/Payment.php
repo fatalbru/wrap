@@ -32,7 +32,7 @@ class Payment extends Model
     {
         parent::boot();
 
-        self::creating(function (Payment $payment) {
+        self::creating(function (Payment $payment): void {
             $payment->application_id ??= $payment->payable->application_id;
         });
     }

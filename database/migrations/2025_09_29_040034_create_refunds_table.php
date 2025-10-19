@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('ksuid');
             $table->foreignIdFor(Payment::class)->constrained();
             $table->double('amount');
+            $table->string('vendor_id')->nullable();
+            $table->json('vendor_data');
             $table->unique(['ksuid']);
             $table->timestamps();
         });

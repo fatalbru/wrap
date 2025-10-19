@@ -23,7 +23,7 @@ class CheckoutsController extends Controller
      */
     public function store(CreateCheckoutRequest $request, CreateCheckout $createCheckout)
     {
-        return $createCheckout->handle(
+        return $createCheckout->execute(
             Customer::findByKsuid($request->get('customer_id')),
             Price::findByKsuid($request->get('price_id')),
             $request->enum('environment', Environment::class),
