@@ -12,7 +12,6 @@ use App\Enums\HandshakeType;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
 use App\Events\Subscriptions\SubscriptionCreated;
-use App\Interfaces\ExternalPaymentHandlerInterface;
 use App\Models\Checkout;
 use App\Models\Handshake;
 use App\Models\Subscription;
@@ -33,7 +32,7 @@ final class CreateSubscriptionLink extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): ExternalPaymentHandlerInterface
+    public function execute(Checkout $checkout): PreapprovalLink
     {
         return $this->lock(function () use ($checkout) {
             /** @var Subscription $subscription */

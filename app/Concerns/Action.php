@@ -44,9 +44,9 @@ abstract class Action
      */
     final public function lock(Closure $closure, ...$args)
     {
-        throw_if(! method_exists($this, self::EXECUTION_HANDLER), 'Execution handler not found.');
+        throw_if(!method_exists($this, self::EXECUTION_HANDLER), 'Execution handler not found.');
 
-        if (! $this->shouldLock) {
+        if (!$this->shouldLock) {
             return $closure();
         }
 
@@ -60,7 +60,7 @@ abstract class Action
         return $this->atomicKey ?: sprintf(
             '%s:%s',
             static::class,
-            md5(serialize(array_map(fn ($a) => $this->simplifyArg($a), $args)))
+            md5(serialize(array_map(fn($a) => $this->simplifyArg($a), $args)))
         );
     }
 
@@ -87,7 +87,7 @@ abstract class Action
         }
 
         if (is_array($arg)) {
-            return array_map(fn ($v) => $this->simplifyArg($v), $arg);
+            return array_map(fn($v) => $this->simplifyArg($v), $arg);
         }
 
         return $arg;

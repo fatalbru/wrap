@@ -9,7 +9,6 @@ use App\Concerns\Action;
 use App\Dtos\MercadoPago\Preferences\PreferenceLink;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
-use App\Interfaces\ExternalPaymentHandlerInterface;
 use App\Jobs\MercadoPago\Preferences\HandlePreferenceCallback;
 use App\Models\Checkout;
 use App\Models\Handshake;
@@ -30,7 +29,7 @@ final class CreatePreferenceLink extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): ExternalPaymentHandlerInterface
+    public function execute(Checkout $checkout): PreferenceLink
     {
         return $this->lock(function () use ($checkout) {
             /** @var Order $order */

@@ -8,6 +8,6 @@ class Dto
 {
     public static function make(...$args): Dto
     {
-        return new self(...$args);
+        return new static(...$args);
     }
 }

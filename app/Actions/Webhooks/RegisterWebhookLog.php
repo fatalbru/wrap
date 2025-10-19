@@ -16,7 +16,7 @@ final class RegisterWebhookLog extends Action
      * @throws IdempotencyOverlap
      * @throws Throwable
      */
-    public function handle(
+    public function execute(
         Model $model,
         array|object $payload,
         ?string $idempotency = null,
