@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\CreateCheckout;
+use App\Actions\Checkouts\CreateCheckout;
 use App\Enums\Environment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkouts\CreateCheckoutRequest;
@@ -26,7 +26,8 @@ class CheckoutsController extends Controller
         return $createCheckout->handle(
             Customer::findByKsuid($request->get('customer_id')),
             Price::findByKsuid($request->get('price_id')),
-            $request->enum('environment', Environment::class)
+            $request->enum('environment', Environment::class),
+            $request->date('expires_at')
         )->toResource(CheckoutResource::class);
     }
 
