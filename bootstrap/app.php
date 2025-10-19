@@ -8,13 +8,17 @@ use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        then: function () {
+            Route::middleware('api')
+                ->prefix('webhooks')
+                ->name('webhooks.')
+                ->group(base_path('routes/webhooks.php'));
+        }
     )
     ->withEvents(discover: [
-        __DIR__.'/../app/Listeners/*',
+        __DIR__ . '/../app/Listeners/*',
     ])
     ->withSchedule(function (Schedule $schedule): void {
         $schedule->command(NotifyCompletedTrials::class)->everyMinute();

@@ -9,7 +9,6 @@ use App\Events\Orders\OrderCanceled;
 use App\Events\Orders\OrderCompleted;
 use App\Events\Orders\OrderCreated;
 use App\Events\Orders\OrderExpired;
-use App\Events\Orders\OrderUpdated;
 use App\Events\Payments\PaymentAuthorized;
 use App\Events\Payments\PaymentCreated;
 use App\Events\Payments\PaymentFailed;
@@ -42,6 +41,7 @@ return [
     'webhook_url' => env('WEBHOOK_URL'),
     'webhook_signature' => env('WEBHOOK_SIGNATURE'),
     'webhook_fake' => env('WEBHOOK_FAKE', false),
+    'webhook_tolerance' => env('WEBHOOK_TOLERANCE', 300), // in seconds
 
     'currency' => env('APP_CURRENCY', 'USD'),
 
@@ -70,7 +70,6 @@ return [
         OrderCanceled::class => 'order.canceled',
         OrderCompleted::class => 'order.completed',
         OrderExpired::class => 'order.expired',
-        OrderUpdated::class => 'order.updated',
         PaymentCreated::class => 'payment.created',
         PaymentUpdated::class => 'payment.updated',
         PaymentFailed::class => 'payment.failed',
