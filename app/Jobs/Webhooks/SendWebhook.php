@@ -16,18 +16,16 @@ class SendWebhook implements ShouldQueue
 
     public function __construct(
         protected string $eventName,
-        protected Model  $model,
-        protected array  $payload
-    )
-    {
-    }
+        protected Model $model,
+        protected array $payload
+    ) {}
 
     public function handle(): void
     {
         /** @var Environment $environment */
         $environment = $this->model->environment;
 
-        $webhookUrl = config('wrap.webhook_urls.' . $environment->value);
+        $webhookUrl = config('wrap.webhook_urls.'.$environment->value);
 
         $this->model->webhookLogs()->create([
             'type' => WebhookType::OUTGOING,

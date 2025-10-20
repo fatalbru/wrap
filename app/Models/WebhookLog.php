@@ -23,7 +23,7 @@ class WebhookLog extends Model
         parent::boot();
 
         self::creating(function (WebhookLog $webhookLog): void {
-            $webhookLog->application_id ??= $webhookLog->loggable?->application_id ?? null;
+            $webhookLog->application_id ??= $webhookLog->loggable?->application_id;
         });
     }
 
