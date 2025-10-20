@@ -53,7 +53,7 @@ class HandlePaymentCreated implements ShouldQueue
             $payment = $this->paymentService->get($application, data_get($event->getPayload(), 'data_id'));
         }
 
-        $modelPrefix = config('mrr.ksuid_prefixes');
+        $modelPrefix = config('wrap.ksuid_prefixes');
 
         $externalReference = data_get($payment, 'external_reference');
         $payerId = data_get($payment, 'payer.id');

@@ -72,7 +72,7 @@ final class CreateSubscriptionLink extends Action
                     $subscription->application,
                     $price,
                     $checkout->customer->email,
-                    Currency::from(config('mrr.currency')),
+                    Currency::from(config('wrap.currency')),
                     $subscription->ksuid,
                     backUrl: url(route('handshake', $handshake->idempotency)),
                     metadata: [$subscription->ksuid],

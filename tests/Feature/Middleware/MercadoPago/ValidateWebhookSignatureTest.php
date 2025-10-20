@@ -15,7 +15,7 @@ test('doenst retain logs outside local', function (): void {
     app()->detectEnvironment(fn () => 'production');
     Log::spy();
     Log::shouldReceive('debug')->never();
-    config(['mrr.webhook_signature' => null]);
+    config(['wrap.webhook_signature' => null]);
     post('/test-webhook')
         ->assertForbidden()
         ->assertSeeText('Webhook Signature conflict');
@@ -25,14 +25,14 @@ test('only logs locally', function (): void {
     app()->detectEnvironment(fn () => 'local');
     Log::spy();
     Log::shouldReceive('debug')->once();
-    config(['mrr.webhook_signature' => null]);
+    config(['wrap.webhook_signature' => null]);
     post('/test-webhook')
         ->assertForbidden()
         ->assertSeeText('Webhook Signature conflict');
 });
 
 test('validate signature is configured', function (): void {
-    config(['mrr.webhook_signature' => null]);
+    config(['wrap.webhook_signature' => null]);
     post('/test-webhook')
         ->assertForbidden()
         ->assertSeeText('Webhook Signature conflict');
@@ -88,7 +88,7 @@ test('malformed signature', function (): void {
 });
 
 test('stale timestamp forbidden', function (): void {
-    $timestamp = now()->subSeconds(config('mrr.webhook_tolerance') + 1)->timestamp;
+    $timestamp = now()->subSeconds(config('wrap.webhook_tolerance') + 1)->timestamp;
     post('/test-webhook', [
         'data' => [
             'id' => 'id',
@@ -108,7 +108,7 @@ test('invalidates signature', function (): void {
     $requestId = 'request-id';
     $secret = Str::random(128);
     config([
-        'mrr.webhook_signature' => $secret,
+        'wrap.webhook_signature' => $secret,
     ]);
     $manifest = "id:{$dataId};request-id:{$requestId};ts:{$timestamp};";
     $hash = hash_hmac('sha256', $manifest, $secret);
@@ -130,7 +130,7 @@ test('validates signature', function (): void {
     $requestId = 'request-id';
     $secret = Str::random(128);
     config([
-        'mrr.webhook_signature' => $secret,
+        'wrap.webhook_signature' => $secret,
     ]);
     $manifest = "id:{$dataId};request-id:{$requestId};ts:{$timestamp};";
     $hash = hash_hmac('sha256', $manifest, $secret);

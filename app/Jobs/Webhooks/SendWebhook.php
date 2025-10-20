@@ -27,7 +27,7 @@ class SendWebhook implements ShouldQueue
         /** @var Environment $environment */
         $environment = $this->model->environment;
 
-        $webhookUrl = config('mrr.webhook_urls.' . $environment->value);
+        $webhookUrl = config('wrap.webhook_urls.' . $environment->value);
 
         $this->model->webhookLogs()->create([
             'type' => WebhookType::OUTGOING,
@@ -35,10 +35,10 @@ class SendWebhook implements ShouldQueue
             'event_name' => $this->eventName,
         ]);
 
-        if (config('mrr.webhook_fake')) {
+        if (config('wrap.webhook_fake')) {
             Log::debug(__CLASS__, [
                 'url' => $webhookUrl,
-                'signature' => config('mrr.webhook_signature'),
+                'signature' => config('wrap.webhook_signature'),
                 'payload' => [
                     'event' => $this->eventName,
                     'timestamp' => now()->timestamp,
@@ -49,7 +49,7 @@ class SendWebhook implements ShouldQueue
             return;
         }
 
-        Http::withHeader('x-webhook-signature', config('mrr.webhook_signature'))
+        Http::withHeader('x-webhook-signature', config('wrap.webhook_signature'))
             ->throw()
             ->post($webhookUrl, [
                 'event' => $this->eventName,

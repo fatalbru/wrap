@@ -27,16 +27,16 @@ Route::prefix('webhooks')->group(function (): void {
     });
 });
 
-Route::domain(config('mrr.checkout_domain'))
-    ->prefix(config('mrr.checkout_prefix').'/{checkout:ksuid}')
+Route::domain(config('wrap.checkout_domain'))
+    ->prefix(config('wrap.checkout_prefix').'/{checkout:ksuid}')
     ->group(function (): void {
         Route::get('/', Pay::class)->name('checkout');
         Route::get('/complete', Completed::class)->name('checkout.complete');
         Route::get('/callback', Callback::class)->name('checkout.callback');
     });
 
-Route::domain(config('mrr.customer_portal_domain'))
-    ->prefix(config('mrr.customer_portal_prefix').'/{portalIdentifier}')
+Route::domain(config('wrap.customer_portal_domain'))
+    ->prefix(config('wrap.customer_portal_prefix').'/{portalIdentifier}')
     ->middleware(PortalIdentifierContext::class)
     ->group(function (): void {
         Route::get('/', Home::class)

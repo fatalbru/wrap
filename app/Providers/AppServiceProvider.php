@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var Model $model */
             $model = $payload[0];
 
-            if (filled($prefix = config('mrr.ksuid_prefixes.'.class_basename(get_class($model))))) {
+            if (filled($prefix = config('wrap.ksuid_prefixes.'.class_basename(get_class($model))))) {
                 $class = get_class($model);
                 $model->ksuid = $class::generateKsuid($prefix);
             }

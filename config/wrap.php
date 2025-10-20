@@ -10,6 +10,7 @@ use App\Events\Orders\OrderCanceled;
 use App\Events\Orders\OrderCompleted;
 use App\Events\Orders\OrderCreated;
 use App\Events\Orders\OrderExpired;
+use App\Events\Orders\OrderUpdated;
 use App\Events\Payments\PaymentAuthorized;
 use App\Events\Payments\PaymentCreated;
 use App\Events\Payments\PaymentFailed;
@@ -75,6 +76,7 @@ return [
         OrderCanceled::class => 'order.canceled',
         OrderCompleted::class => 'order.completed',
         OrderExpired::class => 'order.expired',
+        OrderUpdated::class => 'order.updated',
         PaymentCreated::class => 'payment.created',
         PaymentUpdated::class => 'payment.updated',
         PaymentFailed::class => 'payment.failed',

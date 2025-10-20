@@ -25,7 +25,7 @@ class ValidateWebhookSignature
             ]);
         }
 
-        $webhookSignature = config('mrr.webhook_signature');
+        $webhookSignature = config('wrap.webhook_signature');
 
         abort_if(blank($webhookSignature), Response::HTTP_FORBIDDEN, 'Webhook Signature conflict');
 
@@ -57,7 +57,7 @@ class ValidateWebhookSignature
         $requestTimestamp = Carbon::createFromTimestamp($ts);
 
         abort_if(
-            $requestTimestamp->addSeconds(config('mrr.webhook_tolerance'))->isPast(),
+            $requestTimestamp->addSeconds(config('wrap.webhook_tolerance'))->isPast(),
             Response::HTTP_FORBIDDEN,
             'Stale/invalid timestamp'
         );

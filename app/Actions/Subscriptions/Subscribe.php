@@ -64,7 +64,7 @@ final class Subscribe extends Action
                 $subscription->application,
                 $price,
                 $checkout->customer->email,
-                Currency::from(config('mrr.currency')),
+                Currency::from(config('wrap.currency')),
                 $subscription->ksuid,
                 $card,
                 backUrl: url(route('checkout.callback', $checkout)),

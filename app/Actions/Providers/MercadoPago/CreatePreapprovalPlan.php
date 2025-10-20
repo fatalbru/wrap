@@ -33,7 +33,7 @@ final class CreatePreapprovalPlan extends Action
         $this->lock(function () use ($price): void {
             $payload = [
                 'reason' => $price->name,
-                'back_url' => config('mrr.site_url'),
+                'back_url' => config('wrap.site_url'),
                 'payment_methods_allowed' => [
                     'payment_types' => [
                         ['id' => 'prepaid_card'],
