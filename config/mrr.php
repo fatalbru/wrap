@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\Environment;
 use App\Events\Customers\CustomerCreated;
 use App\Events\Customers\CustomerDeleted;
 use App\Events\Customers\CustomerUpdated;
@@ -38,7 +39,11 @@ return [
     'customer_portal_domain' => env('CUSTOMER_PORTAL_DOMAIN', 'portal.wrap.test'),
     'customer_portal_prefix' => env('CUSTOMER_PORTAL_PREFIX', 'customers'),
 
-    'webhook_url' => env('WEBHOOK_URL'),
+    'webhook_urls' => [
+        Environment::LIVE->value => env('WEBHOOK_URL'),
+        Environment::TEST->value => env('TEST_WEBHOOK_URL'),
+    ],
+
     'webhook_signature' => env('WEBHOOK_SIGNATURE'),
     'webhook_fake' => env('WEBHOOK_FAKE', false),
     'webhook_tolerance' => env('WEBHOOK_TOLERANCE', 300), // in seconds

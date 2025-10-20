@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Webhooks;
 
+use App\Enums\Environment;
 use App\Enums\WebhookType;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -15,12 +16,19 @@ class SendWebhook implements ShouldQueue
 
     public function __construct(
         protected string $eventName,
-        protected Model $model,
-        protected array $payload
-    ) {}
+        protected Model  $model,
+        protected array  $payload
+    )
+    {
+    }
 
     public function handle(): void
     {
+        /** @var Environment $environment */
+        $environment = $this->model->environment;
+
+        $webhookUrl = config('mrr.webhook_urls.' . $environment->value);
+
         $this->model->webhookLogs()->create([
             'type' => WebhookType::OUTGOING,
             'payload' => $this->payload,
@@ -29,7 +37,7 @@ class SendWebhook implements ShouldQueue
 
         if (config('mrr.webhook_fake')) {
             Log::debug(__CLASS__, [
-                'url' => config('mrr.webhook_url'),
+                'url' => $webhookUrl,
                 'signature' => config('mrr.webhook_signature'),
                 'payload' => [
                     'event' => $this->eventName,
@@ -43,7 +51,7 @@ class SendWebhook implements ShouldQueue
 
         Http::withHeader('x-webhook-signature', config('mrr.webhook_signature'))
             ->throw()
-            ->post(config('mrr.webhook_url'), [
+            ->post($webhookUrl, [
                 'event' => $this->eventName,
                 'timestamp' => now()->timestamp,
                 'data' => $this->payload,
