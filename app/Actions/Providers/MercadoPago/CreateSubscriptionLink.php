@@ -25,10 +25,8 @@ final class CreateSubscriptionLink extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication   $assignApplication,
-    )
-    {
-    }
+        private readonly AssignApplication $assignApplication,
+    ) {}
 
     /**
      * @throws LockTimeoutException
@@ -53,7 +51,7 @@ final class CreateSubscriptionLink extends Action
 
                 $price = $subscription->price;
 
-                $idempotency = md5($subscription->ksuid . uniqid() . time());
+                $idempotency = md5($subscription->ksuid.uniqid().time());
 
                 $handshake = Handshake::create([
                     'type' => HandshakeType::REROUTE,

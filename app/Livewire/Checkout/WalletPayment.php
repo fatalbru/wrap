@@ -7,7 +7,6 @@ namespace App\Livewire\Checkout;
 use App\Actions\Providers\MercadoPago\CreatePreferenceLink;
 use App\Actions\Providers\MercadoPago\CreateSubscriptionLink;
 use App\Enums\ProductType;
-use App\Interfaces\ExternalPaymentHandlerInterface;
 use App\Models\Checkout;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Locked;

@@ -18,9 +18,14 @@ final class CreateCustomer extends Action
      */
     public function execute(string $name, string $email, Environment $environment): Customer
     {
-        return $this->lock(
-            fn () => Customer::create(compact('name', 'email', 'environment')),
-            ...func_get_args()
-        );
+        return $this->lock(function () use ($name, $email, $environment) {
+            $customer = new Customer();
+            $customer->name = $name;
+            $customer->email = $email;
+            $customer->environment = $environment;
+            $customer->save();
+
+            return $customer;
+        }, ...func_get_args());
     }
 }

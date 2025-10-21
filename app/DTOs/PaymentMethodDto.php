@@ -15,8 +15,11 @@ use WendellAdriel\ValidatedDTO\ValidatedDTO;
 class PaymentMethodDto extends ValidatedDTO
 {
     public PaymentMethod $paymentMethod;
+
     public ?string $token;
+
     public ?string $lastFourDigits;
+
     public ?string $paymentTypeId;
 
     #[Map(data: 'paymentMethodId')]
@@ -47,10 +50,10 @@ class PaymentMethodDto extends ValidatedDTO
     {
         return [
             'paymentMethod' => new EnumCast(PaymentMethod::class),
-            'token' => new StringCast(),
-            'lastFourDigits' => new StringCast(),
-            'paymentTypeId' => new StringCast(),
-            'payment_method_id' => new StringCast(),
+            'token' => new StringCast,
+            'lastFourDigits' => new StringCast,
+            'paymentTypeId' => new StringCast,
+            'payment_method_id' => new StringCast,
         ];
     }
 }

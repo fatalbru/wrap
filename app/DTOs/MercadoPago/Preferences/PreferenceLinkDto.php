@@ -19,7 +19,7 @@ class PreferenceLinkDto extends ValidatedDTO
     protected function casts(): array
     {
         return [
-            'init_point' => new StringCast(),
+            'init_point' => new StringCast,
         ];
     }
 

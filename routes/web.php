@@ -30,7 +30,7 @@ Route::prefix('webhooks')->group(function (): void {
 });
 
 Route::domain(config('wrap.checkout_domain'))
-    ->prefix(config('wrap.checkout_prefix') . '/{checkout:ksuid}')
+    ->prefix(config('wrap.checkout_prefix').'/{checkout:ksuid}')
     ->middleware(ValidateCheckoutExpiration::class)
     ->group(function (): void {
         Route::get('/', Pay::class)->name('checkout');
@@ -42,7 +42,7 @@ Route::domain(config('wrap.checkout_domain'))
     });
 
 Route::domain(config('wrap.customer_portal_domain'))
-    ->prefix(config('wrap.customer_portal_prefix') . '/{portalIdentifier}')
+    ->prefix(config('wrap.customer_portal_prefix').'/{portalIdentifier}')
     ->middleware(PortalIdentifierContext::class)
     ->group(function (): void {
         Route::get('/', Home::class)

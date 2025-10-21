@@ -9,7 +9,9 @@ use WendellAdriel\ValidatedDTO\ValidatedDTO;
 class AtomicOptionsDto extends ValidatedDTO
 {
     public ?int $ttl = null;
+
     public ?int $wait = null;
+
     public ?string $key = null;
 
     protected function rules(): array
@@ -29,9 +31,9 @@ class AtomicOptionsDto extends ValidatedDTO
     protected function casts(): array
     {
         return [
-            'ttl' => new IntegerCast(),
-            'wait' => new IntegerCast(),
-            'key' => new StringCast(),
+            'ttl' => new IntegerCast,
+            'wait' => new IntegerCast,
+            'key' => new StringCast,
         ];
     }
 }

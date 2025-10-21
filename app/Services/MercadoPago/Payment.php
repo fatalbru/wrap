@@ -35,17 +35,16 @@ final class Payment
      * @throws Throwable
      */
     public function create(
-        Application                            $application,
+        Application $application,
         #[SensitiveParameter] PaymentMethodDto $paymentMethod,
-        string                                 $payerEmail,
-        string                                 $externalReference,
-        string                                 $description,
-        int|float                              $amount,
-        string                                 $idempotency,
-        int                                    $installments = 1,
-        array                                  $metadata = [],
-    )
-    {
+        string $payerEmail,
+        string $externalReference,
+        string $description,
+        int|float $amount,
+        string $idempotency,
+        int $installments = 1,
+        array $metadata = [],
+    ) {
         throw_if($paymentMethod->paymentMethod !== PaymentMethod::CARD, 'Only card payment methods are supported.');
 
         $payload = [

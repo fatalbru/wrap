@@ -28,20 +28,17 @@ final class Subscribe extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication   $assignApplication,
-        private readonly CreatePayment       $createPayment
-    )
-    {
-    }
+        private readonly AssignApplication $assignApplication,
+        private readonly CreatePayment $createPayment
+    ) {}
 
     /**
      * @throws Throwable
      */
     public function execute(
-        Checkout                                $checkout,
+        Checkout $checkout,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null
-    ): Payment
-    {
+    ): Payment {
         return $this->lock(function () use ($checkout, $paymentMethod) {
             /** @var Subscription $subscription */
             $subscription = $checkout->checkoutable;

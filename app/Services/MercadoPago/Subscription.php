@@ -37,17 +37,16 @@ final class Subscription
      * @throws Throwable
      */
     public function subscribe(
-        Application                             $application,
-        Price                                   $price,
-        string                                  $payerEmail,
-        Currency                                $currency,
-        string                                  $externalReference,
+        Application $application,
+        Price $price,
+        string $payerEmail,
+        Currency $currency,
+        string $externalReference,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null,
-        ?string                                 $backUrl = null,
-        array                                   $metadata = [],
-        ?string                                 $notificationUrl = null,
-    ): ?array
-    {
+        ?string $backUrl = null,
+        array $metadata = [],
+        ?string $notificationUrl = null,
+    ): ?array {
         Log::debug(__CLASS__, func_get_args());
 
         $payload = [

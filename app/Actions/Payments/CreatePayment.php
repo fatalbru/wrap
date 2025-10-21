@@ -22,17 +22,16 @@ final class CreatePayment extends Action
      * @throws Throwable
      */
     public function execute(
-        Customer           $customer,
+        Customer $customer,
         Order|Subscription $payable,
-        int|float          $amount,
-        PaymentStatus      $status,
-        PaymentVendor      $vendor,
-        array              $vendorData = [],
-        ?string            $declineReason = null,
-        ?PaymentMethodDto  $paymentMethod = null,
-    ): Payment
-    {
-        return $this->lock(fn() => $payable->payments()->create([
+        int|float $amount,
+        PaymentStatus $status,
+        PaymentVendor $vendor,
+        array $vendorData = [],
+        ?string $declineReason = null,
+        ?PaymentMethodDto $paymentMethod = null,
+    ): Payment {
+        return $this->lock(fn () => $payable->payments()->create([
             'customer_id' => $customer->id,
             'amount' => $amount,
             'status' => $status,

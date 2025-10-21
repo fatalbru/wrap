@@ -83,4 +83,9 @@ class Checkout extends Model
     {
         $builder->whereMorphedTo('checkoutable', Order::class);
     }
+
+    public static function getKsuidPrefix(): string
+    {
+        return 'ch';
+    }
 }

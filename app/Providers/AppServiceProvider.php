@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Price;
 use App\Models\Product;
+use App\Models\Refund;
 use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
@@ -32,20 +33,27 @@ class AppServiceProvider extends ServiceProvider
             URL::forceHttps();
         }
 
-        Relation::enforceMorphMap([
-            1 => Subscription::class,
-            2 => Checkout::class,
-            3 => User::class,
-            4 => Product::class,
-            5 => Price::class,
-            6 => Order::class,
-            7 => Payment::class,
-            8 => Customer::class,
-        ]);
+        Relation::enforceMorphMap(
+            collect([
+                Customer::class,
+                Payment::class,
+                Price::class,
+                Product::class,
+                Refund::class,
+                Subscription::class,
+                Checkout::class,
+                Order::class,
+                User::class,
+            ])
+                ->mapWithKeys(fn(string $className): array => [
+                    strtolower(class_basename($className)) => $className,
+                ])
+                ->toArray()
+        );
 
         Carbon::setLocale(config('app.locale'));
 
-        Str::macro('ksuid', fn (string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid)->payload())));
+        Str::macro('ksuid', fn(string $prefix) => sprintf('%s_%s', $prefix, bin2hex((new Ksuid)->payload())));
 
         Http::macro('mercadopago', function (Application $application) {
             return Http::baseUrl('https://api.mercadopago.com')
@@ -58,16 +66,6 @@ class AppServiceProvider extends ServiceProvider
                 })
                 ->withToken($application->private_key)
                 ->asJson();
-        });
-
-        Event::listen('eloquent.creating: *', function (string $event, array $payload): void {
-            /** @var Model $model */
-            $model = $payload[0];
-
-            if (filled($prefix = config('wrap.ksuid_prefixes.'.class_basename(get_class($model))))) {
-                $class = get_class($model);
-                $model->ksuid = $class::generateKsuid($prefix);
-            }
         });
     }
 }

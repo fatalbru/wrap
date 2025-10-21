@@ -50,15 +50,15 @@ class CardPayment extends Component
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscription : $payOrder;
 
         /** @var Payment $payment */
-        $payment = DB::transaction(fn() => $handler->execute(
+        $payment = DB::transaction(fn () => $handler->execute(
             $this->checkout,
             new PaymentMethodDto([
                 'paymentMethod' => PaymentMethod::CARD,
-                ... $this->card
+                ...$this->card,
             ]),
         ));
 
-        if (!$payment->isSuccessful()) {
+        if (! $payment->isSuccessful()) {
             $this->failed($payment->decline_reason);
 
             return;
