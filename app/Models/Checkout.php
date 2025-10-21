@@ -18,8 +18,6 @@ class Checkout extends Model
 {
     use HasFactory, HasKsuid;
 
-    protected $fillable = ['completed_at', 'price_id', 'status', 'vendor', 'environment'];
-
     protected $with = [
         'payments',
     ];
@@ -75,7 +73,7 @@ class Checkout extends Model
 
         return $this->checkoutable
             ->items
-            ->map(fn (OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
+            ->map(fn(OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
             ->sum();
     }
 
@@ -87,5 +85,13 @@ class Checkout extends Model
     public static function getKsuidPrefix(): string
     {
         return 'ch';
+    }
+
+    public function complete(): void
+    {
+        if (blank($this->completed_at)) {
+            $this->completed_at = now();
+            $this->save();
+        }
     }
 }

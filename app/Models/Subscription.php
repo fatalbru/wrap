@@ -24,10 +24,6 @@ class Subscription extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;
 
-    protected $fillable = ['status', 'started_at', 'ended_at', 'next_payment_at', 'vendor_data',
-        'canceled_at', 'vendor', 'vendor_id', 'price_id', 'environment', 'trial_started_at',
-        'trial_ended_at', 'customer_id'];
-
     protected function casts()
     {
         return [

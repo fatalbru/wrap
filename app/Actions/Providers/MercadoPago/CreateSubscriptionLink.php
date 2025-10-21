@@ -25,16 +25,18 @@ final class CreateSubscriptionLink extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-    ) {}
+        private readonly AssignApplication   $assignApplication,
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): PreapprovalLinkDto
+    public function execute(Checkout $checkout, string $customerEmail): PreapprovalLinkDto
     {
-        return $this->lock(function () use ($checkout) {
+        return $this->lock(function () use ($checkout, $customerEmail) {
             /** @var Subscription $subscription */
             $subscription = $checkout->checkoutable;
 
@@ -51,27 +53,23 @@ final class CreateSubscriptionLink extends Action
 
                 $price = $subscription->price;
 
-                $idempotency = md5($subscription->ksuid.uniqid().time());
+                $idempotency = md5($subscription->ksuid . uniqid() . time());
 
-                $handshake = Handshake::create([
-                    'type' => HandshakeType::REROUTE,
-                    'idempotency' => $idempotency,
-                    'payload' => [
-                        'route' => 'mercadopago.preapproval.callback',
-                        'routeParams' => [
-                            'signature' => encrypt([
-                                'idempotency' => $idempotency,
-                                'checkout_id' => $checkout->id,
-                                'subscription_id' => $subscription->id,
-                            ]),
-                        ],
+                $handshake = Handshake::shouldReroute($idempotency, [
+                    'route' => 'mercadopago.preapproval.callback',
+                    'routeParams' => [
+                        'signature' => encrypt([
+                            'idempotency' => $idempotency,
+                            'checkout_id' => $checkout->id,
+                            'subscription_id' => $subscription->id,
+                        ]),
                     ],
                 ]);
 
                 $response = $this->subscriptionService->subscribe(
                     $subscription->application,
                     $price,
-                    $checkout->customer->email,
+                    $customerEmail,
                     Currency::from(config('wrap.currency')),
                     $subscription->ksuid,
                     backUrl: url(route('handshake', $handshake->idempotency)),

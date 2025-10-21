@@ -11,6 +11,7 @@ use App\DTOs\PaymentMethodDto;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
+use App\Events\Orders\OrderCompleted;
 use App\Models\Checkout;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -25,19 +26,22 @@ use Throwable;
 final class PayOrder extends Action
 {
     public function __construct(
-        private readonly PaymentService $paymentService,
-        private readonly CreatePayment $createPayment,
+        private readonly PaymentService    $paymentService,
+        private readonly CreatePayment     $createPayment,
         private readonly AssignApplication $assignApplication,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
     public function execute(
-        Checkout $checkout,
+        Checkout                               $checkout,
         #[SensitiveParameter] PaymentMethodDto $paymentMethod,
-    ): Payment {
+    ): Payment
+    {
         return $this->lock(function () use ($checkout, $paymentMethod) {
             $idempotency = Str::random(128);
 
@@ -53,7 +57,7 @@ final class PayOrder extends Action
             );
             $order->save();
 
-            $items = $order->items->map(fn (OrderItem $orderItem) => [
+            $items = $order->items->map(fn(OrderItem $orderItem) => [
                 'id' => $orderItem->id,
                 'title' => $orderItem->price->name,
                 'quantity' => $orderItem->quantity,
@@ -84,7 +88,6 @@ final class PayOrder extends Action
             }
 
             $payment = $this->createPayment->execute(
-                $checkout->customer,
                 $order,
                 $total,
                 $status,
@@ -96,7 +99,9 @@ final class PayOrder extends Action
 
             if ($payment->isSuccessful()) {
                 $order->complete();
-                $checkout->touch('completed_at');
+                $checkout->complete();
+
+                event(new OrderCompleted($order));
             }
 
             return $payment;

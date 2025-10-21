@@ -76,7 +76,7 @@ class PreapprovalsController extends Controller
         $registerWebhookLog->execute($subscription, $preapproval, paymentProvider: PaymentProvider::MERCADOPAGO);
 
         if ($status === SubscriptionStatus::AUTHORIZED && blank($subscription->started_at)) {
-            $checkout->touch('completed_at');
+            $checkout->complete();
 
             $subscription->update([
                 'status' => SubscriptionStatus::AUTHORIZED,

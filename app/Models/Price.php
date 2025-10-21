@@ -24,8 +24,6 @@ class Price extends Model
 {
     use HasFactory, HasKsuid;
 
-    protected $fillable = ['name', 'frequency', 'price', 'trial_days', 'vendor_id', 'vendor', 'environment'];
-
     protected function casts()
     {
         return [

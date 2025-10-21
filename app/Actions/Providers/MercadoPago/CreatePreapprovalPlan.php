@@ -17,8 +17,10 @@ final class CreatePreapprovalPlan extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-    ) {}
+        private readonly AssignApplication   $assignApplication,
+    )
+    {
+    }
 
     /**
      * @link https://www.mercadopago.com.ar/developers/en/reference/subscriptions/_preapproval_plan/post
@@ -66,10 +68,9 @@ final class CreatePreapprovalPlan extends Action
                 $payload,
             );
 
-            $price->update([
-                'vendor_id' => data_get($response, 'id'),
-                'vendor' => PaymentVendor::MERCADOPAGO,
-            ]);
+            $price->vendor_id = data_get($response, 'id');
+            $price->vendor = PaymentVendor::MERCADOPAGO;
+            $price->save();
         }, ...func_get_args());
     }
 }

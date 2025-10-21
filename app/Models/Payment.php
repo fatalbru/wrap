@@ -24,10 +24,6 @@ class Payment extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;
 
-    protected $fillable = ['status', 'decline_reason', 'vendor_data', 'customer_id', 'price_id', 'amount',
-        'paid_at', 'vendor_id', 'environment', 'payment_method', 'payment_type', 'card_last_digits',
-        'payment_vendor'];
-
     protected static function boot()
     {
         parent::boot();

@@ -23,15 +23,17 @@ final class CreatePreferenceLink extends Action
     public function __construct(
         private readonly PreferenceService $preferenceService,
         private readonly AssignApplication $assignApplication,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): PreferenceLinkDto
+    public function execute(Checkout $checkout, string $customerEmail): PreferenceLinkDto
     {
-        return $this->lock(function () use ($checkout) {
+        return $this->lock(function () use ($checkout, $customerEmail) {
             /** @var Order $order */
             $order = $checkout->checkoutable;
 
@@ -52,13 +54,13 @@ final class CreatePreferenceLink extends Action
                         'checkout_id' => $checkout->id,
                         'order_id' => $order->id,
                     ],
-                    md5($order->ksuid.uniqid().time()),
+                    md5($order->ksuid . uniqid() . time()),
                     disposable: false,
                 );
 
                 $response = $this->preferenceService->create(
                     $order->application,
-                    $order->items->map(fn (OrderItem $orderItem) => [
+                    $order->items->map(fn(OrderItem $orderItem) => [
                         'id' => $orderItem->price->ksuid,
                         'title' => $orderItem->price->name,
                         'quantity' => $orderItem->quantity,
@@ -69,10 +71,9 @@ final class CreatePreferenceLink extends Action
                     url(route('handshake', $handshake)),
                 );
 
-                $order->update([
-                    'vendor_id' => data_get($response, 'id'),
-                    'vendor_data' => $response,
-                ]);
+                $order->vendor_id = data_get($response, 'id');
+                $order->vendor_data = $response;
+                $order->save();
             }
 
             return new PreferenceLinkDto($order->vendor_data);

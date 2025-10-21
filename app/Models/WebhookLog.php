@@ -9,15 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class WebhookLog extends Model
 {
-    protected $fillable = [
-        'application_id',
-        'payload',
-        'provider',
-        'idempotency',
-        'type',
-        'event_name',
-    ];
-
     protected static function boot()
     {
         parent::boot();

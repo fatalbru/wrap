@@ -6,7 +6,6 @@ namespace App\Models;
 
 use App\Enums\Environment;
 use App\Enums\OrderStatus;
-use App\Events\Orders\OrderCompleted;
 use App\Observers\OrderObserver;
 use App\Traits\HasKsuid;
 use App\Traits\HasWebhookLogs;
@@ -22,9 +21,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 class Order extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;
-
-    protected $fillable = ['status', 'vendor_data', 'vendor', 'vendor_id', 'price_id', 'completed_at', 'canceled_at',
-        'amount', 'customer_id', 'decline_reason', 'data', 'paid_at', 'environment'];
 
     protected static function boot()
     {
@@ -74,12 +70,9 @@ class Order extends Model
     public function complete(): void
     {
         if (blank($this->completed_at)) {
-            $this->update([
-                'status' => OrderStatus::COMPLETED,
-                'completed_at' => now(),
-            ]);
-
-            event(new OrderCompleted($this));
+            $this->status = OrderStatus::COMPLETED;
+            $this->completed_at = now();
+            $this->save();
         }
     }
 }

@@ -25,10 +25,9 @@ final class CancelSubscription extends Action
 
         $this->lock(function () use ($subscription): void {
             $this->subscriptionService->cancel($subscription->application, $subscription->vendor_id);
-            $subscription->touch('canceled_at');
-            $subscription->update([
-                'status' => SubscriptionStatus::CANCELLED,
-            ]);
+            $subscription->canceled_at = now();
+            $subscription->status = SubscriptionStatus::CANCELLED;
+            $subscription->save();
         }, ...func_get_args());
     }
 }

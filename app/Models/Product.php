@@ -15,8 +15,6 @@ class Product extends Model
 {
     use HasFactory, HasKsuid;
 
-    protected $fillable = ['type', 'name', 'environment'];
-
     protected function casts()
     {
         return [

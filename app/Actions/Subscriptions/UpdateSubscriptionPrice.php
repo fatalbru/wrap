@@ -22,11 +22,10 @@ final class UpdateSubscriptionPrice extends Action
     public function handle(Subscription $subscription, Price $price): void
     {
         throw_if($subscription->status === SubscriptionStatus::CANCELLED, 'Cannot modify canceled subscription.');
+        throw_if($price->product->type !== ProductType::SUBSCRIPTION, 'Only subscription prices eligible.');
+        throw_if($subscription->environment !== $price->environment, 'Environments do not match.');
 
-        if ($subscription->price_id !== $price->id) {
-            throw_if($price->product->type !== ProductType::SUBSCRIPTION, 'Only subscription prices eligible.');
-            throw_if($subscription->environment !== $price->environment, 'Environments do not match.');
-
+        if (!$subscription->price()->is($price)) {
             $this->lock(function () use ($subscription, $price): void {
                 $this->subscriptionService->updatePreapproval(
                     $subscription->application,

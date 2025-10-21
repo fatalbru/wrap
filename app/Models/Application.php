@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Application extends Model
 {
-    protected $fillable = ['vendor', 'public_key', 'private_key', 'features', 'name',
-        'environment', 'vendor_id', 'vendor_secondary_id'];
-
     protected function casts()
     {
         return [

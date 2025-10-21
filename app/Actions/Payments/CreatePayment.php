@@ -22,25 +22,29 @@ final class CreatePayment extends Action
      * @throws Throwable
      */
     public function execute(
-        Customer $customer,
         Order|Subscription $payable,
-        int|float $amount,
-        PaymentStatus $status,
-        PaymentVendor $vendor,
-        array $vendorData = [],
-        ?string $declineReason = null,
-        ?PaymentMethodDto $paymentMethod = null,
-    ): Payment {
-        return $this->lock(fn () => $payable->payments()->create([
-            'customer_id' => $customer->id,
-            'amount' => $amount,
-            'status' => $status,
-            'decline_reason' => $declineReason,
-            'vendor_data' => $vendorData,
-            'payment_vendor' => $vendor,
-            'payment_method' => $paymentMethod?->paymentMethodId,
-            'payment_type' => $paymentMethod?->paymentTypeId,
-            'card_last_digits' => $paymentMethod?->lastFourDigits,
-        ]), ...func_get_args());
+        int|float          $amount,
+        PaymentStatus      $status,
+        PaymentVendor      $vendor,
+        array              $vendorData = [],
+        ?string            $declineReason = null,
+        ?PaymentMethodDto  $paymentMethod = null,
+    ): Payment
+    {
+        return $this->lock(function () use ($payable, $amount, $status, $vendor, $vendorData, $declineReason, $paymentMethod) {
+            $payment = new Payment;
+            $payment->customer()->associate($payable->customer);
+            $payment->amount = $amount;
+            $payment->status = $status;
+            $payment->decline_reason = $declineReason;
+            $payment->vendor_data = $vendorData;
+            $payment->payment_vendor = $vendor;
+            $payment->payment_method = $paymentMethod?->paymentMethodId;
+            $payment->payment_type = $paymentMethod?->paymentTypeId;
+            $payment->card_last_digits = $paymentMethod?->lastFourDigits;
+            $payment->save();
+
+            return $payment;
+        }, ...func_get_args());
     }
 }

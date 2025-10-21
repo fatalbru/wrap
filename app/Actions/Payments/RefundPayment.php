@@ -14,7 +14,9 @@ use Throwable;
 
 final class RefundPayment extends Action
 {
-    public function __construct(private readonly PaymentService $paymentService) {}
+    public function __construct(private readonly PaymentService $paymentService)
+    {
+    }
 
     /**
      * @throws Throwable
@@ -35,16 +37,18 @@ final class RefundPayment extends Action
                 __('Refund could not be processed.')
             );
 
-            $payment->update([
-                'refunded_at' => now(),
-                'status' => PaymentStatus::REFUNDED,
-            ]);
+            $payment->refunded_at = now();
+            $payment->status = PaymentStatus::REFUNDED;
+            $payment->save();
 
-            return $payment->refunds()->create([
-                'amount' => $payment->amount,
-                'vendor_id' => data_get($response, 'id'),
-                'vendor_data' => $response,
-            ]);
+            $refund = new Refund;
+            $refund->payment()->associate($payment);
+            $refund->amount = $payment->amount;
+            $refund->vendor_id = data_get($response, 'id');
+            $refund->vendor_data = $response;
+            $refund->save();
+
+            return $refund;
         }, ...func_get_args());
     }
 }

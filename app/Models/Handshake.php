@@ -11,8 +11,6 @@ class Handshake extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['idempotency', 'payload', 'type', 'disposable'];
-
     protected function casts()
     {
         return [
@@ -24,18 +22,32 @@ class Handshake extends Model
 
     public static function forJob(
         string $jobHandler,
-        array $arguments,
+        array  $arguments,
         string $idempotency,
-        bool $disposable = true,
-    ): Handshake {
-        return self::create([
-            'type' => HandshakeType::JOB,
-            'payload' => [
-                'handler' => $jobHandler,
-                'arguments' => $arguments,
-            ],
-            'idempotency' => $idempotency,
-            'disposable' => $disposable,
-        ]);
+        bool   $disposable = true,
+    ): Handshake
+    {
+        $handshake = new Handshake();
+        $handshake->type = HandshakeType::JOB;
+        $handshake->idempotency = $idempotency;
+        $handshake->disposable = $disposable;
+        $handshake->payload = [
+            'handler' => $jobHandler,
+            'arguments' => $arguments,
+        ];
+        $handshake->save();
+
+        return $handshake;
+    }
+
+    public static function shouldReroute(string $idempotency, array $payload): Handshake
+    {
+        $handshake = new Handshake();
+        $handshake->type = HandshakeType::REROUTE;
+        $handshake->idempotency = $idempotency;
+        $handshake->payload = $payload;
+        $handshake->save();
+
+        return $handshake;
     }
 }

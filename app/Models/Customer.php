@@ -20,8 +20,6 @@ class Customer extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;
 
-    protected $fillable = ['name', 'email', 'environment'];
-
     protected static function boot()
     {
         parent::boot();

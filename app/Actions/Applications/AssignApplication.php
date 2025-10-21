@@ -15,11 +15,13 @@ class AssignApplication extends Action
     protected bool $shouldLock = false;
 
     public function execute(
-        Environment $environment,
+        Environment   $environment,
         PaymentVendor $paymentVendor,
-        ProductType $productType,
-    ): Application {
-        return Application::where('vendor', $paymentVendor)
+        ProductType   $productType,
+    ): Application
+    {
+        return Application::query()
+            ->where('vendor', $paymentVendor)
             ->where('environment', $environment)
             ->whereJsonContains('features', $productType)
             ->firstOrFail();

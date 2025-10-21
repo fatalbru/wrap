@@ -28,17 +28,20 @@ final class Subscribe extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-        private readonly CreatePayment $createPayment
-    ) {}
+        private readonly AssignApplication   $assignApplication,
+        private readonly CreatePayment       $createPayment
+    )
+    {
+    }
 
     /**
      * @throws Throwable
      */
     public function execute(
-        Checkout $checkout,
+        Checkout                                $checkout,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null
-    ): Payment {
+    ): Payment
+    {
         return $this->lock(function () use ($checkout, $paymentMethod) {
             /** @var Subscription $subscription */
             $subscription = $checkout->checkoutable;
@@ -83,7 +86,6 @@ final class Subscribe extends Action
             }
 
             $payment = $this->createPayment->execute(
-                $subscription->customer,
                 $subscription,
                 $amount,
                 $status,
@@ -96,23 +98,24 @@ final class Subscribe extends Action
             if ($payment->isSuccessful()) {
                 event(new SubscriptionStarted($subscription));
 
-                $subscription->update([
-                    'status' => SubscriptionStatus::AUTHORIZED,
-                    'next_payment_at' => data_get($response, 'next_payment_date'),
-                    'started_at' => now(),
-                    'vendor_data' => $response,
-                    'vendor_id' => data_get($response, 'id'),
-                    ...$price->has_trial ? [
-                        'trial_started_at' => now(),
-                        'trial_ended_at' => now()->addDays($price->trial_days),
-                    ] : [],
-                ]);
+                $subscription->status = SubscriptionStatus::AUTHORIZED;
+                $subscription->next_payment_at = data_get($response, 'next_payment_date');
+                $subscription->started_at = now();
+                $subscription->vendor_data = $response;
+                $subscription->vendor_id = data_get($response, 'id');
 
                 if ($price->has_trial) {
+                    $subscription->trial_started_at = now();
+                    $subscription->trial_ended_at = now()->addDays($price->trial_days);
+                }
+
+                $subscription->save();
+
+                if($price->has_trial) {
                     event(new TrialStarted($subscription));
                 }
 
-                $checkout->touch('completed_at');
+                $checkout->complete();
             }
 
             return $payment;
