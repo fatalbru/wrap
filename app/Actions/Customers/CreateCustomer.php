@@ -19,7 +19,7 @@ final class CreateCustomer extends Action
     public function execute(string $name, string $email, Environment $environment): Customer
     {
         return $this->lock(function () use ($name, $email, $environment) {
-            $customer = new Customer();
+            $customer = new Customer;
             $customer->name = $name;
             $customer->email = $email;
             $customer->environment = $environment;

@@ -9,17 +9,6 @@ use Psr\Http\Message\RequestInterface;
 
 class MercadoPagoServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
     public function boot(): void
     {
         Http::macro('mercadopago', function (Application $application) {

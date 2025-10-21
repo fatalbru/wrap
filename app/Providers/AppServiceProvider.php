@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
                 Order::class,
                 User::class,
             ])
-                ->mapWithKeys(fn(string $className): array => [
+                ->mapWithKeys(fn (string $className): array => [
                     strtolower(class_basename($className)) => $className,
                 ])
                 ->toArray()

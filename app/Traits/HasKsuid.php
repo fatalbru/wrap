@@ -19,7 +19,7 @@ trait HasKsuid
 {
     public static function bootHasKsuid(): void
     {
-        static::creating(function (Model $model) {
+        static::creating(function (Model $model): void {
             $model->ksuid = static::class::generateKsuid(
                 static::class::getKsuidPrefix()
             );
@@ -41,7 +41,7 @@ trait HasKsuid
     public static function generateKsuid(string $prefix, int $length = 8): string
     {
         do {
-            $timestamp = base_convert((string)now()->timestamp, 10, 36); // shorter, time-based component
+            $timestamp = base_convert((string) now()->timestamp, 10, 36); // shorter, time-based component
             $random = Str::random($length);
             $ksuid = strtolower("{$prefix}_{$timestamp}{$random}");
         } while (self::where('ksuid', $ksuid)->exists());
@@ -49,7 +49,7 @@ trait HasKsuid
         return $ksuid;
     }
 
-    static function getKsuidPrefix(): string
+    public static function getKsuidPrefix(): string
     {
         return substr(class_basename(static::class), 0, 3);
     }
