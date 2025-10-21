@@ -14,7 +14,6 @@
         "livewire/livewire": "^3.6",
         "masmerise/livewire-toaster": "^2.8",
         "nunomaduro/essentials": "^1.0",
-        "tuupola/ksuid": "^2.1",
         "wendelladriel/laravel-validated-dto": "^4.2"
     },
     "require-dev": {

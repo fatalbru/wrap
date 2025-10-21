@@ -1,6 +1,7 @@
 <?php
 
 use App\Console\Commands\Subscriptions\NotifyCompletedTrials;
+use App\Providers\MercadoPagoServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/webhooks.php'));
         }
     )
+    ->withProviders([
+        MercadoPagoServiceProvider::class,
+    ])
     ->withEvents(discover: [
         __DIR__.'/../app/Listeners/*',
     ])
