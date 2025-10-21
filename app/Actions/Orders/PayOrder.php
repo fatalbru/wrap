@@ -7,7 +7,7 @@ namespace App\Actions\Orders;
 use App\Actions\Applications\AssignApplication;
 use App\Actions\Payments\CreatePayment;
 use App\Concerns\Action;
-use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\DTOs\PaymentMethodDto;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
@@ -25,20 +25,23 @@ use Throwable;
 final class PayOrder extends Action
 {
     public function __construct(
-        private readonly PaymentService $paymentService,
-        private readonly CreatePayment $createPayment,
+        private readonly PaymentService    $paymentService,
+        private readonly CreatePayment     $createPayment,
         private readonly AssignApplication $assignApplication,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
     public function execute(
-        Checkout $checkout,
-        #[SensitiveParameter] TemporaryCardDto $card,
-    ): Payment {
-        return $this->lock(function () use ($checkout, $card) {
+        Checkout                               $checkout,
+        #[SensitiveParameter] PaymentMethodDto $paymentMethod,
+    ): Payment
+    {
+        return $this->lock(function () use ($checkout, $paymentMethod) {
             $idempotency = Str::random(128);
 
             /** @var Order $order */
@@ -53,7 +56,7 @@ final class PayOrder extends Action
             );
             $order->save();
 
-            $items = $order->items->map(fn (OrderItem $orderItem) => [
+            $items = $order->items->map(fn(OrderItem $orderItem) => [
                 'id' => $orderItem->id,
                 'title' => $orderItem->price->name,
                 'quantity' => $orderItem->quantity,
@@ -65,7 +68,7 @@ final class PayOrder extends Action
 
             $response = $this->paymentService->create(
                 $order->application,
-                $card,
+                $paymentMethod,
                 $checkout->customer->email,
                 $order->ksuid,
                 __('Order :ksuid', $order->only('ksuid')),
@@ -91,7 +94,7 @@ final class PayOrder extends Action
                 PaymentVendor::MERCADOPAGO_CARD,
                 $response,
                 $declineReason,
-                $card
+                $paymentMethod
             );
 
             if ($payment->isSuccessful()) {

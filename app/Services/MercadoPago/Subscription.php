@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\MercadoPago;
 
-use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\DTOs\PaymentMethodDto;
 use App\Enums\Currency;
 use App\Enums\SubscriptionStatus;
 use App\Models\Application;
@@ -37,16 +37,17 @@ final class Subscription
      * @throws Throwable
      */
     public function subscribe(
-        Application $application,
-        Price $price,
-        string $payerEmail,
-        Currency $currency,
-        string $externalReference,
-        #[SensitiveParameter] ?TemporaryCardDto $card = null,
-        ?string $backUrl = null,
-        array $metadata = [],
-        ?string $notificationUrl = null,
-    ): ?array {
+        Application                             $application,
+        Price                                   $price,
+        string                                  $payerEmail,
+        Currency                                $currency,
+        string                                  $externalReference,
+        #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null,
+        ?string                                 $backUrl = null,
+        array                                   $metadata = [],
+        ?string                                 $notificationUrl = null,
+    ): ?array
+    {
         Log::debug(__CLASS__, func_get_args());
 
         $payload = [
@@ -56,7 +57,7 @@ final class Subscription
             'external_reference' => $externalReference,
             'payer_email' => $payerEmail,
             'back_url' => $backUrl,
-            'card_token_id' => $card?->token(),
+            'card_token_id' => $paymentMethod?->token,
             'auto_return' => 'all',
             'auto_recurring' => [
                 'transaction_amount' => $price->price,
@@ -77,7 +78,7 @@ final class Subscription
             ]);
         }
 
-        if (blank($card)) {
+        if (blank($paymentMethod)) {
             unset($payload['card_token_id']);
             unset($payload['preapproval_plan_id']);
         } else {

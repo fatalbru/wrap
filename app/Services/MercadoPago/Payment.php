@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\MercadoPago;
 
-use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\DTOs\PaymentMethodDto;
+use App\Enums\PaymentMethod;
 use App\Models\Application;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -34,16 +35,19 @@ final class Payment
      * @throws Throwable
      */
     public function create(
-        Application $application,
-        #[SensitiveParameter] TemporaryCardDto $card,
-        string $payerEmail,
-        string $externalReference,
-        string $description,
-        int|float $amount,
-        string $idempotency,
-        int $installments = 1,
-        array $metadata = [],
-    ) {
+        Application                            $application,
+        #[SensitiveParameter] PaymentMethodDto $paymentMethod,
+        string                                 $payerEmail,
+        string                                 $externalReference,
+        string                                 $description,
+        int|float                              $amount,
+        string                                 $idempotency,
+        int                                    $installments = 1,
+        array                                  $metadata = [],
+    )
+    {
+        throw_if($paymentMethod->paymentMethod !== PaymentMethod::CARD, 'Only card payment methods are supported.');
+
         $payload = [
             'payer' => [
                 'email' => $payerEmail,
@@ -52,10 +56,10 @@ final class Payment
             'binary_mode' => true, // used to avoid "in process" payments
             'capture' => true,
             'external_reference' => $externalReference,
-            'payment_method_id' => $card->paymentMethodId(),
+            'payment_method_id' => $paymentMethod->paymentMethodId,
             'description' => $description,
             'transaction_amount' => $amount,
-            'token' => $card->token(),
+            'token' => $paymentMethod->token,
             'statement_descriptor' => config('app.name'),
             'metadata' => $metadata,
         ];

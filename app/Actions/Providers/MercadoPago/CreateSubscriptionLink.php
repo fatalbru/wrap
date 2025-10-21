@@ -6,7 +6,7 @@ namespace App\Actions\Providers\MercadoPago;
 
 use App\Actions\Applications\AssignApplication;
 use App\Concerns\Action;
-use App\Dtos\MercadoPago\Preapprovals\PreapprovalLink;
+use App\DTOs\MercadoPago\Preapprovals\PreapprovalLinkDto;
 use App\Enums\Currency;
 use App\Enums\HandshakeType;
 use App\Enums\PaymentVendor;
@@ -25,14 +25,16 @@ final class CreateSubscriptionLink extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-    ) {}
+        private readonly AssignApplication   $assignApplication,
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): PreapprovalLink
+    public function execute(Checkout $checkout): PreapprovalLinkDto
     {
         return $this->lock(function () use ($checkout) {
             /** @var Subscription $subscription */
@@ -51,7 +53,7 @@ final class CreateSubscriptionLink extends Action
 
                 $price = $subscription->price;
 
-                $idempotency = md5($subscription->ksuid.uniqid().time());
+                $idempotency = md5($subscription->ksuid . uniqid() . time());
 
                 $handshake = Handshake::create([
                     'type' => HandshakeType::REROUTE,
@@ -88,7 +90,7 @@ final class CreateSubscriptionLink extends Action
                 ]);
             }
 
-            return PreapprovalLink::make($subscription->vendor_data);
+            return new PreapprovalLinkDto($subscription->vendor_data);
         }, ...func_get_args());
     }
 }

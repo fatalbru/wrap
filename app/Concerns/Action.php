@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Concerns;
 
-use App\Dtos\AtomicOptions;
+use App\DTOs\AtomicOptionsDto;
 use BackedEnum;
 use Closure;
 use DateTimeInterface;
@@ -27,11 +27,11 @@ abstract class Action
 
     protected ?string $atomicKey = null;
 
-    final public function atomicOptions(AtomicOptions $shouldLock): self
+    final public function atomicOptions(AtomicOptionsDto $options): self
     {
-        $this->lockTtl = $shouldLock->ttl;
-        $this->lockWaitSeconds = $shouldLock->wait;
-        $this->atomicKey = $shouldLock->key;
+        $this->lockTtl = $options->ttl;
+        $this->lockWaitSeconds = $options->wait;
+        $this->atomicKey = $options->key;
 
         return $this;
     }

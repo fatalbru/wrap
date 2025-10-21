@@ -6,7 +6,7 @@ namespace App\Actions\Providers\MercadoPago;
 
 use App\Actions\Applications\AssignApplication;
 use App\Concerns\Action;
-use App\Dtos\MercadoPago\Preferences\PreferenceLink;
+use App\DTOs\MercadoPago\Preferences\PreferenceLinkDto;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
 use App\Jobs\MercadoPago\Preferences\HandlePreferenceCallback;
@@ -23,13 +23,15 @@ final class CreatePreferenceLink extends Action
     public function __construct(
         private readonly PreferenceService $preferenceService,
         private readonly AssignApplication $assignApplication,
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout): PreferenceLink
+    public function execute(Checkout $checkout): PreferenceLinkDto
     {
         return $this->lock(function () use ($checkout) {
             /** @var Order $order */
@@ -52,13 +54,13 @@ final class CreatePreferenceLink extends Action
                         'checkout_id' => $checkout->id,
                         'order_id' => $order->id,
                     ],
-                    md5($order->ksuid.uniqid().time()),
+                    md5($order->ksuid . uniqid() . time()),
                     disposable: false,
                 );
 
                 $response = $this->preferenceService->create(
                     $order->application,
-                    $order->items->map(fn (OrderItem $orderItem) => [
+                    $order->items->map(fn(OrderItem $orderItem) => [
                         'id' => $orderItem->price->ksuid,
                         'title' => $orderItem->price->name,
                         'quantity' => $orderItem->quantity,
@@ -75,7 +77,7 @@ final class CreatePreferenceLink extends Action
                 ]);
             }
 
-            return PreferenceLink::make($order->vendor_data);
+            return new PreferenceLinkDto($order->vendor_data);
         }, ...func_get_args());
     }
 }

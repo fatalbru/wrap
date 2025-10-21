@@ -38,16 +38,15 @@ class WalletPayment extends Component
 
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscriptionLink : $createPreferenceLink;
 
-        /** @var ExternalPaymentHandlerInterface $link */
         $link = DB::transaction(fn () => $handler->execute($this->checkout));
 
-        if (blank($link->redirectLink())) {
+        if (blank($link->init_point)) {
             $this->failed(__('Failed to generate Mercadopago link.'));
 
             return;
         }
 
-        $this->redirect($link->redirectLink());
+        $this->redirect($link->init_point);
     }
 
     private function failed(?string $message): void

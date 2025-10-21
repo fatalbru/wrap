@@ -6,7 +6,8 @@ namespace App\Livewire\Checkout;
 
 use App\Actions\Orders\PayOrder;
 use App\Actions\Subscriptions\Subscribe;
-use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\DTOs\PaymentMethodDto;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentVendor;
 use App\Enums\ProductType;
 use App\Models\Application;
@@ -49,12 +50,15 @@ class CardPayment extends Component
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscription : $payOrder;
 
         /** @var Payment $payment */
-        $payment = DB::transaction(fn () => $handler->execute(
+        $payment = DB::transaction(fn() => $handler->execute(
             $this->checkout,
-            TemporaryCardDto::make($this->card),
+            new PaymentMethodDto([
+                'paymentMethod' => PaymentMethod::CARD,
+                ... $this->card
+            ]),
         ));
 
-        if (! $payment->isSuccessful()) {
+        if (!$payment->isSuccessful()) {
             $this->failed($payment->decline_reason);
 
             return;

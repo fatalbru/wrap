@@ -7,7 +7,7 @@ namespace App\Actions\Subscriptions;
 use App\Actions\Applications\AssignApplication;
 use App\Actions\Payments\CreatePayment;
 use App\Concerns\Action;
-use App\Dtos\MercadoPago\Cards\TemporaryCardDto;
+use App\DTOs\PaymentMethodDto;
 use App\Enums\Currency;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
@@ -28,18 +28,21 @@ final class Subscribe extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-        private readonly CreatePayment $createPayment
-    ) {}
+        private readonly AssignApplication   $assignApplication,
+        private readonly CreatePayment       $createPayment
+    )
+    {
+    }
 
     /**
      * @throws Throwable
      */
     public function execute(
-        Checkout $checkout,
-        #[SensitiveParameter] ?TemporaryCardDto $card = null
-    ): Payment {
-        return $this->lock(function () use ($checkout, $card) {
+        Checkout                                $checkout,
+        #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null
+    ): Payment
+    {
+        return $this->lock(function () use ($checkout, $paymentMethod) {
             /** @var Subscription $subscription */
             $subscription = $checkout->checkoutable;
 
@@ -66,7 +69,7 @@ final class Subscribe extends Action
                 $checkout->customer->email,
                 Currency::from(config('wrap.currency')),
                 $subscription->ksuid,
-                $card,
+                $paymentMethod,
                 backUrl: url(route('checkout.callback', $checkout)),
             );
 
@@ -79,7 +82,7 @@ final class Subscribe extends Action
 
             if (data_get($response, 'status') !== 'authorized') {
                 $status = PaymentStatus::REJECTED;
-                $declineReason = data_get($response, 'code');
+                $declineReason = data_get($response, 'message', data_get($response, 'code'));
             }
 
             $payment = $this->createPayment->execute(
@@ -90,7 +93,7 @@ final class Subscribe extends Action
                 PaymentVendor::MERCADOPAGO_CARD,
                 $response,
                 $declineReason,
-                $card
+                $paymentMethod
             );
 
             if ($payment->isSuccessful()) {
