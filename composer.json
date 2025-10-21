@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "wrap-pagos/wrap",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Construí tu propia pasarela de pagos",
+    "keywords": ["mercadopago", "checkout", "suscripciones"],
     "license": "MIT",
     "require": {
         "php": "^8.4",
