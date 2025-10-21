@@ -29,11 +29,9 @@ class HandlePreapprovalUpdated implements ShouldQueue
 
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly CreatePayment       $createPayment,
-        private readonly RegisterWebhookLog  $registerWebhookLog,
-    )
-    {
-    }
+        private readonly CreatePayment $createPayment,
+        private readonly RegisterWebhookLog $registerWebhookLog,
+    ) {}
 
     /**
      * @throws Throwable

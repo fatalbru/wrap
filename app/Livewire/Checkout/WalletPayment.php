@@ -44,6 +44,7 @@ class WalletPayment extends Component
 
         if (blank($link->init_point)) {
             $this->failed(__('Failed to generate Mercadopago link.'));
+
             return;
         }
 

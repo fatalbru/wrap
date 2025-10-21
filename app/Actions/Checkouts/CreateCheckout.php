@@ -26,12 +26,11 @@ final class CreateCheckout extends Action
      * @throws LockTimeoutException|Throwable
      */
     public function execute(
-        Customer    $customer,
-        Price       $price,
+        Customer $customer,
+        Price $price,
         Environment $environment,
-        ?Carbon     $expiresAt = null
-    ): Checkout
-    {
+        ?Carbon $expiresAt = null
+    ): Checkout {
         throw_if($customer->environment !== $environment, 'Customer environment does not match.');
         throw_if($price->environment !== $environment, 'Price environment does not match.');
 
@@ -40,7 +39,7 @@ final class CreateCheckout extends Action
             $checkout->customer()->associate($customer);
 
             if ($price->product->type === ProductType::SUBSCRIPTION) {
-                $subscription = new Subscription();
+                $subscription = new Subscription;
                 $subscription->customer()->associate($customer);
                 $subscription->price()->associate($price);
                 $subscription->status = SubscriptionStatus::PENDING;
@@ -50,13 +49,13 @@ final class CreateCheckout extends Action
 
                 $checkout->checkoutable()->associate($subscription);
             } else {
-                $order = new Order();
+                $order = new Order;
                 $order->customer()->associate($customer);
                 $order->status = OrderStatus::PENDING;
                 $order->environment = $environment;
                 $order->save();
 
-                $orderItem = new OrderItem();
+                $orderItem = new OrderItem;
                 $orderItem->order()->associate($order);
                 $orderItem->price()->associate($price);
                 $orderItem->save();

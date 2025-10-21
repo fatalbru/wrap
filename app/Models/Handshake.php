@@ -22,12 +22,11 @@ class Handshake extends Model
 
     public static function forJob(
         string $jobHandler,
-        array  $arguments,
+        array $arguments,
         string $idempotency,
-        bool   $disposable = true,
-    ): Handshake
-    {
-        $handshake = new Handshake();
+        bool $disposable = true,
+    ): Handshake {
+        $handshake = new Handshake;
         $handshake->type = HandshakeType::JOB;
         $handshake->idempotency = $idempotency;
         $handshake->disposable = $disposable;
@@ -42,7 +41,7 @@ class Handshake extends Model
 
     public static function shouldReroute(string $idempotency, array $payload): Handshake
     {
-        $handshake = new Handshake();
+        $handshake = new Handshake;
         $handshake->type = HandshakeType::REROUTE;
         $handshake->idempotency = $idempotency;
         $handshake->payload = $payload;

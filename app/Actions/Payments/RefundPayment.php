@@ -14,9 +14,7 @@ use Throwable;
 
 final class RefundPayment extends Action
 {
-    public function __construct(private readonly PaymentService $paymentService)
-    {
-    }
+    public function __construct(private readonly PaymentService $paymentService) {}
 
     /**
      * @throws Throwable

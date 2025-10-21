@@ -26,22 +26,19 @@ use Throwable;
 final class PayOrder extends Action
 {
     public function __construct(
-        private readonly PaymentService    $paymentService,
-        private readonly CreatePayment     $createPayment,
+        private readonly PaymentService $paymentService,
+        private readonly CreatePayment $createPayment,
         private readonly AssignApplication $assignApplication,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws LockTimeoutException
      * @throws Throwable
      */
     public function execute(
-        Checkout                               $checkout,
+        Checkout $checkout,
         #[SensitiveParameter] PaymentMethodDto $paymentMethod,
-    ): Payment
-    {
+    ): Payment {
         return $this->lock(function () use ($checkout, $paymentMethod) {
             $idempotency = Str::random(128);
 
@@ -57,7 +54,7 @@ final class PayOrder extends Action
             );
             $order->save();
 
-            $items = $order->items->map(fn(OrderItem $orderItem) => [
+            $items = $order->items->map(fn (OrderItem $orderItem) => [
                 'id' => $orderItem->id,
                 'title' => $orderItem->price->name,
                 'quantity' => $orderItem->quantity,

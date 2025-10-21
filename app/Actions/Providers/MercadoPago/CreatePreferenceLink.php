@@ -23,9 +23,7 @@ final class CreatePreferenceLink extends Action
     public function __construct(
         private readonly PreferenceService $preferenceService,
         private readonly AssignApplication $assignApplication,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws LockTimeoutException
@@ -33,7 +31,7 @@ final class CreatePreferenceLink extends Action
      */
     public function execute(Checkout $checkout, string $customerEmail): PreferenceLinkDto
     {
-        return $this->lock(function () use ($checkout, $customerEmail) {
+        return $this->lock(function () use ($checkout) {
             /** @var Order $order */
             $order = $checkout->checkoutable;
 
@@ -54,13 +52,13 @@ final class CreatePreferenceLink extends Action
                         'checkout_id' => $checkout->id,
                         'order_id' => $order->id,
                     ],
-                    md5($order->ksuid . uniqid() . time()),
+                    md5($order->ksuid.uniqid().time()),
                     disposable: false,
                 );
 
                 $response = $this->preferenceService->create(
                     $order->application,
-                    $order->items->map(fn(OrderItem $orderItem) => [
+                    $order->items->map(fn (OrderItem $orderItem) => [
                         'id' => $orderItem->price->ksuid,
                         'title' => $orderItem->price->name,
                         'quantity' => $orderItem->quantity,

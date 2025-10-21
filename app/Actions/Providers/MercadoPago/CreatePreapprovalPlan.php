@@ -17,10 +17,8 @@ final class CreatePreapprovalPlan extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication   $assignApplication,
-    )
-    {
-    }
+        private readonly AssignApplication $assignApplication,
+    ) {}
 
     /**
      * @link https://www.mercadopago.com.ar/developers/en/reference/subscriptions/_preapproval_plan/post

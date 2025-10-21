@@ -25,7 +25,7 @@ final class UpdateSubscriptionPrice extends Action
         throw_if($price->product->type !== ProductType::SUBSCRIPTION, 'Only subscription prices eligible.');
         throw_if($subscription->environment !== $price->environment, 'Environments do not match.');
 
-        if (!$subscription->price()->is($price)) {
+        if (! $subscription->price()->is($price)) {
             $this->lock(function () use ($subscription, $price): void {
                 $this->subscriptionService->updatePreapproval(
                     $subscription->application,

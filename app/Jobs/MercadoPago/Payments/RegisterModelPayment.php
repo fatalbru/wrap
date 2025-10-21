@@ -2,29 +2,30 @@
 
 namespace App\Jobs\MercadoPago\Payments;
 
+use App\Actions\Payments\UpsertPayment;
+use App\DTOs\PaymentMethodDto;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Events\Payments\PaymentCreated;
 use App\Events\Payments\PaymentUpdated;
 use App\Models\Order;
-use App\Models\Payment;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Payment as PaymentService;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
+use Throwable;
 
 class RegisterModelPayment implements ShouldQueue
 {
     use Queueable;
 
     public function __construct(
-        private readonly string             $paymentId,
+        private readonly string $paymentId,
         private readonly Order|Subscription $model
-    )
-    {
-    }
+    ) {}
 
     public function middleware()
     {
@@ -34,27 +35,28 @@ class RegisterModelPayment implements ShouldQueue
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|Throwable
      */
-    public function handle(PaymentService $paymentService): void
+    public function handle(PaymentService $paymentService, UpsertPayment $upsertPayment): void
     {
         $payment = $paymentService->get($this->model->application, $this->paymentId);
 
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
-        $paymentModel = Payment::query()->where('vendor_id', data_get($payment, 'id'))->firstOrNew();
-        $paymentModel->vendor_id = data_get($payment, 'id');
-        $paymentModel->customer()->associate($this->model->customer);
-        $paymentModel->environment = $this->model->environment;
-        $paymentModel->status = $status;
-        $paymentModel->amount = data_get($payment, 'transaction_amount');
-        $paymentModel->paid_at = $status === PaymentStatus::APPROVED ? now() : null;
-        $paymentModel->vendor_data = $payment;
-        $paymentModel->payment_vendor = PaymentVendor::MERCADOPAGO;
-        $paymentModel->payment_method = data_get($payment, 'payment_method_id');
-        $paymentModel->payment_type = data_get($payment, 'payment_type_id');
-        $paymentModel->card_last_digits = data_get($payment, 'card.last_four_digits');
-        $paymentModel->save();
+        $paymentModel = $upsertPayment->execute(
+            data_get($payment, 'id'),
+            $this->model,
+            data_get($payment, 'transaction_amount'),
+            $status,
+            PaymentVendor::MERCADOPAGO,
+            $payment,
+            paymentMethod: new PaymentMethodDto([
+                'paymentMethod' => when(data_get($payment, 'payment_method_id') === 'account_money', PaymentMethod::MERCADOPAGO, PaymentMethod::CARD),
+                'lastFourDigits' => data_get($payment, 'card.last_four_digits'),
+                'paymentTypeId' => data_get($payment, 'payment_type_id'),
+                'payment_method_id' => data_get($payment, 'payment_method_id'),
+            ])
+        );
 
         $event = $paymentModel->wasRecentlyCreated ? PaymentCreated::class : PaymentUpdated::class;
 

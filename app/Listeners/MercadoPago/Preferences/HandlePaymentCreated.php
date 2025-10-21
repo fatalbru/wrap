@@ -24,12 +24,10 @@ class HandlePaymentCreated implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        private readonly PaymentService     $paymentService,
+        private readonly PaymentService $paymentService,
         private readonly RegisterWebhookLog $registerWebhookLog,
-        private readonly CreatePayment      $createPayment,
-    )
-    {
-    }
+        private readonly CreatePayment $createPayment,
+    ) {}
 
     /**
      * @throws Throwable
@@ -44,7 +42,7 @@ class HandlePaymentCreated implements ShouldQueue
             return;
         }
 
-        if (!$event->getRelatedModel() instanceof Order) {
+        if (! $event->getRelatedModel() instanceof Order) {
             Log::debug(__CLASS__, [
                 'message' => 'Only Order models are handled',
             ]);
@@ -75,7 +73,7 @@ class HandlePaymentCreated implements ShouldQueue
             when($status !== PaymentStatus::APPROVED, data_get($payment, 'status_detail')),
             paymentMethod: new PaymentMethodDto([
                 'paymentMethod' => PaymentMethod::CARD,
-                ... $payment
+                ...$payment,
             ]),
             paidAt: when($status === PaymentStatus::APPROVED, now()->toImmutable()),
             vendorId: data_get($payment, 'id'),

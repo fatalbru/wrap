@@ -18,7 +18,7 @@ final class ListPayments extends Action
      */
     public function execute(Subscription|Order $model): Collection
     {
-        throw_if(!method_exists($model, 'payments'), 'Model is not payable.');
+        throw_if(! method_exists($model, 'payments'), 'Model is not payable.');
 
         return Payment::query()->whereBelongsTo($model, 'payable')->latest('id')->get();
     }

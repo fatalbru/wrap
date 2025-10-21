@@ -73,7 +73,7 @@ class Checkout extends Model
 
         return $this->checkoutable
             ->items
-            ->map(fn(OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
+            ->map(fn (OrderItem $orderItem) => $orderItem->quantity * $orderItem->price->price)
             ->sum();
     }
 

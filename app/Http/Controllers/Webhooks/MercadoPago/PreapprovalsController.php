@@ -31,12 +31,11 @@ class PreapprovalsController extends Controller
      * @throws IdempotencyOverlap
      */
     public function preapprovalCallback(
-        string              $signature,
+        string $signature,
         SubscriptionService $subscriptionService,
-        RegisterWebhookLog  $registerWebhookLog,
-        CreatePayment       $createPayment,
-    )
-    {
+        RegisterWebhookLog $registerWebhookLog,
+        CreatePayment $createPayment,
+    ) {
         $signature = decrypt($signature);
 
         $validator = Validator::make($signature, [
@@ -57,7 +56,7 @@ class PreapprovalsController extends Controller
         /** @var ?Subscription $subscription */
         $subscription = Subscription::find(data_get($signature, 'subscription_id'));
 
-        if (!$checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
+        if (! $checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -89,7 +88,7 @@ class PreapprovalsController extends Controller
 
             $paymentMethod = new PaymentMethodDto([
                 'paymentMethod' => PaymentMethod::MERCADOPAGO,
-                ... $preapproval
+                ...$preapproval,
             ]);
 
             $createPayment->execute(
