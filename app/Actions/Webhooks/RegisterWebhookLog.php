@@ -6,6 +6,7 @@ namespace App\Actions\Webhooks;
 
 use App\Concerns\Action;
 use App\Enums\PaymentProvider;
+use App\Enums\WebhookType;
 use App\Exceptions\IdempotencyOverlap;
 use App\Models\WebhookLog;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,9 @@ final class RegisterWebhookLog extends Action
         Model            $model,
         array|object     $payload,
         ?string          $idempotency = null,
-        ?PaymentProvider $paymentProvider = null
+        ?PaymentProvider $paymentProvider = null,
+        ?string          $eventName = null,
+        WebhookType      $webhookType = WebhookType::INCOMING,
     ): void
     {
         throw_if(!method_exists($model, 'webhookLogs'), 'Model does not support webhook logs');
@@ -31,12 +34,14 @@ final class RegisterWebhookLog extends Action
             IdempotencyOverlap::class
         );
 
-        $this->lock(function () use ($model, $idempotency, $paymentProvider, $payload): void {
+        $this->lock(function () use ($model, $idempotency, $paymentProvider, $payload, $webhookType, $eventName): void {
             $webhookLog = new WebhookLog();
             $webhookLog->loggable()->associate($model);
             $webhookLog->payload = $payload;
             $webhookLog->idempotency = $idempotency;
             $webhookLog->provider = $paymentProvider;
+            $webhookLog->event_name = $eventName;
+            $webhookLog->type = $webhookType;
             $webhookLog->save();
         }, ...func_get_args());
     }

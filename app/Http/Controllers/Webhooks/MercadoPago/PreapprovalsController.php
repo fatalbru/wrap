@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Webhooks\MercadoPago;
 
+use App\Actions\Payments\CreatePayment;
 use App\Actions\Webhooks\RegisterWebhookLog;
+use App\DTOs\PaymentMethodDto;
+use App\Enums\PaymentMethod;
 use App\Enums\PaymentProvider;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
@@ -28,10 +31,12 @@ class PreapprovalsController extends Controller
      * @throws IdempotencyOverlap
      */
     public function preapprovalCallback(
-        string $signature,
+        string              $signature,
         SubscriptionService $subscriptionService,
-        RegisterWebhookLog $registerWebhookLog
-    ) {
+        RegisterWebhookLog  $registerWebhookLog,
+        CreatePayment       $createPayment,
+    )
+    {
         $signature = decrypt($signature);
 
         $validator = Validator::make($signature, [
@@ -52,7 +57,7 @@ class PreapprovalsController extends Controller
         /** @var ?Subscription $subscription */
         $subscription = Subscription::find(data_get($signature, 'subscription_id'));
 
-        if (! $checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
+        if (!$checkout->checkoutable instanceof Subscription || $checkout->checkoutable->id !== $subscription->id) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -78,31 +83,31 @@ class PreapprovalsController extends Controller
         if ($status === SubscriptionStatus::AUTHORIZED && blank($subscription->started_at)) {
             $checkout->complete();
 
-            $subscription->update([
-                'status' => SubscriptionStatus::AUTHORIZED,
-                'started_at' => now(),
+            $subscription->status = SubscriptionStatus::AUTHORIZED;
+            $subscription->started_at = now();
+            $subscription->save();
+
+            $paymentMethod = new PaymentMethodDto([
+                'paymentMethod' => PaymentMethod::MERCADOPAGO,
+                ... $preapproval
             ]);
 
-            $payment_method_id = data_get($preapproval, 'payment_method_id');
-
-            $subscription->payments()->create([
-                'status' => PaymentStatus::APPROVED,
-                'customer_id' => $subscription->customer_id,
-                'amount' => $subscription->price->has_trial ? 0 : $subscription->price->price,
-                'paid_at' => now(),
-                'payment_vendor' => $payment_method_id === 'account_money' ? PaymentVendor::MERCADOPAGO : PaymentVendor::MERCADOPAGO_CARD,
-                'vendor_data' => $preapproval,
-                'payment_method' => 'account_money',
-                'payment_type' => 'account_money',
-            ]);
+            $createPayment->execute(
+                $subscription,
+                $subscription->price->has_trial ? 0 : $subscription->price->price,
+                PaymentStatus::APPROVED,
+                $paymentMethod->paymentMethod === PaymentMethod::MERCADOPAGO ? PaymentVendor::MERCADOPAGO : PaymentVendor::MERCADOPAGO_CARD,
+                $preapproval,
+                paymentMethod: $paymentMethod,
+                paidAt: now()->toImmutable()
+            );
 
             // Comes from wallet balance
-            if ($payment_method_id === 'account_money') {
+            if ($paymentMethod->paymentMethod === PaymentMethod::MERCADOPAGO) {
                 if ($subscription->price->trial_days > 0) {
-                    $subscription->update([
-                        'trial_started_at' => now(),
-                        'trial_ended_at' => now()->addDays($subscription->price->trial_days),
-                    ]);
+                    $subscription->trial_started_at = now();
+                    $subscription->trial_ended_at = now()->addDays($subscription->price->trial_days);
+                    $subscription->save();
                 }
             }
         }

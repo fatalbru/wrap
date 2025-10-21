@@ -2,11 +2,14 @@
 
 namespace App\Listeners\MercadoPago\Payments;
 
+use App\Actions\Webhooks\RegisterWebhookLog;
+use App\Enums\PaymentProvider;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Events\MercadoPago\WebhookReceived;
 use App\Models\Application;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Payment as PaymentService;
 use Illuminate\Bus\Queueable;
@@ -19,7 +22,12 @@ class HandlePaymentCreated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly PaymentService $paymentService) {}
+    public function __construct(
+        private readonly PaymentService     $paymentService,
+        private readonly RegisterWebhookLog $registerWebhookLog,
+    )
+    {
+    }
 
     /**
      * @throws \Throwable
@@ -71,7 +79,7 @@ class HandlePaymentCreated implements ShouldQueue
         }
 
         if (filled($externalReference)) {
-            if (! Str::contains($externalReference, [
+            if (!Str::contains($externalReference, [
                 $modelPrefix[class_basename(Subscription::class)],
                 $modelPrefix[class_basename(Order::class)],
             ])) {
@@ -98,25 +106,24 @@ class HandlePaymentCreated implements ShouldQueue
 
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
-        $model->webhookLogs()->create([
-            'application_id' => $model->application->id,
-            'vendor' => PaymentVendor::MERCADOPAGO,
-            'payload' => $payment,
-        ]);
+        $this->registerWebhookLog->execute(
+            $model,
+            $payment,
+            paymentProvider: PaymentProvider::MERCADOPAGO
+        );
 
-        $model->payments()->updateOrCreate([
-            'vendor_id' => data_get($payment, 'data_id'),
-        ], [
-            'environment' => $model->environment,
-            'status' => $status,
-            'customer_id' => $model->customer_id,
-            'amount' => data_get($payment, 'transaction_amount'),
-            'paid_at' => $status === PaymentStatus::APPROVED ? now() : null,
-            'vendor_data' => $payment,
-            'payment_vendor' => PaymentVendor::MERCADOPAGO,
-            'payment_method' => data_get($payment, 'payment_method_id'),
-            'payment_type' => data_get($payment, 'payment_type_id'),
-            'card_last_digits' => data_get($payment, 'card.last_four_digits'),
-        ]);
+        $paymentModel = Payment::query()->where('vendor_id', data_get($payment, 'data_id'))->firstOrNew();
+        $paymentModel->customer()->associate($model->customer);
+        $paymentModel->vendor_id = data_get($payment, 'data_id');
+        $paymentModel->environment = $model->environment;
+        $paymentModel->status = $status;
+        $paymentModel->amount = data_get($payment, 'transaction_amount');
+        $paymentModel->paid_at = $status === PaymentStatus::APPROVED ? now() : null;
+        $paymentModel->vendor_data = $payment;
+        $paymentModel->payment_vendor = PaymentVendor::MERCADOPAGO;
+        $paymentModel->payment_method = data_get($payment, 'payment_method_id');
+        $paymentModel->payment_type = data_get($payment, 'payment_type_id');
+        $paymentModel->card_last_digits = data_get($payment, 'card.last_four_digits');
+        $paymentModel->save();
     }
 }

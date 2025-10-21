@@ -43,6 +43,7 @@ class RegisterModelPayment implements ShouldQueue
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
         $paymentModel = Payment::query()->where('vendor_id', data_get($payment, 'id'))->firstOrNew();
+        $paymentModel->vendor_id = data_get($payment, 'id');
         $paymentModel->customer()->associate($this->model->customer);
         $paymentModel->environment = $this->model->environment;
         $paymentModel->status = $status;

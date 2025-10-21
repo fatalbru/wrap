@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Webhooks;
 
+use App\Actions\Webhooks\RegisterWebhookLog;
 use App\Enums\Environment;
 use App\Enums\WebhookType;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,22 +17,25 @@ class SendWebhook implements ShouldQueue
 
     public function __construct(
         protected string $eventName,
-        protected Model $model,
-        protected array $payload
-    ) {}
+        protected Model  $model,
+        protected array  $payload
+    )
+    {
+    }
 
-    public function handle(): void
+    public function handle(RegisterWebhookLog $registerWebhookLog): void
     {
         /** @var Environment $environment */
         $environment = $this->model->environment;
 
-        $webhookUrl = config('wrap.webhook_urls.'.$environment->value);
+        $webhookUrl = config('wrap.webhook_urls.' . $environment->value);
 
-        $this->model->webhookLogs()->create([
-            'type' => WebhookType::OUTGOING,
-            'payload' => $this->payload,
-            'event_name' => $this->eventName,
-        ]);
+        $registerWebhookLog->execute(
+            $this->model,
+            $this->payload,
+            eventName: $this->eventName,
+            webhookType: WebhookType::OUTGOING,
+        );
 
         if (config('wrap.webhook_fake')) {
             Log::debug(__CLASS__, [

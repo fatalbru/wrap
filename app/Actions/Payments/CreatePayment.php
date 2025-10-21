@@ -12,6 +12,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Subscription;
+use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Throwable;
 
@@ -29,19 +30,23 @@ final class CreatePayment extends Action
         array              $vendorData = [],
         ?string            $declineReason = null,
         ?PaymentMethodDto  $paymentMethod = null,
+        ?CarbonImmutable   $paidAt = null,
+        ?string            $vendorId = null,
     ): Payment
     {
-        return $this->lock(function () use ($payable, $amount, $status, $vendor, $vendorData, $declineReason, $paymentMethod) {
+        return $this->lock(function () use ($payable, $amount, $status, $vendor, $vendorData, $declineReason, $paymentMethod, $paidAt, $vendorId) {
             $payment = new Payment;
             $payment->customer()->associate($payable->customer);
             $payment->amount = $amount;
             $payment->status = $status;
             $payment->decline_reason = $declineReason;
             $payment->vendor_data = $vendorData;
+            $payment->vendor_id = $vendorId;
             $payment->payment_vendor = $vendor;
             $payment->payment_method = $paymentMethod?->paymentMethodId;
             $payment->payment_type = $paymentMethod?->paymentTypeId;
             $payment->card_last_digits = $paymentMethod?->lastFourDigits;
+            $payment->paid_at = $paidAt;
             $payment->save();
 
             return $payment;

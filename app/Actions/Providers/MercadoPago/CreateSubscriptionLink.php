@@ -80,10 +80,9 @@ final class CreateSubscriptionLink extends Action
 
                 Log::debug(__CLASS__, Arr::wrap($response));
 
-                $subscription->update([
-                    'vendor_id' => data_get($response, 'id'),
-                    'vendor_data' => $response,
-                ]);
+                $subscription->vendor_id = data_get($response, 'id');
+                $subscription->vendor_data = $response;
+                $subscription->save();
             }
 
             return new PreapprovalLinkDto($subscription->vendor_data);

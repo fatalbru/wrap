@@ -7,7 +7,7 @@ namespace App\Enums;
 enum PaymentMethod: string
 {
     case CARD = 'card';
-    case MERCADOPAGO = 'mercadopago';
+    case MERCADOPAGO = 'account-money';
 
     public function getLabel(): string
     {

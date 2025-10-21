@@ -2,7 +2,12 @@
 
 namespace App\Listeners\MercadoPago\Preferences;
 
+use App\Actions\Payments\CreatePayment;
+use App\Actions\Webhooks\RegisterWebhookLog;
+use App\DTOs\PaymentMethodDto;
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
+use App\Enums\PaymentProvider;
 use App\Enums\PaymentStatus;
 use App\Enums\PaymentVendor;
 use App\Events\MercadoPago\WebhookReceived;
@@ -18,7 +23,13 @@ class HandlePaymentCreated implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(private readonly PaymentService $paymentService) {}
+    public function __construct(
+        private readonly PaymentService     $paymentService,
+        private readonly RegisterWebhookLog $registerWebhookLog,
+        private readonly CreatePayment      $createPayment,
+    )
+    {
+    }
 
     /**
      * @throws Throwable
@@ -33,7 +44,7 @@ class HandlePaymentCreated implements ShouldQueue
             return;
         }
 
-        if (! $event->getRelatedModel() instanceof Order) {
+        if (!$event->getRelatedModel() instanceof Order) {
             Log::debug(__CLASS__, [
                 'message' => 'Only Order models are handled',
             ]);
@@ -43,10 +54,7 @@ class HandlePaymentCreated implements ShouldQueue
 
         $order = $event->getRelatedModel();
 
-        $payment = $this->paymentService->get(
-            $order->application,
-            data_get($event->getPayload(), 'data_id')
-        );
+        $payment = $this->paymentService->get($order->application, data_get($event->getPayload(), 'data_id'));
 
         if (Str::startsWith(data_get($payment, 'description'), '(Sub.)')) {
             Log::debug(__CLASS__, [
@@ -58,32 +66,29 @@ class HandlePaymentCreated implements ShouldQueue
 
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
-        $order->payments()->create([
-            'customer_id' => $order->customer_id,
-            'amount' => data_get($payment, 'transaction_amount'),
-            'status' => $status,
-            'decline_reason' => $status !== PaymentStatus::APPROVED ? data_get($payment, 'status_detail') : null,
-            'vendor_data' => $payment,
-            'vendor_id' => data_get($payment, 'id'),
-            'payment_vendor' => PaymentVendor::MERCADOPAGO,
-            'payment_method' => data_get($payment, 'payment_method_id'),
-            'payment_type' => data_get($payment, 'payment_type_id'),
-            'card_last_digits' => data_get($payment, 'card.last_four_digits'),
-        ]);
+        $this->createPayment->execute(
+            $order,
+            data_get($payment, 'transaction_amount'),
+            $status,
+            PaymentVendor::MERCADOPAGO,
+            $payment,
+            when($status !== PaymentStatus::APPROVED, data_get($payment, 'status_detail')),
+            paymentMethod: new PaymentMethodDto([
+                'paymentMethod' => PaymentMethod::CARD,
+                ... $payment
+            ]),
+            paidAt: when($status === PaymentStatus::APPROVED, now()->toImmutable()),
+            vendorId: data_get($payment, 'id'),
+        );
 
         if ($status === PaymentStatus::APPROVED && $order->status !== OrderStatus::COMPLETED) {
-            $order->update([
-                'status' => OrderStatus::COMPLETED,
-            ]);
+            $order->status = OrderStatus::COMPLETED;
+            $order->save();
 
-            $order->checkout->touch('completed_at');
+            $order->checkout->complete();
         }
 
-        $order->webhookLogs()->create([
-            'application_id' => $order->application->id,
-            'vendor' => PaymentVendor::MERCADOPAGO,
-            'payload' => $payment,
-        ]);
+        $this->registerWebhookLog->execute($order, $payment, paymentProvider: PaymentProvider::MERCADOPAGO);
 
         Log::debug(__CLASS__, [$payment]);
     }

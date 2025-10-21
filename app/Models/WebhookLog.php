@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\PaymentProvider;
 use App\Enums\WebhookType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class WebhookLog extends Model
@@ -25,6 +26,11 @@ class WebhookLog extends Model
             'type' => WebhookType::class,
             'payload' => 'json',
         ];
+    }
+
+    public function application(): BelongsTo
+    {
+        return $this->belongsTo(Application::class);
     }
 
     public function loggable(): MorphTo
