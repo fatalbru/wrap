@@ -15,7 +15,7 @@ class PreferencesController extends Controller
         PreferenceService $preferenceService,
         RegisterWebhookLog $registerWebhookLog
     ) {
-        //        $registerWebhookLog->execute(
+        //        $registerWebhookLog->handle(
         //            $request->order(),
         //            $request->validated(),
         //            $request->idempotency(),

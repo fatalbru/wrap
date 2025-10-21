@@ -31,7 +31,7 @@ class PaymentsController extends Controller
 
     public function refund(Payment $payment, RefundPayment $refundPaymentAction)
     {
-        $refundPaymentAction->execute($payment);
+        $refundPaymentAction->handle($payment);
 
         return response()->noContent();
     }

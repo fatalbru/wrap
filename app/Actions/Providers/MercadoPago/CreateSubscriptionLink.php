@@ -31,7 +31,7 @@ final class CreateSubscriptionLink extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout, string $customerEmail): PreapprovalLinkDto
+    public function handle(Checkout $checkout, string $customerEmail): PreapprovalLinkDto
     {
         return $this->lock(function () use ($checkout, $customerEmail) {
             /** @var Subscription $subscription */
@@ -39,7 +39,7 @@ final class CreateSubscriptionLink extends Action
 
             if (blank(data_get($subscription->vendor_data, 'init_point'))) {
                 $subscription->application()->associate(
-                    $this->assignApplication->execute(
+                    $this->assignApplication->handle(
                         $subscription->environment,
                         PaymentVendor::MERCADOPAGO,
                         ProductType::SUBSCRIPTION

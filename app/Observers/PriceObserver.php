@@ -17,7 +17,7 @@ class PriceObserver
     public function created(Price $price): void
     {
         if ($price->product->type === ProductType::SUBSCRIPTION) {
-            app(CreatePreapprovalPlan::class)->execute($price);
+            app(CreatePreapprovalPlan::class)->handle($price);
         }
     }
 }

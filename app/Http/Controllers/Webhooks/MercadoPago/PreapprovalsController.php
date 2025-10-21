@@ -60,7 +60,7 @@ class PreapprovalsController extends Controller
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $registerWebhookLog->execute(
+        $registerWebhookLog->handle(
             $subscription,
             $signature,
             data_get($signature, 'idempotency'),
@@ -77,7 +77,7 @@ class PreapprovalsController extends Controller
             abort(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $registerWebhookLog->execute($subscription, $preapproval, paymentProvider: PaymentProvider::MERCADOPAGO);
+        $registerWebhookLog->handle($subscription, $preapproval, paymentProvider: PaymentProvider::MERCADOPAGO);
 
         if ($status === SubscriptionStatus::AUTHORIZED && blank($subscription->started_at)) {
             $checkout->complete();
@@ -91,7 +91,7 @@ class PreapprovalsController extends Controller
                 ...$preapproval,
             ]);
 
-            $createPayment->execute(
+            $createPayment->handle(
                 $subscription,
                 $subscription->price->has_trial ? 0 : $subscription->price->price,
                 PaymentStatus::APPROVED,

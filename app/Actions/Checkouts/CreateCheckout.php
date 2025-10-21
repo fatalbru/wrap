@@ -25,7 +25,7 @@ final class CreateCheckout extends Action
     /**
      * @throws LockTimeoutException|Throwable
      */
-    public function execute(
+    public function handle(
         Customer $customer,
         Price $price,
         Environment $environment,

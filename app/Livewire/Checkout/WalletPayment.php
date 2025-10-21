@@ -37,7 +37,7 @@ class WalletPayment extends Component
 
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscriptionLink : $createPreferenceLink;
 
-        $link = DB::transaction(fn () => $handler->execute(
+        $link = DB::transaction(fn () => $handler->handle(
             $this->checkout,
             $this->email,
         ));

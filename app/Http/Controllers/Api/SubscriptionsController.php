@@ -44,12 +44,12 @@ class SubscriptionsController extends Controller
      */
     public function payments(Subscription $subscription, ListPayments $listPayments)
     {
-        return $listPayments->execute($subscription)->toResourceCollection(PaymentResource::class);
+        return $listPayments->handle($subscription)->toResourceCollection(PaymentResource::class);
     }
 
     public function cancel(Subscription $subscription, CancelSubscription $cancelSubscription)
     {
-        $cancelSubscription->execute($subscription);
+        $cancelSubscription->handle($subscription);
 
         return response()->noContent();
     }
@@ -62,7 +62,7 @@ class SubscriptionsController extends Controller
         Subscription $subscription,
         UpdateSubscriptionPriceAction $updateSubscriptionPriceAction
     ) {
-        $updateSubscriptionPriceAction->execute($subscription, Price::findByKsuid($request->get('price_id')));
+        $updateSubscriptionPriceAction->handle($subscription, Price::findByKsuid($request->get('price_id')));
 
         return response()->noContent();
     }

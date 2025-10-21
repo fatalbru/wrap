@@ -16,7 +16,7 @@ final class CreateCustomer extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(string $name, string $email, Environment $environment): Customer
+    public function handle(string $name, string $email, Environment $environment): Customer
     {
         return $this->lock(function () use ($name, $email, $environment) {
             $customer = new Customer;

@@ -35,7 +35,7 @@ final class PayOrder extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(
+    public function handle(
         Checkout $checkout,
         #[SensitiveParameter] PaymentMethodDto $paymentMethod,
     ): Payment {
@@ -46,7 +46,7 @@ final class PayOrder extends Action
             $order = $checkout->checkoutable;
 
             $order->application()->associate(
-                $this->assignApplication->execute(
+                $this->assignApplication->handle(
                     $order->environment,
                     PaymentVendor::MERCADOPAGO_CARD,
                     ProductType::ORDER
@@ -84,7 +84,7 @@ final class PayOrder extends Action
                 $declineReason = data_get($response, 'status_detail');
             }
 
-            $payment = $this->createPayment->execute(
+            $payment = $this->createPayment->handle(
                 $order,
                 $total,
                 $status,

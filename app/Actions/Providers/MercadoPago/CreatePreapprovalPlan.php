@@ -25,7 +25,7 @@ final class CreatePreapprovalPlan extends Action
      *
      * @throws Throwable
      */
-    public function execute(Price $price): void
+    public function handle(Price $price): void
     {
         throw_if($price->product->type !== ProductType::SUBSCRIPTION, 'Only subscription products are eligible for preapprovals.');
         throw_if(filled($price->vendor_id), 'Preapproval already configured.');
@@ -55,7 +55,7 @@ final class CreatePreapprovalPlan extends Action
                 ]);
             }
 
-            $application = $this->assignApplication->execute(
+            $application = $this->assignApplication->handle(
                 $price->product->environment,
                 PaymentVendor::MERCADOPAGO_CARD,
                 ProductType::SUBSCRIPTION

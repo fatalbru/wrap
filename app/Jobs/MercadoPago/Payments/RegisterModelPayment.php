@@ -43,7 +43,7 @@ class RegisterModelPayment implements ShouldQueue
 
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
-        $paymentModel = $upsertPayment->execute(
+        $paymentModel = $upsertPayment->handle(
             data_get($payment, 'id'),
             $this->model,
             data_get($payment, 'transaction_amount'),

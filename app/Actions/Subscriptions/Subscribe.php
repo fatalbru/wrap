@@ -35,7 +35,7 @@ final class Subscribe extends Action
     /**
      * @throws Throwable
      */
-    public function execute(
+    public function handle(
         Checkout $checkout,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null
     ): Payment {
@@ -52,7 +52,7 @@ final class Subscribe extends Action
             }
 
             $subscription->application()->associate(
-                $this->assignApplication->execute(
+                $this->assignApplication->handle(
                     $subscription->environment,
                     PaymentVendor::MERCADOPAGO_CARD,
                     ProductType::SUBSCRIPTION
@@ -82,7 +82,7 @@ final class Subscribe extends Action
                 $declineReason = data_get($response, 'message', data_get($response, 'code'));
             }
 
-            $payment = $this->createPayment->execute(
+            $payment = $this->createPayment->handle(
                 $subscription,
                 $amount,
                 $status,

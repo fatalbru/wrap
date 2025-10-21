@@ -21,7 +21,7 @@ final class UpsertPayment extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(
+    public function handle(
         string $vendorId,
         Order|Subscription $payable,
         int|float $amount,

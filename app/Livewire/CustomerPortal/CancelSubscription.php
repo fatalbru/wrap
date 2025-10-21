@@ -35,7 +35,7 @@ class CancelSubscription extends Component
             return;
         }
 
-        $cancelSubscription->execute($this->subscription);
+        $cancelSubscription->handle($this->subscription);
 
         Toaster::success(__('Subscription cancelled.'));
 

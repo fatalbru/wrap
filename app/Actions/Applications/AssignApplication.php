@@ -14,7 +14,7 @@ class AssignApplication extends Action
 {
     protected bool $shouldLock = false;
 
-    public function execute(
+    public function handle(
         Environment $environment,
         PaymentVendor $paymentVendor,
         ProductType $productType,

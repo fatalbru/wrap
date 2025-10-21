@@ -50,7 +50,7 @@ class CardPayment extends Component
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscription : $payOrder;
 
         /** @var Payment $payment */
-        $payment = DB::transaction(fn () => $handler->execute(
+        $payment = DB::transaction(fn () => $handler->handle(
             $this->checkout,
             new PaymentMethodDto([
                 'paymentMethod' => PaymentMethod::CARD,

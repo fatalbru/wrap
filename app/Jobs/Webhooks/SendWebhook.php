@@ -28,7 +28,7 @@ class SendWebhook implements ShouldQueue
 
         $webhookUrl = config('wrap.webhook_urls.'.$environment->value);
 
-        $registerWebhookLog->execute(
+        $registerWebhookLog->handle(
             $this->model,
             $this->payload,
             eventName: $this->eventName,

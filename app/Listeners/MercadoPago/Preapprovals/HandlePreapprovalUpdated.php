@@ -59,7 +59,7 @@ class HandlePreapprovalUpdated implements ShouldQueue
         $subscription->next_payment_at = data_get($response, 'next_payment_date');
         $subscription->save();
 
-        $this->registerWebhookLog->execute(
+        $this->registerWebhookLog->handle(
             $subscription,
             $response,
             paymentProvider: PaymentProvider::MERCADOPAGO
@@ -88,7 +88,7 @@ class HandlePreapprovalUpdated implements ShouldQueue
                 event(new TrialStarted($subscription));
 
                 if ($subscription->payments()->doesntExist()) {
-                    $this->createPayment->execute(
+                    $this->createPayment->handle(
                         $subscription,
                         0,
                         PaymentStatus::APPROVED,

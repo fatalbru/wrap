@@ -29,7 +29,7 @@ final class CreatePreferenceLink extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(Checkout $checkout, string $customerEmail): PreferenceLinkDto
+    public function handle(Checkout $checkout, string $customerEmail): PreferenceLinkDto
     {
         return $this->lock(function () use ($checkout) {
             /** @var Order $order */
@@ -37,7 +37,7 @@ final class CreatePreferenceLink extends Action
 
             if (blank(data_get($order->vendor_data, 'init_point'))) {
                 $order->application()->associate(
-                    $this->assignApplication->execute(
+                    $this->assignApplication->handle(
                         $order->environment,
                         PaymentVendor::MERCADOPAGO,
                         ProductType::ORDER

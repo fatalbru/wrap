@@ -19,7 +19,7 @@ final class CancelSubscription extends Action
      * @throws Throwable
      * @throws LockTimeoutException
      */
-    public function execute(Subscription $subscription): void
+    public function handle(Subscription $subscription): void
     {
         throw_if(! $subscription->cancelable, 'Cannot cancel subscription');
 

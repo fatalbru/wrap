@@ -16,7 +16,7 @@ final class ListPayments extends Action
     /**
      * @throws Throwable
      */
-    public function execute(Subscription|Order $model): Collection
+    public function handle(Subscription|Order $model): Collection
     {
         throw_if(! method_exists($model, 'payments'), 'Model is not payable.');
 

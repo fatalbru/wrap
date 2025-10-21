@@ -19,7 +19,7 @@ final class RefundPayment extends Action
     /**
      * @throws Throwable
      */
-    public function execute(Payment $payment): Refund
+    public function handle(Payment $payment): Refund
     {
         return $this->lock(function () use ($payment) {
             $idempotency = Str::random(128);

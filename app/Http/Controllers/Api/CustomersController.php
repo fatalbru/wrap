@@ -35,7 +35,7 @@ class CustomersController extends Controller
      */
     public function store(CreateCustomerRequest $request, CreateCustomer $createCustomer)
     {
-        return $createCustomer->execute(
+        return $createCustomer->handle(
             $request->get('name'),
             $request->get('email'),
             $request->enum('environment', Environment::class)

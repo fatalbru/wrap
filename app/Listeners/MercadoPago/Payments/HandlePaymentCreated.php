@@ -106,13 +106,13 @@ class HandlePaymentCreated implements ShouldQueue
 
         $status = PaymentStatus::from(data_get($payment, 'status'));
 
-        $this->registerWebhookLog->execute(
+        $this->registerWebhookLog->handle(
             $model,
             $payment,
             paymentProvider: PaymentProvider::MERCADOPAGO
         );
 
-        $this->upsertPayment->execute(
+        $this->upsertPayment->handle(
             data_get($payment, 'data_id'),
             $model,
             data_get($payment, 'transaction_amount'),

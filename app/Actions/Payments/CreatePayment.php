@@ -21,7 +21,7 @@ final class CreatePayment extends Action
      * @throws LockTimeoutException
      * @throws Throwable
      */
-    public function execute(
+    public function handle(
         Order|Subscription $payable,
         int|float $amount,
         PaymentStatus $status,
