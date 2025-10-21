@@ -37,6 +37,7 @@ class Checkout extends Model
     {
         return [
             'completed_at' => 'datetime',
+            'expires_at' => 'datetime',
             'environment' => Environment::class,
         ];
     }
@@ -59,6 +60,11 @@ class Checkout extends Model
     public function getTypeAttribute(): ProductType
     {
         return $this->checkoutable instanceof Subscription ? ProductType::SUBSCRIPTION : ProductType::ORDER;
+    }
+
+    public function getExpiredAttribute(): bool
+    {
+        return filled($this->expires_at) && $this->expires_at->isPast();
     }
 
     public function getTotalAttribute(): float
