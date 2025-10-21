@@ -9,9 +9,6 @@ use WendellAdriel\ValidatedDTO\Casting\EnumCast;
 use WendellAdriel\ValidatedDTO\Casting\StringCast;
 use WendellAdriel\ValidatedDTO\ValidatedDTO;
 
-/**
- * @property-read  string|null $paymentMethodId
- */
 class PaymentMethodDto extends ValidatedDTO
 {
     public PaymentMethod $paymentMethod;

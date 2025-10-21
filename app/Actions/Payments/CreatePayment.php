@@ -34,6 +34,7 @@ final class CreatePayment extends Action
     ): Payment {
         return $this->lock(function () use ($payable, $amount, $status, $vendor, $vendorData, $declineReason, $paymentMethod, $paidAt, $vendorId) {
             $payment = new Payment;
+            $payment->payable()->associate($payable);
             $payment->customer()->associate($payable->customer);
             $payment->amount = $amount;
             $payment->status = $status;
@@ -41,7 +42,7 @@ final class CreatePayment extends Action
             $payment->vendor_data = $vendorData;
             $payment->vendor_id = $vendorId;
             $payment->payment_vendor = $vendor;
-            $payment->payment_method = $paymentMethod?->paymentMethodId;
+            $payment->payment_method = $paymentMethod?->payment_method_id;
             $payment->payment_type = $paymentMethod?->paymentTypeId;
             $payment->card_last_digits = $paymentMethod?->lastFourDigits;
             $payment->paid_at = $paidAt;

@@ -47,6 +47,11 @@ class CardPayment extends Component
             'card.token' => ['required'],
         ]);
 
+        if(data_get($this->card, 'paymentTypeId') === 'prepaid_card') {
+            $this->failed(__('Prepaid cards are not accepted, try again using either debit or credit.'));
+            return;
+        }
+
         $handler = $this->checkout->type === ProductType::SUBSCRIPTION ? $createSubscription : $payOrder;
 
         /** @var Payment $payment */

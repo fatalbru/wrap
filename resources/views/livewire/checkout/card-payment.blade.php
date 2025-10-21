@@ -46,12 +46,14 @@
                 errorMessage: null,
                 async attemptCardPayment() {
                     if (!this.loading) {
-                        this.loading = true;
-                        this.errorMessage = null;
-                        this.$wire.$set('card', {
+                        const payload = {
                             ...await this.cardHandler.getFormData(),
                             ...await this.cardHandler.getAdditionalData()
-                        });
+                        };
+
+                        this.loading = true;
+                        this.errorMessage = null;
+                        this.$wire.$set('card', payload);
                         this.$wire.$call('pay');
                     }
                 },
@@ -73,10 +75,13 @@
                         },
                         customization: {
                             visual: @json(array_merge(config('mercadopago.card_block_customization'), ['hidePaymentButton' => true])),
-                            paymentMethods: {
-                                minInstallments: {{$checkout->min_installments}},
-                                maxInstallments: {{$checkout->max_installments}},
-                            },
+                            // paymentMethods: {
+                            //     types: {
+                            //         excluded: []
+                            //     },
+                            {{--    minInstallments: {{$checkout->min_installments}},--}}
+                            {{--    maxInstallments: {{$checkout->max_installments}},--}}
+                            // },
                         },
                         callbacks: {
                             onReady: () => {

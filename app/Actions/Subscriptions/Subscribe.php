@@ -20,6 +20,7 @@ use App\Models\Checkout;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Services\MercadoPago\Subscription as SubscriptionService;
+use App\Services\MercadoPago\Preapproval as PreapprovalService;
 use Illuminate\Support\Facades\Log;
 use SensitiveParameter;
 use Throwable;
@@ -28,17 +29,21 @@ final class Subscribe extends Action
 {
     public function __construct(
         private readonly SubscriptionService $subscriptionService,
-        private readonly AssignApplication $assignApplication,
-        private readonly CreatePayment $createPayment
-    ) {}
+        private readonly PreapprovalService  $preapprovalService,
+        private readonly AssignApplication   $assignApplication,
+        private readonly CreatePayment       $createPayment
+    )
+    {
+    }
 
     /**
      * @throws Throwable
      */
     public function handle(
-        Checkout $checkout,
+        Checkout                                $checkout,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null
-    ): Payment {
+    ): Payment
+    {
         return $this->lock(function () use ($checkout, $paymentMethod) {
             /** @var Subscription $subscription */
             $subscription = $checkout->checkoutable;

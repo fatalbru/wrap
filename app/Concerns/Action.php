@@ -17,7 +17,7 @@ use UnitEnum;
  */
 abstract class Action
 {
-    private const string EXECUTION_HANDLER = 'execute';
+    private const string EXECUTION_HANDLER = 'handle';
 
     protected bool $shouldLock = true;
 

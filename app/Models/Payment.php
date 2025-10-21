@@ -20,6 +20,61 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 #[ObservedBy(PaymentObserver::class)]
+/**
+ * @property int $id
+ * @property int $application_id
+ * @property string $ksuid
+ * @property string $payable_type
+ * @property int $payable_id
+ * @property int $customer_id
+ * @property mixed $amount
+ * @property PaymentStatus $status
+ * @property \Carbon\CarbonImmutable|null $paid_at
+ * @property \Carbon\CarbonImmutable|null $refunded_at
+ * @property string|null $decline_reason
+ * @property string|null $vendor_id
+ * @property array<array-key, mixed> $vendor_data
+ * @property Environment $environment
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property string|null $payment_method
+ * @property string|null $payment_type
+ * @property string|null $card_last_digits
+ * @property PaymentVendor $payment_vendor
+ * @property-read \App\Models\Customer $customer
+ * @property-read Model|\Eloquent $payable
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Refund> $refunds
+ * @property-read int|null $refunds_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WebhookLog> $webhookLogs
+ * @property-read int|null $webhook_logs_count
+ * @method static Builder<static>|Payment byKsuid(string $ksuid)
+ * @method static \Database\Factories\PaymentFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Payment newModelQuery()
+ * @method static Builder<static>|Payment newQuery()
+ * @method static Builder<static>|Payment query()
+ * @method static Builder<static>|Payment search(?string $search = null)
+ * @method static Builder<static>|Payment whereAmount($value)
+ * @method static Builder<static>|Payment whereApplicationId($value)
+ * @method static Builder<static>|Payment whereCardLastDigits($value)
+ * @method static Builder<static>|Payment whereCreatedAt($value)
+ * @method static Builder<static>|Payment whereCustomerId($value)
+ * @method static Builder<static>|Payment whereDeclineReason($value)
+ * @method static Builder<static>|Payment whereEnvironment($value)
+ * @method static Builder<static>|Payment whereId($value)
+ * @method static Builder<static>|Payment whereKsuid($value)
+ * @method static Builder<static>|Payment wherePaidAt($value)
+ * @method static Builder<static>|Payment wherePayableId($value)
+ * @method static Builder<static>|Payment wherePayableType($value)
+ * @method static Builder<static>|Payment wherePaymentMethod($value)
+ * @method static Builder<static>|Payment wherePaymentType($value)
+ * @method static Builder<static>|Payment wherePaymentVendor($value)
+ * @method static Builder<static>|Payment whereRefundedAt($value)
+ * @method static Builder<static>|Payment whereStatus($value)
+ * @method static Builder<static>|Payment whereUpdatedAt($value)
+ * @method static Builder<static>|Payment whereVendorData($value)
+ * @method static Builder<static>|Payment whereVendorId($value)
+ * @mixin \Eloquent
+ */
 class Payment extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;

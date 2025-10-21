@@ -17,9 +17,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property-read FrequencyType|null $frequency
+ * @property int $id
+ * @property string $ksuid
+ * @property int $product_id
+ * @property string $name
+ * @property int|null $trial_days
+ * @property FrequencyType|null $frequency
+ * @property mixed $price
+ * @property Environment $environment
+ * @property string|null $vendor_id
+ * @property PaymentVendor|null $vendor
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read bool $has_trial
+ * @property-read \App\Models\Product $product
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price byKsuid(string $ksuid)
+ * @method static \Database\Factories\PriceFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereEnvironment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereFrequency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereKsuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereTrialDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereVendor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Price whereVendorId($value)
+ * @mixin \Eloquent
  */
-#[ObservedBy(PriceObserver::class)]
 class Price extends Model
 {
     use HasFactory, HasKsuid;

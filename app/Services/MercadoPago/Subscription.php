@@ -37,26 +37,31 @@ final class Subscription
      * @throws Throwable
      */
     public function subscribe(
-        Application $application,
-        Price $price,
-        string $payerEmail,
-        Currency $currency,
-        string $externalReference,
+        Application                             $application,
+        Price                                   $price,
+        string                                  $payerEmail,
+        Currency                                $currency,
+        string                                  $externalReference,
         #[SensitiveParameter] ?PaymentMethodDto $paymentMethod = null,
-        ?string $backUrl = null,
-        array $metadata = [],
-        ?string $notificationUrl = null,
-    ): ?array {
+        ?string                                 $backUrl = null,
+        array                                   $metadata = [],
+        ?string                                 $notificationUrl = null,
+        ?array                                  $preapproval = null
+    ): ?array
+    {
         Log::debug(__CLASS__, func_get_args());
 
         $payload = [
-            'metadata' => $metadata,
-            //            'preapproval_plan_id' => $price->vendor_id,
+//            'metadata' => $metadata,
+            'preapproval_plan_id' => data_get($preapproval, 'id'),
             'reason' => implode(' ', Arr::whereNotNull([$price->name, ...$metadata])),
             'external_reference' => $externalReference,
             'payer_email' => $payerEmail,
             'back_url' => $backUrl,
+            'status' => 'pending',
             'card_token_id' => $paymentMethod?->token,
+            'payment_method_id' => $paymentMethod?->payment_method_id,
+            'payment_type_id' => $paymentMethod?->paymentTypeId,
             'auto_return' => 'all',
             'auto_recurring' => [
                 'transaction_amount' => $price->price,
@@ -64,6 +69,10 @@ final class Subscription
                 'frequency_type' => $price->frequency->getFrequencyApiType(),
                 'currency_id' => $currency->value,
             ],
+            'excluded_payment_methods' => array(
+            ),
+            'excluded_payment_types' => array(
+            ),
         ];
 
         if (filled($notificationUrl)) {
@@ -82,6 +91,10 @@ final class Subscription
             unset($payload['preapproval_plan_id']);
         } else {
             $payload['status'] = 'authorized';
+        }
+
+        if(filled($preapproval)) {
+            Arr::forget($payload, 'auto_recurring');
         }
 
         return Http::mercadopago($application)

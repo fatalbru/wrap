@@ -7,6 +7,7 @@ namespace App\Services\MercadoPago;
 use App\DTOs\PaymentMethodDto;
 use App\Enums\PaymentMethod;
 use App\Models\Application;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use SensitiveParameter;
@@ -55,7 +56,7 @@ final class Payment
             'binary_mode' => true, // used to avoid "in process" payments
             'capture' => true,
             'external_reference' => $externalReference,
-            'payment_method_id' => $paymentMethod->paymentMethodId,
+            'payment_method_id' => $paymentMethod->payment_method_id,
             'description' => $description,
             'transaction_amount' => $amount,
             'token' => $paymentMethod->token,

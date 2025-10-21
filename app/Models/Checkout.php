@@ -14,6 +14,50 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
+/**
+ * @property int $id
+ * @property string $ksuid
+ * @property string $checkoutable_type
+ * @property int $checkoutable_id
+ * @property int $customer_id
+ * @property string $redirect_url
+ * @property \Carbon\CarbonImmutable|null $expires_at
+ * @property string|null $canceled_at
+ * @property \Carbon\CarbonImmutable|null $completed_at
+ * @property int $min_installments
+ * @property int $max_installments
+ * @property Environment $environment
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read Model|\Eloquent $checkoutable
+ * @property-read \App\Models\Customer $customer
+ * @property-read bool $expired
+ * @property-read float $total
+ * @property-read ProductType $type
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payment> $payments
+ * @property-read int|null $payments_count
+ * @method static Builder<static>|Checkout byKsuid(string $ksuid)
+ * @method static \Database\Factories\CheckoutFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Checkout newModelQuery()
+ * @method static Builder<static>|Checkout newQuery()
+ * @method static Builder<static>|Checkout orders()
+ * @method static Builder<static>|Checkout query()
+ * @method static Builder<static>|Checkout whereCanceledAt($value)
+ * @method static Builder<static>|Checkout whereCheckoutableId($value)
+ * @method static Builder<static>|Checkout whereCheckoutableType($value)
+ * @method static Builder<static>|Checkout whereCompletedAt($value)
+ * @method static Builder<static>|Checkout whereCreatedAt($value)
+ * @method static Builder<static>|Checkout whereCustomerId($value)
+ * @method static Builder<static>|Checkout whereEnvironment($value)
+ * @method static Builder<static>|Checkout whereExpiresAt($value)
+ * @method static Builder<static>|Checkout whereId($value)
+ * @method static Builder<static>|Checkout whereKsuid($value)
+ * @method static Builder<static>|Checkout whereMaxInstallments($value)
+ * @method static Builder<static>|Checkout whereMinInstallments($value)
+ * @method static Builder<static>|Checkout whereRedirectUrl($value)
+ * @method static Builder<static>|Checkout whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Checkout extends Model
 {
     use HasFactory, HasKsuid;

@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Checkouts\CreateCheckout;
 use App\Enums\Environment;
+use App\Enums\PaymentVendor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkouts\CreateCheckoutRequest;
 use App\Http\Resources\CheckoutResource;

@@ -16,6 +16,39 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 #[ObservedBy(CustomerObserver::class)]
+/**
+ * @property int $id
+ * @property string $portal_id
+ * @property string $ksuid
+ * @property string $name
+ * @property string $email
+ * @property Environment $environment
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Order> $orders
+ * @property-read int|null $orders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Payment> $payments
+ * @property-read int|null $payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Subscription> $subscriptions
+ * @property-read int|null $subscriptions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\WebhookLog> $webhookLogs
+ * @property-read int|null $webhook_logs_count
+ * @method static Builder<static>|Customer byKsuid(string $ksuid)
+ * @method static \Database\Factories\CustomerFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Customer newModelQuery()
+ * @method static Builder<static>|Customer newQuery()
+ * @method static Builder<static>|Customer query()
+ * @method static Builder<static>|Customer search(?string $search)
+ * @method static Builder<static>|Customer whereCreatedAt($value)
+ * @method static Builder<static>|Customer whereEmail($value)
+ * @method static Builder<static>|Customer whereEnvironment($value)
+ * @method static Builder<static>|Customer whereId($value)
+ * @method static Builder<static>|Customer whereKsuid($value)
+ * @method static Builder<static>|Customer whereName($value)
+ * @method static Builder<static>|Customer wherePortalId($value)
+ * @method static Builder<static>|Customer whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Customer extends Model
 {
     use HasFactory, HasKsuid, HasWebhookLogs;
