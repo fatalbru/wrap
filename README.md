@@ -1,41 +1,32 @@
 ![WRAP - Construí tu pasarela de pagos](public/banner.png?raw=true "WRAP Pagos")
 
-# NUNO
-There's no tests here yet, it's a WIP.
-
 # WRAP
 
-WRAP es un agregador de pasarelas de pago que te permite manejar e integrar distintos procesadores de pago desde un mismo lugar.
+WRAP is a payment gateway aggregator to simplify the process of integrating different payment processors in Argentina.
 
-El objetivo principal es reducir el tiempo de desarrollo e implementación.
+Mail goal is to reduce the time to market for your products.
 
-Este repositorio es la versión básica que cubre la funcionalidad necesaria para procesar pagos fácilmente.
+You're looking at the self-hostable version and it's work in progress, it covers basic functionality.
 
-La versión PRO incluye: manejo de múltiples sitios, manejo de usuarios/accesos, códigos de descuento, facturación basada en créditos, facturación basada en asientos (seats), SLA 99.9% y más.
-Descubrí la versión PRO en https://wrap.com.ar/pro
+PRO Version will include broader features such as multiple site management, user management, role-based access, coupon codes, credit-based billing, seat-based billing and more.
 
-## Pasarelas de Pago soportadas
+## Supported Payment Processors
 
-* MercadoPago (Tarjetas y MercadoPago Wallet)
+* MercadoPago (Cards y MercadoPago Wallet)
 
-## Funcionalidades
+## Features
 
-* Ambientes productivos (`live`) y sandbox (`test`)
-* Manejo de clientes
-* Crear links de pago
-* Crear links de subscripción
-* Crear links de subscripción con períodos de prueba
+* `live` and `test` environments
+* Customer management
+* Payment links: one-time payments
+* Subscription links: recurring payments
+* Subscriptions with free trials
 * Incoming Webhooks
 * Outgoing Webhooks
-* Devoluciones de pagos
+* Refunds
 * API REST + Bearer Authentication
-* Portales de cliente
+* Client portals
 
-## Requerimientos
+## Installation
 
-* VPS
-* PostgreSQL
-
-## Instalación
-
-* MercadoPago
+TBD.
